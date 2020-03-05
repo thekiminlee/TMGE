@@ -4,17 +4,23 @@
     <groupId>jfx.game</groupId>
     <artifactId>GameEnv</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <name>app</name>
+    <packaging>jar</packaging>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>11</version>
-        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-controls</artifactId>
+		    <version>11.0.2</version>
+		</dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -27,13 +33,26 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.3</version>
-                <configuration>
-                    <mainClass>jfx.game.GameEnv.App</mainClass>
-                </configuration>
-            </plugin>
+			    <groupId>org.openjfx</groupId>
+			    <artifactId>javafx-maven-plugin</artifactId>
+			    <version>0.0.4</version>
+			    <configuration>
+			        <mainClass>jfx.game.GameEnv.Main</mainClass>
+			    </configuration>
+			</plugin>
+            <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <configuration>
+			        <archive>
+			            <manifest>
+			                <addClasspath>true</addClasspath>
+			                <classpathPrefix>libs/</classpathPrefix>
+			                <mainClass>jfx.game.GameEnv.Main</mainClass>
+			            </manifest>
+			        </archive>
+			    </configuration>
+			</plugin>
         </plugins>
     </build>
 </project>

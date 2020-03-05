@@ -10,6 +10,10 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class App extends Application {
+	
+	void begin(String args[]) {
+		launch(args);
+	}
 
     @Override
     public void start(Stage stage) {
@@ -21,9 +25,9 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
-    public static void main(String[] args) {
-        launch();
+    
+    public static void main(String args[]) {
+    	launch();
     }
 
 }
