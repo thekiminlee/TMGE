@@ -33,6 +33,6 @@ or through your package manager
 
 ```mvn clean package```
 
-##### Run the jar
+##### Run the jar from the project root directory
 
-```java -jar --module-path $env:PATH_TO_FX --add-modules=javafx.controls -jar .\target\GameEnv-0.0.1-SNAPSHOT.jar```
+```java -jar --module-path $PATH_TO_FX --add-modules=javafx.controls -jar .\target\GameEnv-0.0.1-SNAPSHOT.jar```
