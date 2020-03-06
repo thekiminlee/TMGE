@@ -1,10 +1,28 @@
 package jfx.game.Library;
 
+import java.util.ArrayList;
+
 public class GameBoard {
-	Piece[][] board;
-	GameBoard(int rows, int columns) {
-		board = new Piece[rows][columns];
+	GameBoard(){}
+	Level currentLevel;
+	ArrayList<Level> listOfLevels;
+
+
+	void setBoard(Level board){
+		//some way to load it into the gameBoard
 	}
+
+	/*
+	Loads in the current set board of the game
+	 */
+	void loadBoard(){
+
+	}
+
+	void addLevel(Level level){
+		listOfLevels.add(level);
+	}
+
 	
 	void addPiece(Piece p) {
 		if (p.length() == 1) {
@@ -12,6 +30,11 @@ public class GameBoard {
 		} else if (p.length() > 1) {
 			
 		}
+	}
+
+	void update()
+	{
+		//for each in tile: if tile implemnets updatable.update()
 	}
 	
 	public String toString() {
