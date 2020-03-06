@@ -38,4 +38,4 @@ or through your package manager
 ```java -jar --module-path $PATH_TO_FX --add-modules=javafx.controls -jar .\target\GameEnv-0.0.1-SNAPSHOT.jar```
 
 #####MASCOT 
-[Mascot](https://lh4.ggpht.com/DZBSRMasGop5vYRaBbM6uR_3-2ZxAtTMyCaSaiSz_jK2Hp_OHJG4hgkrvpz9Duqb_6ky=h310-rw)
+![Mascot](https://lh4.ggpht.com/DZBSRMasGop5vYRaBbM6uR_3-2ZxAtTMyCaSaiSz_jK2Hp_OHJG4hgkrvpz9Duqb_6ky=h310-rw)
