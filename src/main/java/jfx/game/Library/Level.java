@@ -26,7 +26,7 @@ public class Level {
 
     void update()
     {
-        //for each in tile: if tile implemnets updatable.update()
+        //for each in tile: if tile implements updatable.update()
     }
 
     public String toString() {
