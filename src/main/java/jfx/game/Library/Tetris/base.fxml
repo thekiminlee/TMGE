@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.game.Library.Tetris.TetrisBase">
+   <children>
+      <BorderPane prefWidth="720.0">
+         <left>
+            <VBox fx:id="leftVBox" prefWidth="144.0" BorderPane.alignment="CENTER" />
+         </left>
+         <center>
+            <VBox fx:id="gameVBox" prefWidth="432.0" prefHeight="640.0" BorderPane.alignment="CENTER" />
+         </center>
+         <right>
+            <VBox fx:id="rightVBox" prefWidth="144.0" BorderPane.alignment="CENTER" />
+         </right>
+         <top>
+            <BorderPane BorderPane.alignment="CENTER">
+               <left>
+                  <Label text="Label" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <Label alignment="CENTER" onMouseClicked="#exit" prefHeight="27.0" prefWidth="38.0" style="-fx-background-color: #e12020" text="X" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </right>
+               <center>
+                  <Label text="Label" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
