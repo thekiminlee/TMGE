@@ -1,30 +1,30 @@
 package jfx.game.GameEnv;
 
-import jfx.game.Library.Scene;
+import jfx.game.Library.Screen;
 
 public class Engine {
     private boolean loopContinue;
-    private Scene scene;
+    private Screen screen;
     Boolean init(){
         return false;
     }
 
-    void MainLoop(Scene incomingScene){
-        scene = incomingScene;
-        scene.initliaze();
+    void MainLoop(Screen incomingScreen){
+        screen = incomingScreen;
+        screen.initliaze();
         while(loopContinue){
-            scene.update();
-            scene.draw();
+            screen.update();
+            screen.draw();
         }
     }
 
-    void startLoop(Scene scene){
+    void startLoop(Screen screen){
         loopContinue = true;
-        this.MainLoop(scene);
+        this.MainLoop(screen);
     }
 
-    void Update(){
-
+    void update(){
+        screen.update();
     }
 
 }
