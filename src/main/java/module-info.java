@@ -1,5 +1,5 @@
 module jfx.game.GameEnv {
-    requires javafx.controls;
     requires javafx.graphics;
+    requires javafx.controls;
     exports jfx.game.GameEnv;
 }
