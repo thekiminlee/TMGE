@@ -5,7 +5,7 @@ package jfx.game.Library;
  */
 public interface Screen {
 
-    /* This is where
+    /* This is where*/
     void loadScene();
 
     //public abstract void loadScene(int ye);
