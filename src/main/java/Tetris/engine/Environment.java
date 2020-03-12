@@ -5,9 +5,11 @@ import Tetris.engine.Tile;
 
 public class Environment {
     protected Board board;
+    protected boolean running;
+    protected Configuration config;
 
-    public Environment() {
-
+    public Environment(Configuration config) {
+        this.config = config;
     }
 
     public Board createBoard(int x, int y) {
@@ -15,6 +17,14 @@ public class Environment {
         return board;
     }
 
-    public void start() {
+    // Game will implement this method for primary game logic
+    public void render() {
+    }
+
+    // Main loop
+    public void run() {
+        while (true) {
+            this.render();
+        }
     }
 }
