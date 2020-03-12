@@ -52,9 +52,11 @@ public class TetrisBase {
 //			return createRectangle(Color.AQUA);
 //		}, 0, 0));
 		
-		executorTest(new Piece(() -> {
-			return createRectangle(Color.AQUA);
-		}, 0, 8));
+		
+		for (int c = 0; c < COLUMNS; c++)
+			executorTest(new Piece(() -> {
+				return createRectangle(Color.AQUA);
+			}, 0, c));
 		
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
