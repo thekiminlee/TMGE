@@ -5,7 +5,7 @@ package jfx.game.Library;
  */
 public interface Screen {
 
-    /* This is where*/
+    /* This is where the scene is initialized. Scene is the actual game board*/
     void loadScene();
 
     //public abstract void loadScene(int ye);
@@ -17,7 +17,10 @@ public interface Screen {
     void update(); //this will be called when gameLoop updates
 
     /* Required components that will be redrawn after every update() method is called */
+    /* maybe use FXElementFactory here? Idk */
     void draw();
+
+    //void draw(Scene scene) //javafx.scene || this way we can reset the scene and then redraw the components needed for this screen
 
     /* Some actions that will be done at the end of the exit. This can be applying a new screen and calling Engine.startLoop on it */
     void exit();

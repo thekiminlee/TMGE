@@ -17,4 +17,9 @@ public abstract class Stage {
     /* This method will handle updating the board. Any updates to the board depending on clicks of the user will end up going into here */
     public abstract void update();
 
+    /* A way to score the player in the end */
+    public abstract int score();
+
+    /*A way to detect when the stage(which is the board) game has ended */
+    public abstract boolean end();
 }
