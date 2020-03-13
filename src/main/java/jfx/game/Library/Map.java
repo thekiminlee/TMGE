@@ -1,8 +1,8 @@
 package jfx.game.Library;
 
-public abstract class Stage {
+public abstract class Map {
     Tile[][] board;
-    Stage(Game game) {
+    Map(Game game) {
         board = new Tile[game.getRows()][game.getColumns()];
     }
 
