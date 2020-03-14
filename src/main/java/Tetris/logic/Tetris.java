@@ -10,7 +10,6 @@ public class Tetris extends Environment {
     }
 
     public void render() {
-        // board.toString();
         System.out.println(board);
     }
 }

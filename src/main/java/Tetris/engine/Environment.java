@@ -23,8 +23,9 @@ public class Environment {
 
     // Main loop
     public void run() {
-        while (true) {
-            this.render();
-        }
+        // while (true) {
+        // this.render();
+        // }
+        this.render();
     }
 }

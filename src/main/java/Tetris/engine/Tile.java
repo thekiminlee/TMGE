@@ -1,13 +1,13 @@
 package Tetris.engine;
 
-public class Tile {
-    int type;
+public class Tile<T> {
+    T value;
 
-    public Tile() {
-
+    public Tile(T value) {
+        this.value = value;
     }
 
-    public int getTile() {
-        return type;
+    public T getValue() {
+        return value;
     }
 }
