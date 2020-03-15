@@ -2,8 +2,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>jfx.game</groupId>
-    <artifactId>GameEnv</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>TMGEngine</artifactId>
+    <version>0.0.5-SNAPSHOT</version>
     <name>app</name>
     <packaging>jar</packaging>
     
@@ -21,14 +21,14 @@
 		    <version>11.0.2</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
 		<dependency>
 		    <groupId>org.openjfx</groupId>
 		    <artifactId>javafx-fxml</artifactId>
 		    <version>11.0.2</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
 		<dependency>
 		    <groupId>org.openjfx</groupId>
 		    <artifactId>javafx-graphics</artifactId>
@@ -57,6 +57,7 @@
             <plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-jar-plugin</artifactId>
+			    <version>3.1.2</version>
 			    <configuration>
 			        <archive>
 			            <manifest>

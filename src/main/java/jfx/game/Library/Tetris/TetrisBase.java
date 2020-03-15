@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -28,12 +27,13 @@ public class TetrisBase {
 	public static URI link = Paths.get("src/main/java/jfx/game/Library/Tetris/base.fxml").toUri();
 	final int COLUMNS = 10, ROWS = 20;
 	final static double DEFAULT_WIDTH = 720.0 * 0.6, DEFAULT_HEIGHT = 640.0 - 48;
-	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
-			Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE}; 
-	final Color empty = Color.valueOf("040d06");
+	
+	private boolean playing = true;
+	
 	ArrayList<ArrayList<VBox>> gameBox;
+	ArrayList<ArrayList<Piece>> pieces;
+	
 	ScheduledExecutorService es = Executors.newSingleThreadScheduledExecutor();
-	ScheduledFuture<?> future;
 	
 	@FXML Stage stage;
 	@FXML VBox leftVBox;
@@ -44,58 +44,60 @@ public class TetrisBase {
 	
 	@FXML
 	public void initialize() {
+		//screenWidth, screenHeight, columns, rows
+		PieceGenerator pg = new PieceGenerator(DEFAULT_WIDTH, DEFAULT_HEIGHT, ROWS, COLUMNS);
 		Random seed = new Random();
 		seed.setSeed(LocalTime.now().toNanoOfDay());
 		gameBox = new ArrayList<ArrayList<VBox>>();
-		resetBoard();
-//		executorTest(new Piece(() -> {
-//			return createRectangle(Color.AQUA);
-//		}, 0, 0));
+		resetBoard();		
 		
-		
-		for (int c = 0; c < COLUMNS; c++)
-			executorTest(new Piece(() -> {
-				return createRectangle(Color.AQUA);
-			}, 0, c));
+		es.scheduleAtFixedRate(() -> {
+			Platform.runLater(() -> {
+				for (Piece p: PieceGenerator.createPieces()) {
+					addPiece(p);
+					executorTest(p);
+				}
+			});
+		}, 0, 500, TimeUnit.MILLISECONDS);
 		
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
 	}
 	
-	private void executorTest(Piece p) {
-		future = es.scheduleAtFixedRate(() -> {
-			Platform.runLater(() -> {
-				step(p);
-			});
-		}, 0, 1, TimeUnit.SECONDS);
-	}
-	
-	private void createPiece(Color c) {
+	private void gameover() {
 		
 	}
 	
-	private boolean pieceCanMoveDown(Piece p) {
+	synchronized private void executorTest(Piece p) {
+		p.setFuture(es.scheduleAtFixedRate(() -> {
+			Platform.runLater(() -> {
+				step(p);
+			});
+		}, 0, 1, TimeUnit.SECONDS));
+	}
+	
+	synchronized private boolean pieceCanMoveDown(Piece p) {
 		int row = p.getRow();
-		// there is not a piece below and it is in range
-		System.out.println("size: " + gameBox.get(row + 1).get(p.getColumn()).getChildren().size() +
-							"\nrow: " + row);
-		return !(gameBox.get(row + 1).get(p.getColumn()).getChildren().size() > 1)
-				&& !(row >= ROWS - 1);
+		// piece is in range and piece below is "empty"
+		return playing && row + 1 < ROWS && occupied(row + 1, p.getColumn());
+	}
+	
+	synchronized private boolean occupied(int row, int column) {
+		return ((Rectangle)gameBox.get(row).get(column).getChildren().get(0)).getFill().equals(PieceGenerator.empty.color);
 	}
 	
 	synchronized private void step(Piece p) {
-		try {
-			if (pieceCanMoveDown(p)) {
-				int row = p.getRow();
-				deleteElementsAt(row, p.getColumn());
-				p.setRow(row + 1);
-				addElementAt(row + 1, p.getColumn(), p.getNode());
-			} else {
-				future.cancel(true);
-			}
-		} catch (Exception e) {
-			System.err.println("TetrisBase.step, p.getNode() failed.");
-			e.printStackTrace();
+		if (pieceCanMoveDown(p)) {
+			deleteElementsAt(p.getRow(), p.getColumn());
+			p.moveDown();
+			addElementAt(p.getRow(), p.getColumn(), p.getNode());
+			p.stop();
+		} else {
+			p.stop();
+//		} else { // piece is at the top row
+//			p.stop();
+//			playing = false;
+//			System.out.println("game has ended.");
 		}
 	}
 	
@@ -113,7 +115,7 @@ public class TetrisBase {
 					rcBox = gameBox.get(r).get(c);
 					rcBox.getChildren().clear();
 				}
-				rcBox.getChildren().add(new Rectangle(DEFAULT_WIDTH / COLUMNS, DEFAULT_HEIGHT / ROWS, empty));
+				rcBox.getChildren().add(PieceGenerator.getEmptyNode());
 			}
 		}
 	}
@@ -124,7 +126,7 @@ public class TetrisBase {
 	
 	private void deleteElementsAt(int row, int column) {
 		gameBox.get(row).get(column).getChildren().clear();
-		gameBox.get(row).get(column).getChildren().add(new Rectangle(DEFAULT_WIDTH / COLUMNS, DEFAULT_HEIGHT / ROWS, empty));
+		gameBox.get(row).get(column).getChildren().add(PieceGenerator.getEmptyNode());
 	}
 	
 	private void deleteRow(int row) {
@@ -135,6 +137,12 @@ public class TetrisBase {
 	private void addElementAt(int row, int column, Node element) {
 		gameBox.get(row).get(column).getChildren().clear();
 		gameBox.get(row).get(column).getChildren().add(element);
+	}
+	
+	synchronized private void addPiece(Piece p) {
+		int row = p.getRow(), column = p.getColumn();
+		gameBox.get(row).get(column).getChildren().clear();
+		gameBox.get(row).get(column).getChildren().add(p.getNode());
 	}
 	
 	private void sendError(String err) {
