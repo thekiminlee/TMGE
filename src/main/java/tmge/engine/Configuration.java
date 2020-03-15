@@ -1,4 +1,4 @@
-package Tetris.engine;
+package tmge.engine;
 
 public class Configuration {
     public Configuration() {

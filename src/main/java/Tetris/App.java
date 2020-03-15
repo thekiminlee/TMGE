@@ -1,6 +1,6 @@
 package Tetris;
 
-import Tetris.engine.Configuration;
+import tmge.engine.Configuration;
 import Tetris.logic.Tetris;
 
 public class App {

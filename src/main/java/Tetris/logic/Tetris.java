@@ -1,15 +1,16 @@
 package Tetris.logic;
 
-import Tetris.engine.Configuration;
-import Tetris.engine.Environment;
+import tmge.engine.Configuration;
+import tmge.engine.Environment;
 
 public class Tetris extends Environment {
+
     public Tetris(Configuration config) {
         super(config);
         board = createBoard(5, 5);
     }
 
     public void render() {
-        System.out.println(board);
+
     }
 }

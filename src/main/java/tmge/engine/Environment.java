@@ -1,11 +1,9 @@
-package Tetris.engine;
+package tmge.engine;
 
-import Tetris.engine.Board;
-import Tetris.engine.Tile;
+import tmge.engine.gameComponents.*;
 
 public class Environment {
     protected Board board;
-    protected boolean running;
     protected Configuration config;
 
     public Environment(Configuration config) {
@@ -23,9 +21,8 @@ public class Environment {
 
     // Main loop
     public void run() {
-        // while (true) {
-        // this.render();
-        // }
-        this.render();
+        while (true) {
+            this.render();
+        }
     }
 }
