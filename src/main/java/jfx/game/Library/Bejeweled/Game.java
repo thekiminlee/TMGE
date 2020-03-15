@@ -1,3 +1,5 @@
+package jfx.game.Library.Bejeweled;
+
 import java.util.ArrayList;
 
 public class Game{
@@ -71,4 +73,4 @@ public class Game{
 //     private void loadGame(){
         
 //     }
-// }
+}

@@ -1,3 +1,5 @@
+package jfx.game.Library.Bejeweled;
+
 import java.util.ArrayList;
 
 public abstract class Jewel{
