@@ -1,23 +1,22 @@
-package jfx.game.Library.Bejeweled;
 import java.util.ArrayList;
+package jfx.game.Library.Bejeweled;
 
 /*
-HorizontalMatch Class:
-- Source: https://github.com/itzmestar/Bejeweled/blob/master/Bejeweled/src/HorizontalMatch.java
-- Matches tiles in the left direction, right direction.
+VerticalMatch:
+- Source: https://github.com/itzmestar/Bejeweled/blob/master/Bejeweled/src/VerticalMatch.java
+- Extends JewelMatch class to match tiles vertically in the game.
  */
-public class HorizontalMatch extends JewelMatchDecorator {
-
-    // HorizontalMatch constructor:
-    public HorizontalMatch() {
+public class VerticalMatch extends JewelMatchDecorator {
+    public VerticalMatch() {
         super(null);
     }
 
-    public HorizontalMatch(JewelMatch jewelMatch);
+    pubic VerticalMatch(JewelMatch jewelMatch) {
+        super(jewelMatch);
+    }
 
     @Override
     public ArrayList<Coordinate> findMatch(Jewel jewelOrigin, Jewel[][] gameGrid) {
-
         ArrayList<Coordinate> list;
 
         if (jewelMatch != null) {
@@ -30,16 +29,15 @@ public class HorizontalMatch extends JewelMatchDecorator {
         int colSize = gameGrid.length;
         int rowSize = gameGrid[0].length;
 
-        int x = jewelOrigin.getCoordinates().getX();
         int y = jewelOrigin.getCoordinates().getY();
+        int x = jewelOrigin.getCoordinates().getX();
         list.add(jewelOrigin.getCoordinates());
 
         Jewel matchJewel = jewelOrigin;
-
-        // LEFT MATCH
+        // match first towards up direction
         for (int j = 1; j < 3; j++) {
-            y -= 1;
-            if (y > -1) {
+            x -= 1;
+            if (x > -1) {
                 Jewel jewel = gameGrid[x][y];
                 if (matchJewel.matchJewelNames(jewel.getName())) {
                     Coordinate coords = new Coordinate(x, y);
@@ -59,13 +57,12 @@ public class HorizontalMatch extends JewelMatchDecorator {
         }
         list.add(jewelOrigin.getCoordinates());
 
-        y = jewelOrigin.getCoordinates().getY();
+        // match downwards direction
+        x = jewelOrigin.getCoordinates().getX();
         matchJewel = jewelOrigin;
-
-        // RIGHT MATCH
         for (int j = 1; j < 3; j++) {
-            y += j;
-            if (y < rowSize) {
+            x += 1;
+            if (x < colSize) {
                 Jewel jewel = gameGrid[x][y];
                 if (matchJewel.matchJewelNames(jewel.getName())) {
                     Coordinate coords = new Coordinate(x, y);
@@ -84,6 +81,5 @@ public class HorizontalMatch extends JewelMatchDecorator {
             return list;
         }
         return null;
-
     }
 }
