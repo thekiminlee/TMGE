@@ -1,7 +1,7 @@
 package jfx.game.GameEnv;
 
 import jfx.game.Library.Game;
-import jfx.game.Library.ScreenInputs;
+import jfx.game.Library.GameInput;
 
 
 /* this doesn't need to end up running different threads*/ //MAYBE NOT? unsure still .-.
@@ -14,16 +14,16 @@ import jfx.game.Library.ScreenInputs;
 public class MultiplayerGame{
 
     /*A way to keep the inputs for keyboards in here */
-    ScreenInputs playerOne;
-    ScreenInputs playerTwo;
+    GameInput playerOne;
+    GameInput playerTwo;
 
-    //create a Stage
-
-
-    Game game;
+    //create two different games because they will both be running different things
+    Game gameP1;
+    Game gameP2;
 
     MultiplayerGame(Game game){
-        this.game = game;
+        this.gameP1 = game;
+        this.gameP2 = game;
     }
 
     void createMultiplayerGame(){

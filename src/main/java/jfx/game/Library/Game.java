@@ -3,6 +3,7 @@ package jfx.game.Library;
 
 /*MAIN GAME CLASS THAT WILL HANDLE THE DIFFERENT GAMES */
 public class Game {
+	GameInput input;
 	Screen currentScreen;
 	int rows;
 	int columns;
