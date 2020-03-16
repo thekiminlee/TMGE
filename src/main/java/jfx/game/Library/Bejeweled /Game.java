@@ -6,9 +6,9 @@ public class Game{
     private int gridRow;
     private int gridCol;
 
-    // public Game(){
-    //     loadGame();
-    // }
+    public Game(){
+        loadGame();
+    }
 
     public Game(int row, int col){
         this.gridRow = row;
@@ -68,7 +68,7 @@ public class Game{
         }
     }
 
-//     private void loadGame(){
+    private void loadGame(){
         
-//     }
-// }
+    }
+}
