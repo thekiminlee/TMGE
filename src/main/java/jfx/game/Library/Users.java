@@ -18,6 +18,10 @@ public class Users {
         return false;
     }
 
+    public void logout() {
+        currentUser = null;
+    }
+
     public boolean createUser(String userName, String password) {
         if (!(users.containsKey(userName))) {
             User user = new User(userName, password);
@@ -25,6 +29,10 @@ public class Users {
             return true;
         }
         return false;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 
     private boolean authenticateUser(User user, String password) {
