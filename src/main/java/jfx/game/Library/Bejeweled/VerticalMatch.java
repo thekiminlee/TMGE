@@ -1,5 +1,6 @@
-import java.util.ArrayList;
 package jfx.game.Library.Bejeweled;
+
+import java.util.ArrayList;
 
 /*
 VerticalMatch:
@@ -11,7 +12,7 @@ public class VerticalMatch extends JewelMatchDecorator {
         super(null);
     }
 
-    pubic VerticalMatch(JewelMatch jewelMatch) {
+    public VerticalMatch(JewelMatch jewelMatch) {
         super(jewelMatch);
     }
 

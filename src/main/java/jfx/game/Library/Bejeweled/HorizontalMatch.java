@@ -1,5 +1,7 @@
 package jfx.game.Library.Bejeweled;
+
 import java.util.ArrayList;
+import jfx.game.Library.Bejeweled.JewelMatchDecorator;
 
 /*
 HorizontalMatch Class:
@@ -13,15 +15,17 @@ public class HorizontalMatch extends JewelMatchDecorator {
         super(null);
     }
 
-    public HorizontalMatch(JewelMatch jewelMatch);
+    public HorizontalMatch(JewelMatch jewelMatch) {
+        super(null);
+    };
 
     @Override
-    public ArrayList<Coordinate> findMatch(Jewel jewelOrigin, Jewel[][] gameGrid) {
+    public ArrayList<Coordinate> findMatch(Jewel location, Jewel[][] gameGrid) {
 
         ArrayList<Coordinate> list;
 
         if (jewelMatch != null) {
-            list = jewelMatch.findMatch(jewelOrigin, gameGrid);
+            list = jewelMatch.findMatch(location, gameGrid);
             if (list != null)
                 return list;
         }
@@ -30,11 +34,11 @@ public class HorizontalMatch extends JewelMatchDecorator {
         int colSize = gameGrid.length;
         int rowSize = gameGrid[0].length;
 
-        int x = jewelOrigin.getCoordinates().getX();
-        int y = jewelOrigin.getCoordinates().getY();
-        list.add(jewelOrigin.getCoordinates());
+        int x = location.getCoordinates().getX();
+        int y = location.getCoordinates().getY();
+        list.add(location.getCoordinates());
 
-        Jewel matchJewel = jewelOrigin;
+        Jewel matchJewel = location;
 
         // LEFT MATCH
         for (int j = 1; j < 3; j++) {
@@ -57,10 +61,10 @@ public class HorizontalMatch extends JewelMatchDecorator {
         if (list.size() == 3) {
             return list;
         }
-        list.add(jewelOrigin.getCoordinates());
+        list.add(location.getCoordinates());
 
-        y = jewelOrigin.getCoordinates().getY();
-        matchJewel = jewelOrigin;
+        y = location.getCoordinates().getY();
+        matchJewel = location;
 
         // RIGHT MATCH
         for (int j = 1; j < 3; j++) {

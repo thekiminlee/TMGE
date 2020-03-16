@@ -1,3 +1,5 @@
+package jfx.game.Library;
+
 public class Player {
     String name;
     int points;
@@ -11,7 +13,7 @@ public class Player {
         return (this.name + " " + this.points);
     }
 
-    public int getPoints(){
+    public int getPoints() {
         return this.points;
     }
 }

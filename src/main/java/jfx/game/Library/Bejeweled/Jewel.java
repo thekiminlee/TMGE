@@ -2,26 +2,25 @@ package jfx.game.Library.Bejeweled;
 
 import java.util.ArrayList;
 
-public abstract class Jewel{
+public abstract class Jewel {
     private int points;
     private String name;
     private Coordinate coordinate;
     private ArrayList<String> matchingJewelNames;
-    private JewelMatch jewelMatch;
+    protected JewelMatch jewelMatch;
 
-
-    public Jewel(String name, int points, Coordinate coordinate){
+    public Jewel(String name, int points, Coordinate coordinate) {
         this.points = points;
         this.coordinate = coordinate;
         this.name = name;
         this.matchingJewelNames = new ArrayList<String>();
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public int getPoints(){
+    public int getPoints() {
         return this.points;
     }
 
@@ -45,4 +44,6 @@ public abstract class Jewel{
         }
         return false;
     }
+
+    public abstract ArrayList<Coordinate> findMatch(Jewel[][] gameGrid);
 }
