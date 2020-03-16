@@ -2,15 +2,13 @@ package jfx.game.Library;
 
 
 /*
-    This is a tile class where the board  will be made up of tile pieces
+    This is a tile class where the board  will be made up of tile pieces. This class is expected to be extended for the use
+    of the user.
  */
 public class Tile {
 	private String locationToImage;
-	private boolean solid;
-
-	Tile(String locationToImage,boolean solid){
+	Tile(String locationToImage){
 		this.locationToImage = locationToImage;
-		this.solid = solid;
 	}
 
 	void loadTexture(){

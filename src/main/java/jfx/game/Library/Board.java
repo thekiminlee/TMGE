@@ -8,6 +8,7 @@ public abstract class Board {
         this.rows = game.getRows();
         this.columns = game.getColumns();
         this.board = new Tile[rows][columns];
+        fillBoard();
     }
 
     /* This method allows the user to be able to add a Piece to the board. User is able to extend Tile class and be able to
@@ -17,9 +18,6 @@ public abstract class Board {
     /* This method allows the user to be able to remove a Piece to the board. User is able to extend Tile class and be able to
      * make more complicated Tile pieces such as a Group of Tiles which would be used for a game such as Tetris. */
     public abstract void removePiece(Tile p);
-
-    /* This method will handle updating the board. Any updates to the board depending on clicks of the user will end up going into here */
-    public abstract void update();
 
     /* A way to score the player in the end */
     public abstract int score();
@@ -31,6 +29,9 @@ public abstract class Board {
     public Tile[] getRow(int rowIndex) {
         return board[rowIndex];
     }
+
+    //Method will be called inside of the constructor
+    abstract void fillBoard();
 
     public Tile[][] setRow(int rowIndex, Tile[] Row) {
         if (this.rows == Row.length) {
