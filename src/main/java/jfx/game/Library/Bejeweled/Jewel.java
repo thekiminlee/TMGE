@@ -9,6 +9,14 @@ public abstract class Jewel{
     private ArrayList<String> matchingJewelNames;
     private JewelMatch jewelMatch;
 
+
+    public Jewel(String name, int points, Coordinate coordinate){
+        this.points = points;
+        this.coordinate = coordinate;
+        this.name = name;
+        this.matchingJewelNames = new ArrayList<String>();
+    }
+
     public String getName(){
         return this.name;
     }
