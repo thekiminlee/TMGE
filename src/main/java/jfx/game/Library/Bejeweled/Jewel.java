@@ -36,6 +36,10 @@ public abstract class Jewel {
         return this.coordinate;
     }
 
+    public void addMatchingJewelNames(String name) {
+        this.matchingJewelNames.add(name);
+    }
+
     public boolean matchJewelNames(String name) {
         for (String jewelName : this.matchingJewelNames) {
             if (name.equals(jewelName)) {

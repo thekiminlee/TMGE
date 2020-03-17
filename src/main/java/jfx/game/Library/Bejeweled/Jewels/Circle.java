@@ -1,4 +1,4 @@
-package jfx.game.Library.Bejeweled;
+package jfx.game.Library.Bejeweled.Jewels;
 
 import java.util.ArrayList;
 import jfx.game.Library.Bejeweled.Jewel;
@@ -10,7 +10,7 @@ import jfx.game.Library.Bejeweled.JewelMatch;
 public class Circle extends Jewel {
     public Circle(int x, int y) {
         super("C", 50, new Coordinate(x, y));
-        this.jewelHorizontalMatch = new HorizontalMatch(new VerticalMatch());
+        this.jewelMatch = new HorizontalMatch(new VerticalMatch());
         addMatchingJewelNames(this.name);
     }
 
