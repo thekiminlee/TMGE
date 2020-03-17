@@ -25,10 +25,12 @@ public class Game {
 	}
 
 	/* Here is where the call that will be made to update the Scene */
-	void update()
+	public void update()
 	{
-		if(currentScreen != null)
+		if(currentScreen != null){
 			currentScreen.update();
+			currentScreen.draw();
+		}
 	}
 	
 	public String toString() {

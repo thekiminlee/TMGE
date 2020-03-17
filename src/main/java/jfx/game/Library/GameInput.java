@@ -33,7 +33,7 @@ public class GameInput {
 
     public void addCommandsToScene(){
         removeCommandsFromScene();
-        //some way to do this
+        //some way to add the commands to javafx scene
     }
 
     public void removeCommandsFromScene(){

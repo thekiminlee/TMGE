@@ -56,7 +56,7 @@ public abstract class Board {
             }
         }
         return board;
-    }
+   }
 
     public Tile getTile(int rowIndex, int colIndex) {
         return board[rowIndex][colIndex];
@@ -72,7 +72,7 @@ public abstract class Board {
         String tileString = "";
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++)
-                tileString += "[" + board[i][j] + "]";
+                 tileString += "[" + board[i][j] + "]";
             tileString += "\n";
         }
         return tileString;

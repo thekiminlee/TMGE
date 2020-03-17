@@ -16,12 +16,12 @@ public abstract class Screen {
         this.actors = new ArrayList<Actor>();
     }
     /* This is where the scene is initialized. Scene is the actual game board*/
-    abstract void loadScene();
+    abstract public void loadScene();
 
     //public abstract void loadScene(int ye);
 
     /* Any important data initialization that will be used in this Scene in the future.*/
-    abstract void initliaze();
+    abstract public void initliaze();
 
     //this will be called when gameLoop updates
     protected void update(){
@@ -33,15 +33,15 @@ public abstract class Screen {
     }
 
     /* This is where any changes to the Application data will go. */
-    abstract void appUpdate();
+    abstract public void appUpdate();
     /* Required components that will be redrawn after every update() method is called */
     /* maybe use FXElementFactory here? Idk */
-    abstract void draw();
+    abstract public void draw();
 
     //void draw(Scene scene) //javafx.scene || this way we can reset the scene and then redraw the components needed for this screen
 
     /* Some actions that will be done at the end of the exit. This can be applying a new screen and calling Engine.startLoop on it */
-    abstract void exit();
+    abstract public void exit();
 
     void addAdctor(Actor a){
         actors.add(a);
