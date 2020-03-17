@@ -11,6 +11,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import jfx.game.Library.Tetris.TetrisBoard;
 import tmge.engine.Screen;
 import tmge.engine.gameComponents.Tile;
@@ -34,8 +35,8 @@ public class BejeweledScreen implements Screen {
 
 		board = new BejeweledBoard();
 		gameBox = new VBox[board.getRows()][board.getColumns()];
-		
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
+
+		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());		
 		TileGenerator.registerPalette(palette);
 	}
 	
@@ -80,9 +81,10 @@ public class BejeweledScreen implements Screen {
 	}
 
 	@Override
+	@FXML
 	public void exit() {
-		// TODO Auto-generated method stub
-		
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+        stage.close();
 	}
 
 }

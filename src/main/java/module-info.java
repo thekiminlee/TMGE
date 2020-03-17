@@ -8,5 +8,5 @@ module jfx.game {
     exports jfx.game.GameEnv;
     exports jfx.game.Library;
     opens jfx.game.Library.Tetris to javafx.controls, javafx.fxml;
-    opens jfx.game.GameEnv to javafx.controls, javafx.fxml;
+    
 }

@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import jfx.game.Library.App;
+import jfx.game.Library.Bejeweled.BejeweledScreen;
 import jfx.game.Library.Tetris.TetrisScreen;
 import tmge.engine.Screen;
 import javafx.event.ActionEvent;
@@ -126,6 +127,8 @@ public class GameSelect implements Screen {
     		@Override
     		public void handle(ActionEvent event) {
     			System.out.println("Open Bejeweled here");
+    			App.startGame(BejeweledScreen.link, new AnchorPane(), true);
+    			exit();
     		}
     	});
         
