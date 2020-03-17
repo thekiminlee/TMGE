@@ -12,12 +12,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import jfx.game.Library.Tetris.TetrisBoard;
-import tmge.engine.gameComponents.Screen;
+import tmge.engine.Screen;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class BejeweledScreen implements Screen {
-	public final static URI link = Paths.get("src/main/java/jfx/game/Library/base.fxml").toUri();
+	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/base.fxml").toUri();
 
 	Tile empty = TileGenerator.emptyTile();
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,

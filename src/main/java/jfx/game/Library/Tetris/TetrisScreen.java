@@ -19,12 +19,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import jfx.game.Library.App;
-import tmge.engine.gameComponents.Screen;
+import tmge.engine.Screen;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class TetrisScreen implements Screen {
-	public final static URI link = Paths.get("src/main/java/jfx/game/Library/base.fxml").toUri();
+	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/base.fxml").toUri();
 
 	Tile empty = TileGenerator.emptyTile();
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,

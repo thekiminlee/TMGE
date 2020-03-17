@@ -36,7 +36,7 @@
                <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="576.0" onMouseClicked="#minimize" pickOnBounds="true" preserveRatio="true" smooth="false">
                      <image>
-                        <Image url="@arrow-down.png" />
+                        <Image url="@../images/arrow-down.png" />
                      </image>
                      <viewport>
                         <Rectangle2D height="48.0" width="48.0" />
@@ -44,7 +44,7 @@
                   </ImageView>
                   <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="624.0" onMousePressed="#maximize" pickOnBounds="true" preserveRatio="true" smooth="false">
                      <image>
-                        <Image url="@arrow-up.png" />
+                        <Image url="@../images/arrow-up.png" />
                      </image>
                      <viewport>
                         <Rectangle2D height="48.0" width="48.0" />
@@ -52,7 +52,7 @@
                   </ImageView>
                   <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="672.0" onMousePressed="#exit" pickOnBounds="true" preserveRatio="true" smooth="false">
                      <image>
-                        <Image url="@close.png" />
+                        <Image url="@../images/close.png" />
                      </image>
                      <viewport>
                         <Rectangle2D height="48.0" width="48.0" />

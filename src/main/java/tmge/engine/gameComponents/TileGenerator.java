@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class TileGenerator {
@@ -13,11 +14,12 @@ public class TileGenerator {
 	private static int[][][] tileConfigurations;
 	private static int[] tileScores;
 	static Color[] palette;
+	enum Shapes {SQUARE, DIAMOND, CIRCLE, STAR};
 	
 	private static Tile empty = new Tile(0, () -> {
-		return createNode(Color.valueOf("040d06"));
+		return createSquare(Color.valueOf("040d06"));
 	});
-	static Random seed;
+	
 	static double screenWidth, screenHeight;
 
 	static int columns, rows;
@@ -27,7 +29,6 @@ public class TileGenerator {
 		screenHeight = defaultHeight;
 		columns = c;
 		rows = r;
-		seed = new Random(LocalTime.now().toNanoOfDay());
 	}
 	
 	public static void registerTileConfigurations(int[][][] configs) {
@@ -38,9 +39,14 @@ public class TileGenerator {
 		palette = colors;
 	}
 	
+	public static Tile createTile(int index) {
+		return new Tile(tileScores[index], () -> {
+			return createSquare(palette[index]);
+		});
+	}
+	
 	public static ArrayList<Tile> createTiles(int index) {
 		ArrayList<Tile> list = new ArrayList<Tile>();
-		int index = seed.nextInt(tileConfigurations.length);
 		for (int i = 0; i < tileConfigurations[index].length; i++) {
 			list.add(new Tile(tileScores[index], () -> {
 				return createSquare(palette[index]);
@@ -51,6 +57,15 @@ public class TileGenerator {
 	
 	static Node createSquare(Color c) {
 		return new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
+	}
+	static Node createDiamond(Color c) {
+		Rectangle node = new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
+		node.setRotate(45.0);
+		return node;
+	}
+	static Node createCircle(Color c) {
+		double minValue = Math.min(getWidth() / getColumns(), getHeight() / getRows());
+		return new Circle(minValue, c);
 	}
 	
 	public static Tile emptyTile() {

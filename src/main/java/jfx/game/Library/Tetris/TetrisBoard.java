@@ -1,6 +1,8 @@
 package jfx.game.Library.Tetris;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Random;
 
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Tile;
@@ -13,6 +15,7 @@ public class TetrisBoard extends Board {
 	static final int minimumDelay = 500;
 	ArrayList<Tile> activeTiles = null;
 	TileGame game;
+	Random seed;
 	
 	int[][][] configurations = {	
 		{ // Square
@@ -46,6 +49,7 @@ public class TetrisBoard extends Board {
 	
 	TetrisBoard() {
 		super(new TileGame(ROWS, COLUMNS));
+		seed = new Random(LocalTime.now().toNanoOfDay());
 		TileGenerator.registerTileConfigurations(configurations);
 	}
 
@@ -74,7 +78,7 @@ public class TetrisBoard extends Board {
 	}
 	
 	void createMovableTiles() {
-		activeTiles = TileGenerator.createTiles();
+		activeTiles = TileGenerator.createTiles(seed.nextInt(configurations.length));
 		for (Tile t: activeTiles) {
 			// TODO: add tiles to the first available position on the board
 			//		register movement options

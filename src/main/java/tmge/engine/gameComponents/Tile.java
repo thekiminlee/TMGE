@@ -4,7 +4,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledFuture;
 
 import javafx.scene.Node;
-import jfx.game.GameEnv.Factory;
 /*
     This is a tile class where the board  will be made up of tile pieces
  */

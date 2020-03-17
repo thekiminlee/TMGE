@@ -1,6 +1,7 @@
 package tmge.engine;
 
 import tmge.engine.gameComponents.Board;
+import tmge.engine.gameComponents.TileGame;
 
 public class Environment {
     protected Board board;
@@ -10,10 +11,11 @@ public class Environment {
         this.config = config;
     }
 
-    public Board createBoard(int x, int y) {
-        Board board = new Board(x, y);
-        return board;
-    }
+    // cant use this function
+//    public Board createBoard(int x, int y) {
+//        Board board = new Board(new TileGame(x, y));
+//        return board;
+//    }
 
     // Game will implement this method for primary game logic
     public void render() {

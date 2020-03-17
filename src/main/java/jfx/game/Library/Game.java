@@ -1,6 +1,6 @@
 package jfx.game.Library;
 
-import tmge.engine.gameComponents.Screen;
+import tmge.engine.Screen;
 
 public class Game {
 	Screen currentScreen;

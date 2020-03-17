@@ -1,6 +1,8 @@
 package jfx.game.Library.Bejeweled;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Random;
 
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Tile;
@@ -11,6 +13,7 @@ public class BejeweledBoard extends Board {
     private int score;
     private int[][][] configurations = {{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}}};
     private static final int ROWS = 20, COLUMNS = 10;
+    private Random seed = new Random(LocalTime.now().toNanoOfDay());
     
     public BejeweledBoard(){
     	super(new TileGame(ROWS, COLUMNS));
@@ -49,7 +52,7 @@ public class BejeweledBoard extends Board {
     public void fillTopRow() {
     	for (int column = 0; column < this.getColumns(); column++)
     		if (!occupied(board[0][column]))
-    			board[0][column] = TileGenerator.createTiles().get(0);
+    			board[0][column] = TileGenerator.createTile(seed.nextInt(configurations.length));
     }
 
     public boolean occupied(Tile t) {

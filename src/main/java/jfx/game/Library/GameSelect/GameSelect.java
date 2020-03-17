@@ -8,7 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import jfx.game.Library.App;
 import jfx.game.Library.Tetris.TetrisScreen;
-import tmge.engine.gameComponents.Screen;
+import tmge.engine.Screen;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -44,7 +44,7 @@ public class GameSelect implements Screen {
     Button clickToStart;
     
     Scene scene, scene1;
-    String relativeDirectory = "src/main/java/jfx/game/Library/GameSelect/";
+    String relativeDirectory = "src/main/java/jfx/game/resources/images/";
     
     public Scene start(Stage stage) {
     	//Title Screen
@@ -121,7 +121,7 @@ public class GameSelect implements Screen {
         bejeweledGameStartButton.setStyle(buttonStyle);
         bejeweledGameStartButton.setText("Bejeweled");
         bejeweledGameStartButton.setContentDisplay(ContentDisplay.TOP);
-        bejeweledGameStartButton.setGraphic(new ImageView(loadImage(relativeDirectory + "img1.png")));
+        bejeweledGameStartButton.setGraphic(new ImageView(loadImage(relativeDirectory + "bejeweled.png")));
         bejeweledGameStartButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -134,7 +134,7 @@ public class GameSelect implements Screen {
         tetrisGameStartButton.setStyle(buttonStyle);
         tetrisGameStartButton.setText("Tetris");
         tetrisGameStartButton.setContentDisplay(ContentDisplay.TOP);
-        tetrisGameStartButton.setGraphic(new ImageView(loadImage(relativeDirectory + "img2.png")));
+        tetrisGameStartButton.setGraphic(new ImageView(loadImage(relativeDirectory + "tetris.png")));
         tetrisGameStartButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {

@@ -1,5 +1,7 @@
 package tmge.engine.gameComponents;
 
+import tmge.engine.Screen;
+
 public class TileGame {
 	Screen currentScreen;
 	int rows;
