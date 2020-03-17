@@ -1,5 +1,7 @@
 package jfx.game.GameEnv;
 
+import jfx.game.Library.App;
+
 /*
  * A pseudo javafx loader class, bypasses some errors in creating a jarfile.
  */

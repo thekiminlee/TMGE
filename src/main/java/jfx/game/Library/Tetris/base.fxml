@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.game.Library.Tetris.TetrisBase">
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.game.Library.Tetris.TetrisScreen">
    <children>
       <BorderPane>
          <left>
@@ -50,7 +50,7 @@
                         <Rectangle2D height="48.0" width="48.0" />
                      </viewport>
                   </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="672.0" onMousePressed="#close" pickOnBounds="true" preserveRatio="true" smooth="false">
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="672.0" onMousePressed="#exit" pickOnBounds="true" preserveRatio="true" smooth="false">
                      <image>
                         <Image url="@close.png" />
                      </image>

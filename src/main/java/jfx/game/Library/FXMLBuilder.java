@@ -1,4 +1,4 @@
-package jfx.game.GameEnv;
+package jfx.game.Library;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -6,9 +6,9 @@ import java.net.URI;
 import java.net.URL;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -31,13 +31,13 @@ public class FXMLBuilder {
 	 * 		errors out when the fxml file does not match the controller class).
 	 *  Useful when javafx stages need to be customized (i.e. new window)
 	 */
-	public static <T> Scene buildScene(Pane pane) {
-		try {	
+	public static <T> Scene buildScene(Parent pane) {
+		try {
 			FXMLLoader loader =  new FXMLLoader();
 			loader.setLocation(fxmlString);
 			System.out.println(loader.getLocation());
-			pane = (AnchorPane) loader.load();
-			@SuppressWarnings("unused")
+			pane = (Parent) loader.load();
+			// references a screen-derived class
 			T controller = loader.getController();
 			return new Scene(pane);
 		} catch (IOException e) {
@@ -64,7 +64,7 @@ public class FXMLBuilder {
 		stage.show();
 	}
 	
-	public static <T> void build(String link, Pane pane, boolean isModal) {
+	public static <T> void build(Parent pane, boolean isModal) {
 		Scene scene = buildScene(pane);
 		Stage stage = buildStage(scene, isModal);
 		

@@ -1,21 +1,31 @@
 package jfx.game.GameEnv;
 
 public class Engine {
+    private boolean loopContinue;
+    private Screen screen;
+    private Board board;
+    
     Boolean init(){
         return false;
     }
 
-    void MainLoop(){
-
+    void MainLoop(Screen incomingScreen, Board incomingBoard){
+        screen = incomingScreen;
+        board = incomingBoard;
+        screen.initialize();
+        while(loopContinue){
+            board.update();
+            screen.draw();
+        }
     }
 
-    void Update(){
-
+    void startLoop(Screen screen, Board incomingBoard){
+        loopContinue = true;
+        this.MainLoop(screen, incomingBoard);
     }
-
-    static void startEngine(){
-
+    
+    void endLoop() {
+    	loopContinue = false;
     }
-
 
 }
