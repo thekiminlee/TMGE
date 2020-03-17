@@ -16,7 +16,7 @@ public class HorizontalMatch extends JewelMatchDecorator {
     }
 
     public HorizontalMatch(JewelMatch jewelMatch) {
-        super(null);
+        super(jewelMatch);
     };
 
     @Override
