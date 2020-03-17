@@ -2,6 +2,7 @@ package jfx.game.Library.GameSelect;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -15,7 +16,13 @@ import javafx.geometry.Pos;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -33,53 +40,88 @@ import javafx.scene.image.Image;
 public class GameSelect implements Screen {
     Button bejeweledGameStartButton;
     Button tetrisGameStartButton;
+
+    Button clickToStart;
     
-    Scene scene;
+    Scene scene, scene1;
     String relativeDirectory = "src/main/java/jfx/game/Library/GameSelect/";
     
     public Scene start(Stage stage) {
-        //Media for background playing video
-        BorderPane border = new BorderPane();
-		HBox buttonBox = addHBox();
-        border.setCenter(buttonBox);
-        border.setMaxSize(500,300);
-        border.setStyle("-fx-background-color: #FFFFFF;");
-		String src = Paths.get(relativeDirectory + "clip1.mp4").toUri().toString();
-        Media media = new Media(src);
-        MediaPlayer mp = new MediaPlayer(media);
-        mp.setAutoPlay(true);
-        MediaView mv = new MediaView(mp);
+    	//Title Screen
+        StackPane titleScreen = new StackPane();
+        titleScreen.setMaxSize(900,480);
+        titleScreen.setBackground(
+        		new Background(
+        				new BackgroundImage(loadImage(relativeDirectory + "TitleScreen.png"),
+        					BackgroundRepeat.REPEAT,
+			                BackgroundRepeat.REPEAT,
+			                BackgroundPosition.DEFAULT,
+			                BackgroundSize.DEFAULT)));
 
-        StackPane layout = new StackPane();
+        clickToStart = new Button("Let's Play");
+        clickToStart.setStyle("-fx-background-color: linear-gradient(#ffd65b, #e68400),linear-gradient(#ffef84, #f2ba44)," +
+                "        linear-gradient(#ffea6a, #efaa22)," +
+                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%)," +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));" +
+                "    -fx-background-radius: 30;" +
+                "    -fx-background-insets: 0,1,2,3,0;" +
+                "    -fx-text-fill: #654b00;" +
+                "    -fx-font-weight: bold;" +
+                "    -fx-font-size: 17px;" +
+                "    -fx-padding: 10 20 10 20;");
 
-        BorderPane menu = new BorderPane();
+        //GridPane to center the Button
+        GridPane grid = new GridPane();
+        grid.setMinSize(900, 480);
+        grid.setVgap(10);
+        grid.setHgap(10);
+        grid.setAlignment(Pos.CENTER_LEFT);
+        grid.add(clickToStart,37,20);
 
-        menu.setMaxSize(500,300);
-        menu.setStyle("-fx-background-color: #FFFFFF;");
+        //titleScreen.setCenter(grid);
+        titleScreen.getChildren().add(grid);
 
-        menu.setBottom(buttonBox);
+        //Go to choose game screen
+        clickToStart.setOnAction(e -> stage.setScene(scene1));
+        scene1 = new Scene(addChooseGameScreen(),654,520);
 
-        Label playerName = new Label("Enter Your Name:");
-        menu.setCenter(playerName);
-        
-        layout.getChildren().add(mv);
-        layout.getChildren().add(border);
-        layout.getChildren().add(menu);
-
-        scene = new Scene(layout, 1000, 500);
+        Scene scene = new Scene(titleScreen, 900,480);
         return scene;
     }
+    	
+    public BorderPane addChooseGameScreen() {
+        BorderPane border = new BorderPane();
+		HBox buttonBox = addGames();
+		
+		border.setBackground(
+			new Background(
+				new BackgroundImage(loadImage(relativeDirectory + "ChooseGameScreen.png"),
+					BackgroundRepeat.REPEAT,
+	                BackgroundRepeat.REPEAT,
+	                BackgroundPosition.DEFAULT,
+	                BackgroundSize.DEFAULT)));
+
+        buttonBox.setAlignment(Pos.CENTER);
+        border.setCenter(buttonBox);
+        
+        return border;
+    }
     
-    public HBox addHBox(){
+    public HBox addGames(){
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(10);
         //hbox.setStyle("-fx-background-color: #336699;");
-
+        
         hbox.setAlignment(Pos.CENTER);
+        
+        String buttonStyle = "-fx-background-color: transparent;  -fx-text-fill: #e81010; -fx-font-size: 17px; -fx-font-family: 'Comic Sans MS'; -fx-height: 100px; -fx-weight: 100px";
         //Bejeweled Button
         bejeweledGameStartButton = new Button();
-        bejeweledGameStartButton.setGraphic(loadImage(relativeDirectory + "img1.png"));
+        bejeweledGameStartButton.setStyle(buttonStyle);
+        bejeweledGameStartButton.setText("Bejeweled");
+        bejeweledGameStartButton.setContentDisplay(ContentDisplay.TOP);
+        bejeweledGameStartButton.setGraphic(new ImageView(loadImage(relativeDirectory + "img1.png")));
         bejeweledGameStartButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -89,7 +131,10 @@ public class GameSelect implements Screen {
         
         //Tetris Button
         tetrisGameStartButton = new Button();
-        tetrisGameStartButton.setGraphic(loadImage(relativeDirectory + "img2.png"));
+        tetrisGameStartButton.setStyle(buttonStyle);
+        tetrisGameStartButton.setText("Tetris");
+        tetrisGameStartButton.setContentDisplay(ContentDisplay.TOP);
+        tetrisGameStartButton.setGraphic(new ImageView(loadImage(relativeDirectory + "img2.png")));
         tetrisGameStartButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
@@ -105,9 +150,9 @@ public class GameSelect implements Screen {
         return hbox;
     }
 
-    public ImageView loadImage(String imagePath) {
+    public Image loadImage(String imagePath) {
     	try {
-			return new ImageView(new Image(new FileInputStream(imagePath)));
+			return new Image(new FileInputStream(imagePath));
     	} catch(FileNotFoundException e) {
     		e.printStackTrace();
     		return null;
@@ -124,6 +169,6 @@ public class GameSelect implements Screen {
 
 	@Override
 	public void exit() {
-		((Stage)scene.getWindow()).close();
+		((Stage)scene1.getWindow()).close();
 	}
 }

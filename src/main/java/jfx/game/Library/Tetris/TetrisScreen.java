@@ -33,7 +33,7 @@ public class TetrisScreen implements Screen {
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
 	
-	public TetrisScreen() { createScreen(720.0, 640.0); }
+	public TetrisScreen() { createScreen(720.0 * 0.6, 640.0 - 48); }
 	
 	void createScreen(double screenWidth, double screenHeight) {
 		this.screenWidth = screenWidth;
@@ -74,7 +74,6 @@ public class TetrisScreen implements Screen {
 				setVBox(row, column, TileGenerator.emptyTile());
 			}
 		}
-		
 		
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
