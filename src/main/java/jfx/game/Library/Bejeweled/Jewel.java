@@ -3,10 +3,10 @@ package jfx.game.Library.Bejeweled;
 import java.util.ArrayList;
 
 public abstract class Jewel {
-    private int points;
-    private String name;
-    private Coordinate coordinate;
-    private ArrayList<String> matchingJewelNames;
+    protected int points;
+    protected String name;
+    protected Coordinate coordinate;
+    protected ArrayList<String> matchingJewelNames;
     protected JewelMatch jewelMatch;
 
     public Jewel(String name, int points, Coordinate coordinate) {
