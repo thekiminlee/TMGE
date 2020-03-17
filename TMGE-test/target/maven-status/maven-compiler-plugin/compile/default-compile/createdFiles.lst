@@ -1,0 +1,13 @@
+jfx\game\GameEnv\SystemInfo.class
+jfx\game\GameEnv\Engine.class
+jfx\game\Library\User.class
+jfx\game\Library\Tile.class
+jfx\game\GameEnv\Main.class
+jfx\game\Library\Screen.class
+jfx\game\Library\Stage.class
+jfx\game\Library\Users.class
+jfx\game\Library\Game.class
+module-info.class
+jfx\game\Library\FXElementFactory.class
+jfx\game\Library\ScreenInputs.class
+jfx\game\GameEnv\App.class
