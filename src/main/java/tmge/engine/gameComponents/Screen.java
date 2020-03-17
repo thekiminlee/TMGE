@@ -1,4 +1,4 @@
-package jfx.game.GameEnv;
+package tmge.engine.gameComponents;
 
 import javafx.scene.control.Alert;
 

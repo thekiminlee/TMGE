@@ -18,13 +18,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import jfx.game.GameEnv.Screen;
-import jfx.game.GameEnv.Tile;
-import jfx.game.GameEnv.TileGenerator;
 import jfx.game.Library.App;
+import tmge.engine.gameComponents.Screen;
+import tmge.engine.gameComponents.Tile;
+import tmge.engine.gameComponents.TileGenerator;
 
 public class TetrisScreen implements Screen {
-	public final static URI link = Paths.get("src/main/java/jfx/game/Library/Tetris/base.fxml").toUri();
+	public final static URI link = Paths.get("src/main/java/jfx/game/Library/base.fxml").toUri();
 
 	Tile empty = TileGenerator.emptyTile();
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
@@ -55,15 +55,11 @@ public class TetrisScreen implements Screen {
 	@Override
 	@FXML
 	public void initialize() {
-
-		board = new TetrisBoard();
-		gameBox = new VBox[board.getRows()][board.getColumns()];
-		
 		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
 		TileGenerator.registerPalette(palette);
 		
-		Random seed = new Random();
-		seed.setSeed(LocalTime.now().toNanoOfDay());
+//		Random seed = new Random();
+//		seed.setSeed(LocalTime.now().toNanoOfDay());
 		
 		// init all vboxes, add them to a tracking data structure and the visual
 		for (int row = 0; row < board.getRows(); row++) {

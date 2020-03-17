@@ -1,4 +1,7 @@
-package jfx.game.GameEnv;
+package tmge.engine;
+
+import tmge.engine.gameComponents.Board;
+import tmge.engine.gameComponents.Screen;
 
 public class Engine {
     private boolean loopContinue;

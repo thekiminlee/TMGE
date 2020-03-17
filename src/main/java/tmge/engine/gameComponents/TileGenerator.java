@@ -1,4 +1,4 @@
-package jfx.game.GameEnv;
+package tmge.engine.gameComponents;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -11,9 +11,10 @@ import javafx.scene.shape.Rectangle;
 public class TileGenerator {
 	
 	private static int[][][] tileConfigurations;
+	private static int[] tileScores;
 	static Color[] palette;
 	
-	private static Tile empty = new Tile(() -> {
+	private static Tile empty = new Tile(0, () -> {
 		return createNode(Color.valueOf("040d06"));
 	});
 	static Random seed;
@@ -37,18 +38,18 @@ public class TileGenerator {
 		palette = colors;
 	}
 	
-	public static ArrayList<Tile> createTiles() {
+	public static ArrayList<Tile> createTiles(int index) {
 		ArrayList<Tile> list = new ArrayList<Tile>();
 		int index = seed.nextInt(tileConfigurations.length);
 		for (int i = 0; i < tileConfigurations[index].length; i++) {
-			list.add(new Tile(() -> {
-				return createNode(palette[index]);
+			list.add(new Tile(tileScores[index], () -> {
+				return createSquare(palette[index]);
 			}));
 		}
 		return list;
 	}
 	
-	static Node createNode(Color c) {
+	static Node createSquare(Color c) {
 		return new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
 	}
 	

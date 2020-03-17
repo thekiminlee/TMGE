@@ -2,10 +2,10 @@ package jfx.game.Library.Tetris;
 
 import java.util.ArrayList;
 
-import jfx.game.GameEnv.Board;
-import jfx.game.GameEnv.Tile;
-import jfx.game.GameEnv.TileGame;
-import jfx.game.GameEnv.TileGenerator;
+import tmge.engine.gameComponents.Board;
+import tmge.engine.gameComponents.Tile;
+import tmge.engine.gameComponents.TileGame;
+import tmge.engine.gameComponents.TileGenerator;
 
 public class TetrisBoard extends Board {
 	static final int ROWS = 20, COLUMNS = 10;

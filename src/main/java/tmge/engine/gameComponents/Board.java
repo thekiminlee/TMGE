@@ -1,4 +1,4 @@
-package jfx.game.GameEnv;
+package tmge.engine.gameComponents;
 
 public abstract class Board {
     protected Tile[][] board;
