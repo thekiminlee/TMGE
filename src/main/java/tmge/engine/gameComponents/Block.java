@@ -4,8 +4,11 @@ public class Block {
 	Tile[] tiles;
     private int value;
 
-    public Block(int value, Tile[] tiles) {
-        this.value = value;
+    public Block(Tile[] tiles) {
+    	int v = 0;
+    	for (Tile t: tiles)
+    		v += t.value;
+        this.value = v;
         this.tiles = tiles;
     }
 
@@ -20,4 +23,19 @@ public class Block {
     public Tile[] getTiles() {
     	return tiles;
     }
+
+	public int size() {
+		return tiles.length;
+	}
+
+	public Tile get(int i) {
+		return tiles[i];
+	}
+	
+	public boolean contains(Coordinate c) {
+		for (Tile t: tiles)
+			if (c.getX() == t.getCoords().getX() && c.getY() == t.getCoords().getY())
+				return true;
+		return false;
+	}
 }

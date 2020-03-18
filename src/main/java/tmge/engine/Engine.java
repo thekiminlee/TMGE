@@ -12,20 +12,20 @@ public class Engine {
     }
 
     void MainLoop(Screen incomingScreen){
-        while(loopContinue) {
-    		System.out.println("loop");
-    		screen.setReady(false);
-    		board.update();
-            screen.draw();
-        	while (!screen.ready()) {
-        		System.out.println("sleep");
-	        	try {
-					Thread.sleep(board.getDelay());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-        	}
-        }
+//        while(loopContinue) {
+//    		System.out.println("loop");
+//    		screen.setReady(false);
+//    		board.update();
+//            screen.draw();
+//        	while (!screen.ready()) {
+//        		System.out.println("sleep");
+//	        	try {
+//					Thread.sleep(board.getDelay());
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//        	}
+//        }
     }
     
     public void startLoop(Screen screen) {

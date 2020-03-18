@@ -32,7 +32,8 @@ public class TetrisScreen implements Screen {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 
-		board = new TetrisBoard();
+		board = new TetrisBoard(this);
+		new Thread(board).start();
 		gameBox = new VBox[board.getRows()][board.getColumns()];
 		
 		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
@@ -112,17 +113,15 @@ public class TetrisScreen implements Screen {
 
 	@Override
 	public void draw() {
-		Platform.runLater(() -> {
-			Tile[][] gameState = board.getBoard();
-			System.out.println(board);
-			for (int row = 0; row < board.getRows(); row++) {
-				for (int column = 0; column < board.getColumns(); column++) {
-					Tile t = gameState[row][column];
-					setVBox(row, column, t);
-				}
+		Tile[][] gameState = board.getBoard();
+		System.out.println(board);
+		for (int row = 0; row < board.getRows(); row++) {
+			for (int column = 0; column < board.getColumns(); column++) {
+				Tile t = gameState[row][column];
+				setVBox(row, column, t);
 			}
-			this.ready = true;
-		});
+		}
+		this.ready = true;
 		System.out.println("draw");
 	}
 	

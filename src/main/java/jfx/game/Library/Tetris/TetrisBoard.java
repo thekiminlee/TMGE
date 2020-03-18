@@ -4,9 +4,11 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.application.Platform;
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Tile;
+import tmge.engine.gameComponents.Block;
 import tmge.engine.gameComponents.TileGame;
 import tmge.engine.gameComponents.TileGenerator;
 
@@ -14,7 +16,8 @@ public class TetrisBoard extends Board {
 	static final int ROWS = 20, COLUMNS = 10;
 	static int delay = 1000;
 	static final int minimumDelay = 500;
-	ArrayList<Tile> activeTiles = null;
+	TetrisScreen screen;
+	Block activeBlock = null;
 	TileGame game;
 	Random seed;
 	
@@ -49,10 +52,11 @@ public class TetrisBoard extends Board {
 	};
 	int[] values = {1,1,1,1,1,1,1};
 	
-	TetrisBoard() {
+	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
 		seed = new Random(LocalTime.now().toNanoOfDay());
 		TileGenerator.registerTileConfigurations(configurations, values);
+		this.screen = screen;
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++)
 				board[row][col] = TileGenerator.emptyTile();
@@ -60,16 +64,23 @@ public class TetrisBoard extends Board {
 
 	@Override
 	public void update() {
-		System.out.println("update");
-		try {
-			if (activeTiles == null)
-				createMovableTiles();
-			else {
-				settle();
-			}
-			Thread.sleep(delay);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		while (true) {
+			System.out.println("update");
+			this.screen.setReady(false);
+			Platform.runLater(() -> {
+				if (activeBlock == null)
+					createMovableBlock();
+				else {
+					settle();
+				}
+				this.screen.draw();
+			});
+			while(!this.screen.ready())
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 	
@@ -110,7 +121,7 @@ public class TetrisBoard extends Board {
 		return -1;
 	}
 	
-	void createMovableTiles() {
+	void createMovableBlock() {
 		int config = seed.nextInt(configurations.length);
 		int column = findFirstAvailableColumn(config);
 
@@ -118,37 +129,54 @@ public class TetrisBoard extends Board {
 		if (column < 0) { // no place to drop the tile
 			gameover();
 		} else { // add tile to board, register movement
-			ArrayList<Tile> movableTiles = TileGenerator.createTiles(config, column);
-			activeTiles = movableTiles;
-			for (int i = 0; i < activeTiles.size(); i++) {
+			Block movableBlock = TileGenerator.createBlock(config, column);
+			activeBlock = movableBlock;
+			for (int i = 0; i < activeBlock.size(); i++) {
 				// add to board
 				int row = configurations[config][i][0];
 				int col = configurations[config][i][1] + column;
 				System.out.println("inserted tile at: " + row + ", " + col);
-				board[row][col] = activeTiles.get(i);
+				board[row][col] = activeBlock.get(i);
 				// make Block movable, set empty tiles above
 			}
 		}
 	}
 	
 	void settle() {
-		for (Tile t: activeTiles) {
-			Coordinate c = t.getCoords();
-			System.out.println(c);
-			if (makeMove(c.getX(), c.getY(), c.getX() + 1, c.getY()))
-				activeTiles = null;
+		boolean canSettle = blockCanMove(activeBlock, 1, 0);
+		if (!canSettle) {
+			activeBlock = null;
+			return;
+		} else {
+			for (Tile t: activeBlock.getTiles()) {
+				Coordinate c = t.getCoords();	
+				makeMove(c.getX(), c.getY(), c.getX() + 1, c.getY());
+			}
 		}
 	}
 	
-	boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn) {
-		if (rangeCheck(toRow, toColumn) && !occupied(toRow, toColumn)) {
-			Tile t = board[fromRow][fromColumn];
-			t.setCoords(toRow, toColumn);
-			board[toRow][toColumn] = t;
-			board[fromRow][fromColumn] = TileGenerator.emptyTile();
-			return false;
+	boolean blockCanMove(Block block, int row, int column) {
+		boolean canMove = true;
+		for (Tile t: activeBlock.getTiles()) {
+			Coordinate c = t.getCoords();
+			if (!rangeCheck(c.getX() + row, c.getY() + column) ||
+				(occupied(c.getX() + row, c.getY() + column) && !activeBlock.contains(c))) {
+				canMove = false;
+			}
 		}
-		return true;
+		return canMove;
+	}
+	
+	void makeMove(int fromRow, int fromColumn, int toRow, int toColumn) {
+		Tile t = board[fromRow][fromColumn];
+		t.setCoords(toRow, toColumn);
+		board[toRow][toColumn] = t;
+		board[fromRow][fromColumn] = TileGenerator.emptyTile();
+	}
+
+	@Override
+	public void run() {
+		update();
 	}
 	
 }

@@ -55,15 +55,29 @@ public class TileGenerator {
 		}
 		return list;
 	}
+
+	public static Block createBlock(int index, int column) {
+		Tile[] tiles = new Tile[tileConfigurations[index].length];
+		for (int i = 0; i < tileConfigurations[index].length; i++) {
+			tiles[i] = new Tile(
+				tileScores[index],
+				new Coordinate(tileConfigurations[index][i][0], tileConfigurations[index][i][1] + column),
+				() -> { return createSquare(palette[index]); }
+			);
+		}
+		return new Block(tiles);
+	}
 	
 	static Node createSquare(Color c) {
 		return new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
 	}
+	
 	static Node createDiamond(Color c) {
 		Rectangle node = new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
 		node.setRotate(45.0);
 		return node;
 	}
+	
 	static Node createCircle(Color c) {
 		double minValue = Math.min(getWidth() / getColumns(), getHeight() / getRows());
 		return new Circle(minValue, c);
@@ -78,8 +92,6 @@ public class TileGenerator {
 		triangle.setFill(c);
 		return triangle;
 	}
-
-
 	
 	public static Tile emptyTile(Coordinate coords) {
 		return new Tile(0, coords, () -> {

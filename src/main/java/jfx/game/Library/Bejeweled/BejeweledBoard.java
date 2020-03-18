@@ -82,4 +82,9 @@ public class BejeweledBoard extends Board {
 		// TODO Main loop for game
 		System.out.println("Update called");
 	}
+
+	@Override
+	public void run() {
+		update();
+	}
 }

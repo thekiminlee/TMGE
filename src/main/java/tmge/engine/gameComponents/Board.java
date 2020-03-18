@@ -1,6 +1,7 @@
 package tmge.engine.gameComponents;
 
-public abstract class Board {
+public abstract class Board implements Runnable {
+	
     protected Tile[][] board;
     TileGame game;
     long delay = 1000;
