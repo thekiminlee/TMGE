@@ -14,8 +14,10 @@ public class BejeweledBoard extends Board {
     private int score;
     private int[][][] configurations = {{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}}};
     private int[] values = {1,2,3,4,5,6};
-    private static final int ROWS = 20, COLUMNS = 10;
+    private static final int ROWS = 8, COLUMNS = 8;
     private Random seed = new Random(LocalTime.now().toNanoOfDay());
+    TileGame game;
+    BejeweledScreen screen;
     
     public BejeweledBoard(){
     	super(new TileGame(ROWS, COLUMNS));
@@ -62,6 +64,8 @@ public class BejeweledBoard extends Board {
     public boolean occupied(Tile t) {
     	return (t != null) && (t != TileGenerator.emptyTile());
     }
+
+
     
 	@Override
 	public void addTile(int row, int column, Tile t) {
@@ -87,4 +91,6 @@ public class BejeweledBoard extends Board {
 	public void run() {
 		update();
 	}
+
+
 }

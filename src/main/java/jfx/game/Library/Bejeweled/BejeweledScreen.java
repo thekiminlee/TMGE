@@ -72,17 +72,13 @@ public class BejeweledScreen implements Screen {
 	private void setVBox(int row, int column, Tile tile) {
 		gameBox[row][column].getChildren().add(tile.getNode());
 	}
-	
-	@Override
-	public Board getBoard() {
-		return board;
-	}
 
-	@Override
-	public void draw() {
-		System.out.println("Draw called");
-	}
-	
+
+//	@Override
+//	public void draw() {
+//		System.out.println("Draw called");
+//	}
+//
 	@FXML 
 	private void minimize() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
@@ -93,6 +89,25 @@ public class BejeweledScreen implements Screen {
 	private void maximize() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
 		stage.setMaximized(true);
+	}
+
+	@Override
+	public Board getBoard() {
+		return this.board;
+	}
+
+	@Override
+	public void draw() {
+		Tile[][] gameState = board.getBoard();
+		System.out.println(board);
+		for (int row = 0; row < board.getRows(); row++) {
+			for (int column = 0; column < board.getColumns(); column++) {
+				Tile t = gameState[row][column];
+				setVBox(row, column, t);
+			}
+		}
+		this.ready = true;
+		System.out.println("draw");
 	}
 
 	@Override
