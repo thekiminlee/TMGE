@@ -1,20 +1,19 @@
 package jfx.game.Library.GameSelect;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import jfx.game.Library.App;
+import jfx.game.Library.FXMLBuilder;
 import jfx.game.Library.Bejeweled.BejeweledScreen;
 import jfx.game.Library.Tetris.TetrisScreen;
+import tmge.engine.Engine;
 import tmge.engine.Screen;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -25,20 +24,14 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URI;
-import java.nio.file.Paths;
-
 import javafx.scene.image.Image;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
-public class GameSelect implements Screen {
+public class GameSelect {
     Button bejeweledGameStartButton;
     Button tetrisGameStartButton;
 
@@ -126,9 +119,11 @@ public class GameSelect implements Screen {
         bejeweledGameStartButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
-    			System.out.println("Open Bejeweled here");
+    			// open the new game and close the game select window, behind the scenes a BejeweledScreen is created
     			App.startGame(BejeweledScreen.link, new AnchorPane(), true);
     			exit();
+    			Screen screen = FXMLBuilder.getController();
+    			loadGame(screen);
     		}
     	});
         
@@ -141,16 +136,31 @@ public class GameSelect implements Screen {
         tetrisGameStartButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
-    			// open the new game and close the game select window
-    			System.out.println("Open Tetris Here");
+    			// open the new game and close the game select window, behind the scenes a TetrisScreen is created
     			App.startGame(TetrisScreen.link, new AnchorPane(), true);
     			exit();
+    			System.out.println("Getting TetrisScreen");
+    			Screen screen = FXMLBuilder.getController();
+    			loadGame(screen);
     		}
     	});
         
         hbox.getChildren().addAll(bejeweledGameStartButton, tetrisGameStartButton);
 
         return hbox;
+    }
+    
+    private void loadGame(Screen screen) {
+    	Engine engine = new Engine();	
+		Platform.runLater(() -> {
+			while (!screen.ready())
+    			try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			engine.startFXMLLoop(screen);
+		});
     }
 
     public Image loadImage(String imagePath) {
@@ -162,15 +172,6 @@ public class GameSelect implements Screen {
     	}
     }
     
-	@Override
-	public void initialize() {}
-
-	@Override
-	public void draw() {
-		return;
-	}
-
-	@Override
 	public void exit() {
 		((Stage)scene1.getWindow()).close();
 	}

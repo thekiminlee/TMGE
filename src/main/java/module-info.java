@@ -5,8 +5,7 @@ module jfx.game {
     requires javafx.fxml;
 	requires java.base;
 	requires javafx.base;
-    exports jfx.game.GameEnv;
-    exports jfx.game.Library;
+    opens jfx.game.Library to javafx.graphics;
+    opens jfx.game.Library.Bejeweled to javafx.controls, javafx.fxml; 
     opens jfx.game.Library.Tetris to javafx.controls, javafx.fxml;
-    
 }

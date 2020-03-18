@@ -12,9 +12,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import tmge.engine.Screen;
 
 public class FXMLBuilder {
 	private static URL fxmlString = null;
+	private static Screen controller = null;
 	
 	public static void setFXML(URI link) {
 		try {
@@ -23,6 +25,10 @@ public class FXMLBuilder {
 			System.out.println(link);
 			e.printStackTrace();
 		}
+	}
+	
+	public static Screen getController() {
+		return controller;
 	}
 	
 	/*	buildScene
@@ -38,7 +44,7 @@ public class FXMLBuilder {
 			System.out.println(loader.getLocation());
 			pane = (Parent) loader.load();
 			// references a screen-derived class
-			T controller = loader.getController();
+			controller = loader.getController();
 			return new Scene(pane);
 		} catch (IOException e) {
 			e.printStackTrace();

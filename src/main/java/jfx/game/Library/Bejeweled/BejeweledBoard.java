@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import tmge.engine.gameComponents.Board;
+import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGame;
 import tmge.engine.gameComponents.TileGenerator;
@@ -12,12 +13,15 @@ import tmge.engine.gameComponents.TileGenerator;
 public class BejeweledBoard extends Board {
     private int score;
     private int[][][] configurations = {{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}}};
+    private int[] values = {1,2,3,4,5,6};
     private static final int ROWS = 20, COLUMNS = 10;
     private Random seed = new Random(LocalTime.now().toNanoOfDay());
     
     public BejeweledBoard(){
     	super(new TileGame(ROWS, COLUMNS));
-    	TileGenerator.registerTileConfigurations(configurations);
+    	TileGenerator.registerTileConfigurations(configurations, values);
+
+		System.out.println("Board created");
     }
 
     //Matching on board
@@ -40,7 +44,7 @@ public class BejeweledBoard extends Board {
     		for (int column = this.getColumns() - 1; column >= 0; column++) {
     			if (board[row][column] == null)
     				removeTile(row, column);
-    			else if (board[row][column] == TileGenerator.emptyTile()) {
+    			else if (board[row][column] == TileGenerator.emptyTile(new Coordinate(row, column))) {
     				addTile(row, column, board[row - 1][column]);
     				removeTile(row - 1, column);
     			}
@@ -52,7 +56,7 @@ public class BejeweledBoard extends Board {
     public void fillTopRow() {
     	for (int column = 0; column < this.getColumns(); column++)
     		if (!occupied(board[0][column]))
-    			board[0][column] = TileGenerator.createTile(seed.nextInt(configurations.length));
+    			board[0][column] = TileGenerator.createTile(seed.nextInt(configurations.length), new Coordinate(0, column));
     }
 
     public boolean occupied(Tile t) {
@@ -76,5 +80,6 @@ public class BejeweledBoard extends Board {
 	@Override
 	public void update() {
 		// TODO Main loop for game
+		System.out.println("Update called");
 	}
 }

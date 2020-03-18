@@ -20,12 +20,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import jfx.game.Library.App;
 import tmge.engine.Screen;
+import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class TetrisScreen implements Screen {
-	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/base.fxml").toUri();
-
+	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
+	boolean ready = false;
 	Tile empty = TileGenerator.emptyTile();
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL}; 
@@ -73,25 +74,13 @@ public class TetrisScreen implements Screen {
 		
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
-	}
-	
-	Rectangle createRectangle(Color color) {
-		return new Rectangle(screenWidth / board.getColumns(), screenHeight / board.getRows(), color);
+		ready = true;
+		System.out.println("initialized");
 	}
 	
 	public void setVBox(int row, int column, Tile t) {
 		gameBox[row][column].getChildren().clear();
 		gameBox[row][column].getChildren().add(t.getNode());
-	}
-
-	@Override
-	public void draw() {
-		Tile[][] gameState = board.getBoard();
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
-				setVBox(row, column, gameState[row][column]);
-			}
-		}
 	}
 	
 	// TODO: time permitting, make everything resizable
@@ -125,10 +114,38 @@ public class TetrisScreen implements Screen {
 	}
 	
 	@Override
+	public Board getBoard() {
+		return this.board;
+	}
+
+	@Override
+	public void draw() {
+		Tile[][] gameState = board.getBoard();
+		System.out.println(board);
+		for (int row = 0; row < board.getRows(); row++) {
+			for (int column = 0; column < board.getColumns(); column++) {
+				setVBox(row, column, gameState[row][column]);
+			}
+		}
+		this.ready = true;
+		System.out.println("draw");
+	}
+	
+	@Override
 	@FXML
 	public void exit() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
         stage.close();
+	}
+	
+	@Override
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
+
+	@Override
+	public boolean ready() {
+		return ready;
 	}
 
 }

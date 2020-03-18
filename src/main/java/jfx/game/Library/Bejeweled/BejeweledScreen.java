@@ -14,12 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import jfx.game.Library.Tetris.TetrisBoard;
 import tmge.engine.Screen;
+import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class BejeweledScreen implements Screen {
-	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/base.fxml").toUri();
-
+	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml").toUri();
+	boolean ready = false;
 	Tile empty = TileGenerator.emptyTile();
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE};
@@ -38,6 +39,10 @@ public class BejeweledScreen implements Screen {
 
 		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());		
 		TileGenerator.registerPalette(palette);
+		
+		Random seed = new Random();
+		seed.setSeed(LocalTime.now().toNanoOfDay());
+		System.out.println("Screen created");
 	}
 	
 	@FXML VBox leftVBox;
@@ -49,13 +54,6 @@ public class BejeweledScreen implements Screen {
 	@Override
 	@FXML
 	public void initialize() {
-		
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
-		TileGenerator.registerPalette(palette);
-		
-		Random seed = new Random();
-		seed.setSeed(LocalTime.now().toNanoOfDay());
-		
 		// init all vboxes, add them to a tracking data structure and the visual
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {
@@ -68,16 +66,34 @@ public class BejeweledScreen implements Screen {
 		
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
+		System.out.println("Screen initialized");
+		ready = true;
 	}
 
 	private void setVBox(int row, int column, Tile tile) {
 		gameBox[row][column].getChildren().add(tile.getNode());
 	}
+	
+	@Override
+	public Board getBoard() {
+		return board;
+	}
 
 	@Override
 	public void draw() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Draw called");
+	}
+	
+	@FXML 
+	private void minimize() {
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		stage.setIconified(true);
+	}
+	
+	@FXML 
+	private void maximize() {
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		stage.setMaximized(true);
 	}
 
 	@Override
@@ -85,6 +101,16 @@ public class BejeweledScreen implements Screen {
 	public void exit() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
         stage.close();
+	}
+
+	@Override
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
+
+	@Override
+	public boolean ready() {
+		return ready;
 	}
 
 }

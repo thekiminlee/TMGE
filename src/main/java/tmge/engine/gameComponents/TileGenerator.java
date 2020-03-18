@@ -16,9 +16,7 @@ public class TileGenerator {
 	static Color[] palette;
 	enum Shapes {SQUARE, DIAMOND, CIRCLE, STAR};
 	
-	private static Tile empty = new Tile(0, () -> {
-		return createSquare(Color.valueOf("040d06"));
-	});
+	private static Tile empty = emptyTile(new Coordinate(0,0));
 	
 	static double screenWidth, screenHeight;
 
@@ -31,26 +29,30 @@ public class TileGenerator {
 		rows = r;
 	}
 	
-	public static void registerTileConfigurations(int[][][] configs) {
+	public static void registerTileConfigurations(int[][][] configs, int[] values) {
 		tileConfigurations = configs;
+		tileScores = values;
 	}
 	
 	public static void registerPalette(Color[] colors) {
 		palette = colors;
 	}
 	
-	public static Tile createTile(int index) {
-		return new Tile(tileScores[index], () -> {
+	public static Tile createTile(int index, Coordinate coord) {
+		return new Tile(tileScores[index], coord, () -> {
 			return createSquare(palette[index]);
 		});
 	}
 	
-	public static ArrayList<Tile> createTiles(int index) {
+	public static ArrayList<Tile> createTiles(int index, int column) {
 		ArrayList<Tile> list = new ArrayList<Tile>();
 		for (int i = 0; i < tileConfigurations[index].length; i++) {
-			list.add(new Tile(tileScores[index], () -> {
-				return createSquare(palette[index]);
-			}));
+			list.add(
+				new Tile(tileScores[index],
+					new Coordinate(tileConfigurations[index][i][0], tileConfigurations[index][i][1] + column),
+					() -> { return createSquare(palette[index]); }
+				)
+			);
 		}
 		return list;
 	}
@@ -66,6 +68,12 @@ public class TileGenerator {
 	static Node createCircle(Color c) {
 		double minValue = Math.min(getWidth() / getColumns(), getHeight() / getRows());
 		return new Circle(minValue, c);
+	}
+	
+	public static Tile emptyTile(Coordinate coords) {
+		return new Tile(0, coords, () -> {
+			return createSquare(Color.valueOf("040d06"));
+		});
 	}
 	
 	public static Tile emptyTile() {

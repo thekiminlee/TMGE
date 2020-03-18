@@ -1,4 +1,4 @@
-package jfx.game.Library.Bejeweled;
+package tmge.engine.gameComponents;
 
 public class Coordinate{
     private int x;
@@ -20,5 +20,17 @@ public class Coordinate{
 
     public int getY(){
         return this.y;
+    }
+    
+    public void setX(int x){
+        this.x = x;
+    }
+
+    public void getY(int y){
+        this.y = y;
+    }
+    
+    public String toString() {
+    	return "<" + Integer.toString(x) + ", " + Integer.toString(y) + ">";
     }
 }
