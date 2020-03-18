@@ -159,8 +159,9 @@ public class TetrisBoard extends Board {
 		boolean canMove = true;
 		for (Tile t: activeBlock.getTiles()) {
 			Coordinate c = t.getCoords();
-			if (!rangeCheck(c.getX() + row, c.getY() + column) ||
-				(occupied(c.getX() + row, c.getY() + column) && !activeBlock.contains(c))) {
+			Coordinate cPrime = new Coordinate(c.getX() + row, c.getY() + column);
+			if (!rangeCheck(cPrime.getX(), cPrime.getY()) ||
+				(occupied(cPrime.getX(), cPrime.getY()) && !activeBlock.contains(cPrime))) {
 				canMove = false;
 			}
 		}
