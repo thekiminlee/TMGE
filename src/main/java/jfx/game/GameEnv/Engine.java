@@ -3,9 +3,8 @@ package jfx.game.GameEnv;
 import jfx.game.Library.Game;
 import jfx.game.Library.Screen;
 
-public class Engine {
+public class Engine implements Runnable {
     private boolean loopContinue = true;
-    private Screen screen;
     private Game game;
     Boolean init(){
         return false;
@@ -16,28 +15,20 @@ public class Engine {
     }
 
 
-    /* change this up its correct logic, but in the wrong place*/
-    /*
-    void MainLoop(Screen incomingScreen){
-        screen = incomingScreen;
-        screen.initliaze();
-        while(loopContinue){
-            screen.appUpdate();
-            screen.draw();
-        }
-    }*/
-
     void MainLoop(){
         while(loopContinue){
             game.update();
         }
     }
 
-    void startLoop(Screen screen){
+    void startLoop(){
         loopContinue = true;
         MainLoop();
     }
 
-
-
+    //this would be used as new Thread(Engine Obj).run();
+    //we can set this on an action on when someone clicks on a game and then this ends up running
+    public void run(){
+        startLoop();
+    }
 }
