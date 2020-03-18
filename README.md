@@ -35,4 +35,4 @@ or through your package manager
 
 ##### Run the jar from the project root directory
 
-```java --module-path $PATH_TO_FX --add-modules=javafx.controls -jar .\target\GameEnv-0.0.1-SNAPSHOT.jar```
+```java --module-path $PATH_TO_FX --add-modules=javafx.controls,javafx.fxml -jar .\target\TMGEngine-0.0.5-SNAPSHOT.jar```
