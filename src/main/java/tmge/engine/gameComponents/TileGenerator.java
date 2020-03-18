@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Polygon;
 
 public class TileGenerator {
 	
@@ -69,6 +70,18 @@ public class TileGenerator {
 		double minValue = Math.min(getWidth() / getColumns(), getHeight() / getRows());
 		return new Circle(minValue, c);
 	}
+
+	static Node createTriangle(Color c) {
+		Polygon triangle = new Polygon();
+		triangle.getPoints().addAll(new Double[]{
+			getWidth() / getColumns(), 0.0, 0.0, getHeight() / getRows(), 
+				(getWidth() / getColumns())*2, 0.0
+		});
+		triangle.setFill(c);
+		return triangle;
+	}
+
+
 	
 	public static Tile emptyTile(Coordinate coords) {
 		return new Tile(0, coords, () -> {
