@@ -58,7 +58,7 @@
 			    <artifactId>javafx-maven-plugin</artifactId>
 			    <version>0.0.4</version>
 			    <configuration>
-			        <mainClass>jfx.game.GameEnv.Main</mainClass>
+			        <mainClass>Games.GameEnv.Main</mainClass>
 			    </configuration>
 			</plugin>
             <plugin>
@@ -70,7 +70,7 @@
 			            <manifest>
 			                <addClasspath>true</addClasspath>
 			                <classpathPrefix>libs/</classpathPrefix>
-			                <mainClass>jfx.game.GameEnv.Main</mainClass>
+			                <mainClass>Games.GameEnv.Main</mainClass>
 			            </manifest>
 			        </archive>
 			    </configuration>

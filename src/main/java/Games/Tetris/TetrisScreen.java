@@ -1,9 +1,8 @@
-package jfx.game.Library.Tetris;
+package Games.Tetris;
 
 import java.net.URI;
 import java.nio.file.Paths;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;

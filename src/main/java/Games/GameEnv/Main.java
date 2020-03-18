@@ -1,4 +1,4 @@
-package jfx.game.GameEnv;
+package Games.GameEnv;
 
 import jfx.game.Library.App;
 

@@ -1,16 +1,10 @@
-package jfx.game.Library.Tetris;
+package Games.Tetris;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.application.Platform;
-import tmge.engine.gameComponents.Board;
-import tmge.engine.gameComponents.Coordinate;
-import tmge.engine.gameComponents.Tile;
-import tmge.engine.gameComponents.Block;
-import tmge.engine.gameComponents.TileGame;
-import tmge.engine.gameComponents.TileGenerator;
+import tmge.engine.gameComponents.*;
 
 public class TetrisBoard extends Board {
 	static final int ROWS = 20, COLUMNS = 10;

@@ -1,4 +1,4 @@
-package jfx.game.Library.Bejeweled;
+package Games.Bejeweled;
 
 import java.time.LocalTime;
 import java.util.ArrayList;

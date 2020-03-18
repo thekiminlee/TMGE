@@ -1,4 +1,4 @@
-package jfx.game.Library.Bejeweled;
+package Games.Bejeweled;
 
 import java.net.URI;
 import java.nio.file.Paths;

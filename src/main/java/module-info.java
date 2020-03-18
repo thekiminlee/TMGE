@@ -3,9 +3,9 @@ module jfx.game {
     requires javafx.controls;
     requires javafx.media;
     requires javafx.fxml;
-	requires java.base;
-	requires javafx.base;
+    requires java.base;
+    requires javafx.base;
     opens jfx.game.Library to javafx.graphics;
-    opens jfx.game.Library.Bejeweled to javafx.controls, javafx.fxml; 
-    opens jfx.game.Library.Tetris to javafx.controls, javafx.fxml;
+    opens Games.Bejeweled to javafx.controls, javafx.fxml;
+    opens Games.Tetris to javafx.controls, javafx.fxml;
 }
