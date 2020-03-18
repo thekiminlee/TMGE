@@ -2,23 +2,15 @@ package jfx.game.Library.Tetris;
 
 import java.net.URI;
 import java.nio.file.Paths;
-import java.time.LocalTime;
-import java.util.Random;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import jfx.game.Library.App;
 import tmge.engine.Screen;
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Tile;
@@ -84,13 +76,13 @@ public class TetrisScreen implements Screen {
 	}
 	
 	// TODO: time permitting, make everything resizable
-	private void resizeElements() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
-		
-		screenWidth = stage.getWidth();
-		screenHeight = stage.getHeight();
-		TileGenerator.setWindowDimensions(screenWidth, screenHeight);
-		
+//	private void resizeElements() {
+//		Stage stage = (Stage) leftVBox.getScene().getWindow();
+//		
+//		screenWidth = stage.getWidth();
+//		screenHeight = stage.getHeight();
+//		TileGenerator.setWindowDimensions(screenWidth, screenHeight);
+//		
 //		leftVBox.layoutXProperty().addListener(new ChangeListener<Number>() {
 //			@Override
 //			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -99,7 +91,7 @@ public class TetrisScreen implements Screen {
 //		});
 //		rightVBox;
 //		gameGrid;
-	}
+//	}
 	
 	@FXML 
 	private void minimize() {
@@ -120,14 +112,17 @@ public class TetrisScreen implements Screen {
 
 	@Override
 	public void draw() {
-		Tile[][] gameState = board.getBoard();
-		System.out.println(board);
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
-				setVBox(row, column, gameState[row][column]);
+		Platform.runLater(() -> {
+			Tile[][] gameState = board.getBoard();
+			System.out.println(board);
+			for (int row = 0; row < board.getRows(); row++) {
+				for (int column = 0; column < board.getColumns(); column++) {
+					Tile t = gameState[row][column];
+					setVBox(row, column, t);
+				}
 			}
-		}
-		this.ready = true;
+			this.ready = true;
+		});
 		System.out.println("draw");
 	}
 	

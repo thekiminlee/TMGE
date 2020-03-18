@@ -1,8 +1,5 @@
 package tmge.engine;
 
-import java.io.PrintStream;
-
-import javafx.application.Platform;
 import tmge.engine.gameComponents.Board;
 
 public class Engine {

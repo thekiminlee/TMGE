@@ -1,7 +1,6 @@
 package tmge.engine;
 
 import tmge.engine.gameComponents.Board;
-import tmge.engine.gameComponents.TileGame;
 
 public class Environment {
     protected Board board;

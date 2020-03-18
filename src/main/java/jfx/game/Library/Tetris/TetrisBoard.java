@@ -2,7 +2,6 @@ package jfx.game.Library.Tetris;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Random;
 
 import tmge.engine.gameComponents.Board;
@@ -27,11 +26,11 @@ public class TetrisBoard extends Board {
 		{ // Line
 			{0,3}, {0,2}, {0,1}, {0,0}
 		}, 
-		{ // S
+		{ // Z
 			{1,2},	{1,1},
 					{0,1},	{0,0}
 		},
-		{ // Z
+		{ // S
 					{1,1},	{1,0},
 			{0,2},	{0,1}
 		},
@@ -136,17 +135,20 @@ public class TetrisBoard extends Board {
 		for (Tile t: activeTiles) {
 			Coordinate c = t.getCoords();
 			System.out.println(c);
-			move(c.getX(), c.getY(), c.getX() + 1, c.getY());
+			if (makeMove(c.getX(), c.getY(), c.getX() + 1, c.getY()))
+				activeTiles = null;
 		}
 	}
 	
-	void move(int fromRow, int fromColumn, int toRow, int toColumn) {
-		if (occupied(fromRow, fromColumn) && rangeCheck(toRow, toColumn) && !occupied(toRow, toColumn)) {
-			board[toRow][toColumn] = board[fromRow][fromColumn];
+	boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn) {
+		if (rangeCheck(toRow, toColumn) && !occupied(toRow, toColumn)) {
+			Tile t = board[fromRow][fromColumn];
+			t.setCoords(toRow, toColumn);
+			board[toRow][toColumn] = t;
 			board[fromRow][fromColumn] = TileGenerator.emptyTile();
-			board[fromRow][fromColumn].setX(fromRow);
-			board[fromRow][fromColumn].setY(fromColumn);
+			return false;
 		}
+		return true;
 	}
 	
 }

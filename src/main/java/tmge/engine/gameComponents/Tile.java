@@ -53,6 +53,10 @@ public class Tile implements Factory<Node> {
 		this.coords.setX(y);
 	}
 	
+	public void setCoords(int x, int y) {
+		this.coords = new Coordinate(x,y);
+	}
+	
 	public boolean compareTo(Tile t) {
 		return this.coords.getX() == t.getCoords().getX() &&
 				this.coords.getY() == t.getCoords().getY() &&

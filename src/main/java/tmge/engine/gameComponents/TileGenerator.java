@@ -1,8 +1,6 @@
 package tmge.engine.gameComponents;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
