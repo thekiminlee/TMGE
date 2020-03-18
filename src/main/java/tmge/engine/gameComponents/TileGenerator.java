@@ -13,7 +13,7 @@ public class TileGenerator {
 	private static int[][][] tileConfigurations;
 	private static int[] tileScores;
 	static Color[] palette;
-	enum Shapes {SQUARE, DIAMOND, CIRCLE, STAR};
+	enum Shapes {SQUARE, DIAMOND, CIRCLE, TRIANGLE};
 	
 	private static Tile empty = emptyTile(new Coordinate(0,0));
 	

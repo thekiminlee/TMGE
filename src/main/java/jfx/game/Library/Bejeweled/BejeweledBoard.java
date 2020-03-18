@@ -22,9 +22,21 @@ public class BejeweledBoard extends Board {
     public BejeweledBoard(){
     	super(new TileGame(ROWS, COLUMNS));
     	TileGenerator.registerTileConfigurations(configurations, values);
-
+		for (int row = 0; row < ROWS; row++)
+			for (int col = 0; col < COLUMNS; col++)
+				board[row][col] = TileGenerator.emptyTile();
+		printBoard();
 		System.out.println("Board created");
     }
+
+    public void printBoard(){
+		for (int row = 0; row < ROWS; row++) {
+			for (int col = 0; col < COLUMNS; col++)
+				System.out.print(board[row][col].getValue());
+			System.out.println();
+		}
+	}
+
 
     //Matching on board
     public int applyMatch(ArrayList<Coordinate> list) {
@@ -64,6 +76,14 @@ public class BejeweledBoard extends Board {
     public boolean occupied(Tile t) {
     	return (t != null) && (t != TileGenerator.emptyTile());
     }
+
+    public void fillBoard(){
+    	for(int row = 0; row < this.getRows(); row++){
+    		for(int col = 0; col < this.getColumns(); col++){
+
+			}
+		}
+	}
 
 
     
