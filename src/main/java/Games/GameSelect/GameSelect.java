@@ -151,7 +151,7 @@ public class GameSelect {
     }
     
     private void loadGame(Screen screen) {
-    	Engine engine = new Engine();	
+    	//Engine engine = new Engine();
 		Platform.runLater(() -> {
 			while (!screen.ready())
     			try {

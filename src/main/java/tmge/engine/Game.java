@@ -2,36 +2,41 @@ package tmge.engine;
 
 import tmge.engine.Screen;
 import tmge.engine.boardComponents.Board;
+import tmge.engine.boardComponents.Tile;
 
 public class Game {
-	Screen currentScreen;
-	Board currentBoard;
-	int rows;
-	int columns;
+	private Screen currentScreen;
+	private Board currentBoard;
 
-	public Game(int rows, int columns){
-		this.rows = rows;
-		this.columns = columns;
-		this.currentScreen = null;
+
+	public Game(Screen currentScreen, Board currentBoard) {
+		this.currentScreen = currentScreen;
+		this.currentBoard = currentBoard;
 	}
 
 	public void setCurrentScene(Screen screen){
 		currentScreen = screen;
 	}
 
-	public String toString() {
-		return "";
-	}
+	public void setCurrentBoard(Board board) {currentBoard = board;}
 
-	public Screen getCurrentScene() {
+	/*
+	private Screen getCurrentScene() {
 		return currentScreen;
 	}
 
+	private Board getCurrentBoard() { return currentBoard;}
+	*/
+
 	public int getRows() {
-		return rows;
+		return this.currentBoard.getRows();
 	}
 
 	public int getColumns() {
-		return columns;
+		return this.currentBoard.getColumns();
 	}
+
+	public Tile[][] getCurrentBoard() { return this.currentBoard.getBoard();}
+
+
 }

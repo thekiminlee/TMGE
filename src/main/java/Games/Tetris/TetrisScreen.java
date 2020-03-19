@@ -48,8 +48,8 @@ public class TetrisScreen implements Screen {
 	@Override
 	@FXML
 	public void initialize() {
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
-		TileGenerator.registerPalette(palette);
+		//new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
+		//TileGenerator.registerPalette(palette);
 		
 //		Random seed = new Random();
 //		seed.setSeed(LocalTime.now().toNanoOfDay());
