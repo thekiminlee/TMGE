@@ -2,17 +2,25 @@ package jfx.game.Library.Tetris;
 
 import java.net.URI;
 import java.nio.file.Paths;
+import java.util.concurrent.Callable;
+import java.util.function.BiFunction;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import tmge.engine.Screen;
+import tmge.engine.gameComponents.Block;
 import tmge.engine.gameComponents.Board;
+import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
@@ -36,8 +44,7 @@ public class TetrisScreen implements Screen {
 		new Thread(board).start();
 		gameBox = new VBox[board.getRows()][board.getColumns()];
 		
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
-		TileGenerator.registerPalette(palette);
+		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns(), palette);
 	}
 	
 	@FXML VBox leftVBox;
@@ -49,12 +56,6 @@ public class TetrisScreen implements Screen {
 	@Override
 	@FXML
 	public void initialize() {
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
-		TileGenerator.registerPalette(palette);
-		
-//		Random seed = new Random();
-//		seed.setSeed(LocalTime.now().toNanoOfDay());
-		
 		// init all vboxes, add them to a tracking data structure and the visual
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {
@@ -110,19 +111,53 @@ public class TetrisScreen implements Screen {
 	public Board getBoard() {
 		return this.board;
 	}
+	
+	public void translateMovableBlock(Block activeBlock, BiFunction<TetrisBoard.Moves, Integer, Boolean> function) {
+		(leftVBox.getScene()).setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+            	switch (event.getCode()) {
+            	case SPACE:
+            	case S:
+					function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, 1);
+					break;
+            	case A:
+            		function.apply(TetrisBoard.Moves.TRANSLATE_HORIZONTAL, -1);
+            		break;
+            	case D:
+            		function.apply(TetrisBoard.Moves.TRANSLATE_HORIZONTAL, 1);
+            		break;
+            	case W:
+            		function.apply(TetrisBoard.Moves.ROTATE_CLOCKWISE, 1);
+            	default:
+            		break;
+            	}
+            	draw();
+            }
+        });
+	}
 
 	@Override
 	public void draw() {
 		Tile[][] gameState = board.getBoard();
-		System.out.println(board);
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {
 				Tile t = gameState[row][column];
 				setVBox(row, column, t);
 			}
 		}
+		Block activeBlock = board.getActiveBlock();
+		if (activeBlock != null)
+			for (Tile t: activeBlock.getTiles()) {
+				Coordinate coords = t.getCoords();
+				setVBox(coords.getX(), coords.getY(), t);
+			}
 		this.ready = true;
-		System.out.println("draw");
+	}
+	
+	public void onEnd() {
+		// TODO: popup, start again?
+		exit();
 	}
 	
 	@Override

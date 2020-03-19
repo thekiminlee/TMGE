@@ -8,6 +8,10 @@ public class Coordinate{
         this.x = x;
         this.y = y;
     }
+    
+    public Coordinate clone() {
+    	return new Coordinate(x, y);
+    }
 
     public void updateCoordinate(int x, int y){
         this.x = x;

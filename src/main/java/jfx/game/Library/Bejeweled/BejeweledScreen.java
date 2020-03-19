@@ -2,8 +2,6 @@ package jfx.game.Library.Bejeweled;
 
 import java.net.URI;
 import java.nio.file.Paths;
-import java.time.LocalTime;
-import java.util.Random;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -27,20 +25,30 @@ public class BejeweledScreen implements Screen {
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
 	
-	public BejeweledScreen() { createScreen(720.0 * 0.6, 640.0 - 48); }
+	public BejeweledScreen()
+	{
+		createScreen(720.0 * 0.6, 640.0 - 48);
+	}
 	
 	void createScreen(double screenWidth, double screenHeight) {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 
-		board = new BejeweledBoard();
+		board = new BejeweledBoard(this);
+		new Thread(board).start();
 		gameBox = new VBox[board.getRows()][board.getColumns()];
 
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());		
-		TileGenerator.registerPalette(palette);
-		
-		Random seed = new Random();
-		seed.setSeed(LocalTime.now().toNanoOfDay());
+		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns(), palette);
+		// init all vboxes, add them to a tracking data structure and the visual
+		for (int row = 0; row < board.getRows(); row++) {
+			for (int column = 0; column < board.getColumns(); column++) {
+				VBox box = new VBox();
+				gameBox[row][column] = box;
+				setVBox(row, column, TileGenerator.emptyTile());
+			}
+		}
+//		Random seed = new Random();
+//		seed.setSeed(LocalTime.now().toNanoOfDay());
 		System.out.println("Screen created");
 	}
 	
@@ -53,23 +61,23 @@ public class BejeweledScreen implements Screen {
 	@Override
 	@FXML
 	public void initialize() {
+
 		// init all vboxes, add them to a tracking data structure and the visual
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {
-				VBox box = new VBox();
-				gameBox[row][column] = box;
-				gameGrid.add(box, column, row);
-				setVBox(row, column, TileGenerator.emptyTile());
+				gameGrid.add(gameBox[row][column], column, row);
 			}
 		}
 		
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
-		System.out.println("Screen initialized");
+
 		ready = true;
+		System.out.println("Screen initialized");
 	}
 
 	private void setVBox(int row, int column, Tile tile) {
+		gameBox[row][column].getChildren().clear();
 		gameBox[row][column].getChildren().add(tile.getNode());
 	}
 	
@@ -80,7 +88,16 @@ public class BejeweledScreen implements Screen {
 
 	@Override
 	public void draw() {
-		System.out.println("Draw called");
+		Tile[][] gameState = board.getBoard();
+		System.out.println(board);
+		for (int row = 0; row < board.getRows(); row++) {
+			for (int column = 0; column < board.getColumns(); column++) {
+				Tile t = gameState[row][column];
+				setVBox(row, column, t);
+			}
+		}
+		this.ready = true;
+		System.out.println("draw");
 	}
 	
 	@FXML 

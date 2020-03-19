@@ -10,8 +10,6 @@ import javafx.scene.shape.Polygon;
 
 public class TileGenerator {
 	
-	private static int[][][] tileConfigurations;
-	private static int[] tileScores;
 	static Color[] palette;
 	enum Shapes {SQUARE, DIAMOND, CIRCLE, STAR};
 	
@@ -21,51 +19,18 @@ public class TileGenerator {
 
 	static int columns, rows;
 	
-	public TileGenerator(double defaultWidth, double defaultHeight, int r, int c) {
+	public TileGenerator(double defaultWidth, double defaultHeight, int r, int c, Color[] colors) {
 		screenWidth = defaultWidth;
 		screenHeight = defaultHeight;
 		columns = c;
 		rows = r;
-	}
-	
-	public static void registerTileConfigurations(int[][][] configs, int[] values) {
-		tileConfigurations = configs;
-		tileScores = values;
-	}
-	
-	public static void registerPalette(Color[] colors) {
 		palette = colors;
 	}
 	
-	public static Tile createTile(int index, Coordinate coord) {
-		return new Tile(tileScores[index], coord, () -> {
-			return createSquare(palette[index]);
+	public static Tile createTile(int index, int score, Coordinate coord) {
+		return new Tile(score, coord, palette[index], (color) -> {
+			return createSquare(color);
 		});
-	}
-	
-	public static ArrayList<Tile> createTiles(int index, int column) {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for (int i = 0; i < tileConfigurations[index].length; i++) {
-			list.add(
-				new Tile(tileScores[index],
-					new Coordinate(tileConfigurations[index][i][0], tileConfigurations[index][i][1] + column),
-					() -> { return createSquare(palette[index]); }
-				)
-			);
-		}
-		return list;
-	}
-
-	public static Block createBlock(int index, int column) {
-		Tile[] tiles = new Tile[tileConfigurations[index].length];
-		for (int i = 0; i < tileConfigurations[index].length; i++) {
-			tiles[i] = new Tile(
-				tileScores[index],
-				new Coordinate(tileConfigurations[index][i][0], tileConfigurations[index][i][1] + column),
-				() -> { return createSquare(palette[index]); }
-			);
-		}
-		return new Block(tiles);
 	}
 	
 	static Node createSquare(Color c) {
@@ -94,8 +59,8 @@ public class TileGenerator {
 	}
 	
 	public static Tile emptyTile(Coordinate coords) {
-		return new Tile(0, coords, () -> {
-			return createSquare(Color.valueOf("040d06"));
+		return new Tile(0, coords, Color.valueOf("040d06"), (color) -> {
+			return createSquare(color);
 		});
 	}
 	
