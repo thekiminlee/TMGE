@@ -1,6 +1,7 @@
 package tmge.engine.gameComponents;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -9,7 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
 
 public class TileGenerator {
-	
+	private static Random seed = new Random();
 	private static int[][][] tileConfigurations;
 	private static int[] tileScores;
 	static Color[] palette;
@@ -41,6 +42,28 @@ public class TileGenerator {
 		return new Tile(tileScores[index], coord, () -> {
 			return createSquare(palette[index]);
 		});
+	}
+	public static Tile createRandomTile(int index, Coordinate coord){
+		Node n = randomShape(index);
+		return new Tile(tileScores[index],coord, () -> {
+			return n;
+		});
+	}
+	public static Node randomShape(int index){
+		int randomInt = seed.nextInt(4);
+		if(randomInt == 0){
+			return createSquare(palette[0]);
+		}
+		if(randomInt == 1){
+			return createCircle(palette[1]);
+		}
+		if(randomInt == 2){
+			return createDiamond(palette[2]);
+		}
+		if(randomInt == 3){
+			return  createTriangle(palette[3]);
+		}
+		return null;
 	}
 	
 	public static ArrayList<Tile> createTiles(int index, int column) {

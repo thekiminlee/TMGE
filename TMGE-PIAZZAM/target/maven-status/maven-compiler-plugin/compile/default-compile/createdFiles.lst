@@ -9,6 +9,7 @@ module-info.class
 tmge\engine\Engine.class
 tmge\engine\gameComponents\Factory.class
 tmge\engine\Screen.class
+jfx\game\Library\Bejeweled\BejeweledScreen$1.class
 jfx\game\Library\Bejeweled\BejeweledBoard.class
 jfx\game\Library\ScreenInputs.class
 jfx\game\Library\App.class

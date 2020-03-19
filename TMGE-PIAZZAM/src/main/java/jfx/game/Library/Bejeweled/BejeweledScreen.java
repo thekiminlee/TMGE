@@ -16,6 +16,9 @@ import tmge.engine.Screen;
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
+import javafx.scene.input.MouseEvent;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 public class BejeweledScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml").toUri();
@@ -65,6 +68,15 @@ public class BejeweledScreen implements Screen {
 			for (int column = 0; column < board.getColumns(); column++) {
 				VBox box = new VBox();
 				gameBox[row][column] = box;
+				int targetRow = row;
+				int targetCol = column;
+				gameBox[row][column].addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent e) {
+						//Node test = gameBox[row][column]
+						System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
+					}
+				});
 				gameGrid.add(box, column, row);
 				setVBox(row, column, TileGenerator.emptyTile());
 			}

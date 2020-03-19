@@ -10,6 +10,7 @@ import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGame;
 import tmge.engine.gameComponents.TileGenerator;
+import javafx.scene.input.MouseEvent;
 
 public class BejeweledBoard extends Board {
     private int score;
@@ -28,8 +29,10 @@ public class BejeweledBoard extends Board {
     	TileGenerator.registerTileConfigurations(configurations, values);
 		this.screen = screen;
 		for (int row = 0; row < ROWS; row++)
-			for (int col = 0; col < COLUMNS; col++)
+			for (int col = 0; col < COLUMNS; col++){
 				board[row][col] = TileGenerator.emptyTile();
+			}
+
 		System.out.println("Board created");
     }
 
@@ -65,13 +68,13 @@ public class BejeweledBoard extends Board {
     public void fillTopRow() {
     	for (int column = 0; column < this.getColumns(); column++)
     		if (!occupied(board[0][column]))
-    			board[0][column] = TileGenerator.createTile(seed.nextInt(configurations.length), new Coordinate(0, column));
+    			board[0][column] = TileGenerator.createRandomTile(seed.nextInt(configurations.length), new Coordinate(0, column));
     }
     public void fillAll(){
     	for(int row = 0; row < this.getRows(); row++){
 			for(int column = 0; column < this.getColumns(); column++)			{
 				if(!occupied(board[row][column]))				{
-					board[row][column] = TileGenerator.createTile(seed.nextInt(configurations.length), new Coordinate(0, column));
+					board[row][column] = TileGenerator.createRandomTile(seed.nextInt(configurations.length), new Coordinate(0, column));
 				}
 			}
 		}
@@ -98,9 +101,7 @@ public class BejeweledBoard extends Board {
 
 	@Override
 	public void update() {
-		// TODO Main loop for game
-		//while(true)
-		//{
+
 			System.out.println("UPDATE IN BJ board");
 
 			Platform.runLater(() -> {
@@ -111,7 +112,6 @@ public class BejeweledBoard extends Board {
 					this.screen.draw();
 				}
 			});
-		//}
 
 	}
 
