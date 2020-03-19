@@ -5,12 +5,14 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import tmge.engine.Screen;
 
 public class FXMLBuilder {
@@ -72,7 +74,12 @@ public class FXMLBuilder {
 	public static <T> void build(Parent pane, boolean isModal) {
 		Scene scene = buildScene(pane);
 		Stage stage = buildStage(scene, isModal);
-		
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				System.out.println("Stage is closing");
+				System.exit(0);
+			}
+		});
 		stage.setScene(scene);
 		stage.show();
 	}

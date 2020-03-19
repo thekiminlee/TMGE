@@ -3,10 +3,12 @@ package jfx.game.UI;
 import java.net.URI;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import Games.GameSelect.GameSelect;
+import javafx.stage.WindowEvent;
 
 /**
  * JavaFX App

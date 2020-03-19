@@ -1,9 +1,11 @@
 package tmge.engine;
 
 import tmge.engine.Screen;
+import tmge.engine.boardComponents.Board;
 
 public class Game {
 	Screen currentScreen;
+	Board currentBoard;
 	int rows;
 	int columns;
 

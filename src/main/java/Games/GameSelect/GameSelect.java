@@ -120,10 +120,10 @@ public class GameSelect {
     		@Override
     		public void handle(ActionEvent event) {
     			// open the new game and close the game select window, behind the scenes a BejeweledScreen is created
-    			App.startGame(BejeweledScreen.link, new AnchorPane(), true);
+    			App.startGame(BejeweledScreen.link, new AnchorPane(), false);
     			exit();
     			Screen screen = FXMLBuilder.getController();
-    			loadGame(screen);
+    			//loadGame(screen);
     		}
     	});
         
@@ -137,7 +137,7 @@ public class GameSelect {
     		@Override
     		public void handle(ActionEvent event) {
     			// open the new game and close the game select window, behind the scenes a TetrisScreen is created
-    			App.startGame(TetrisScreen.link, new AnchorPane(), true);
+    			App.startGame(TetrisScreen.link, new AnchorPane(), false);
     			exit();
     			System.out.println("Getting TetrisScreen");
     			Screen screen = FXMLBuilder.getController();
