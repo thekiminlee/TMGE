@@ -19,7 +19,7 @@ public class BejeweledBoard extends Board {
     private ArrayList<Coordinate> listOfCoords;
     private TileGenerator generator;
     private boolean playing;
-    private Random seed = new Random(LocalTime.now().toNanoOfDay());
+    private Random seed;
 
     BejeweledScreen screen;
 
@@ -73,23 +73,16 @@ public class BejeweledBoard extends Board {
     	for (int column = 0; column < this.getColumns(); column++) {
     		int rand = seed.nextInt(configurations.length);
     		if (!occupied(board[row][column])) {
-    			board[0][column] = generator.createCustomTile(rand, rand,
-    					values[rand], new Coordinate(row, column));
+    			board[row][column] = generator.createCustomTile(rand,
+					rand, values[rand], new Coordinate(row, column));
     		}
     	}
     }
     
     public void fillAll() {
     	for(int row = 0; row < this.getRows(); row++){
-			for(int column = 0; column < this.getColumns(); column++) {
-				int rand = seed.nextInt(configurations.length);
-				if(!occupied(board[row][column])) {
-					board[row][column] = generator.createCustomTile(rand, rand,
-							values[rand], new Coordinate(row, column));
-				}
-			}
+			fillRow(row);
 		}
-
 	}
 
 	public void swap(Tile t1, Tile t2){

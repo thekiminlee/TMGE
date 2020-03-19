@@ -35,7 +35,7 @@ public class TetrisScreen implements Screen {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 
-		generator = new TileGenerator(screenWidth, screenHeight, palette);
+		generator = new TileGenerator(screenWidth, screenHeight, 0, palette);
 		board = new TetrisBoard(this);
 		new Thread(board).start();
 		gameBox = new VBox[board.getRows()][board.getColumns()];

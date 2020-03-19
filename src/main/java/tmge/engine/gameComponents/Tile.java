@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import tmge.engine.Factory;
 /*
     This is a tile class where the board  will be made up of tile pieces
@@ -73,5 +74,9 @@ public class Tile implements Factory<Node> {
 	
 	public String toString() {
 		return "<" + coords.getX() + "," + coords.getY() + ">:" + value;
+	}
+
+	public Color getColor() {
+		return color;
 	}
 }
