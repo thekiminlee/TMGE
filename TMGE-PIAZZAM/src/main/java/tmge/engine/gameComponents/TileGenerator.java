@@ -93,26 +93,26 @@ public class TileGenerator {
 	
 	static Node createSquare(Color c)
 	{
-		return new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
+		return new Rectangle((getWidth() / getColumns())/2, (getHeight() / getRows())/2, c);
 	}
 	
 	static Node createDiamond(Color c)
 	{
-		Rectangle node = new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
+		Rectangle node = new Rectangle((getWidth() / getColumns())/2, (getHeight() / getRows())/3, c);
 		node.setRotate(45.0);
 		return node;
 	}
 	
 	static Node createCircle(Color c) {
 		double minValue = Math.min(getWidth() / getColumns(), getHeight() / getRows());
-		return new Circle(minValue, c);
+		return new Circle(minValue/3, c);
 	}
 
 	static Node createTriangle(Color c) {
 		Polygon triangle = new Polygon();
 		triangle.getPoints().addAll(new Double[]{
-			getWidth() / getColumns(), 0.0, 0.0, getHeight() / getRows(), 
-				(getWidth() / getColumns())*2, 0.0
+				(getWidth() / getColumns())/2, 0.0, 0.0, (getHeight() / getRows())/2,
+				getWidth() / getColumns(), (getHeight() / getRows())/2
 		});
 		triangle.setFill(c);
 		return triangle;

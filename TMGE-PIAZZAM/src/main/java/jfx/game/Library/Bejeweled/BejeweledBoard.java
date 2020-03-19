@@ -84,6 +84,10 @@ public class BejeweledBoard extends Board {
 
 	}
 
+	public void swap(Tile t1, Tile t2){
+
+	}
+
     public boolean occupied(Tile t) {
     	return (t != null) && (t != TileGenerator.emptyTile());
     }
@@ -105,18 +109,36 @@ public class BejeweledBoard extends Board {
 	@Override
 	public void update() {
 
-			System.out.println("UPDATE IN BJ board");
+    	while(true) {
 
+			System.out.println("UPDATE IN BJ board");
+			this.screen.setReady(false);
 			Platform.runLater(() -> {
 				if(this.screen.ready())
 				{
 
 					fillAll();
 					this.screen.draw();
+					System.out.println(screen.getNumOfClicks());
 					//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
 				}
 			});
 
+//			int clicks = screen.getNumOfClicks();
+			System.out.println(screen.getNumOfClicks());
+//			int firstClickX, firstClickY, secondClickX, secondClickY;
+//			if(clicks == 1){
+//				firstClickX = screen.getMouseClickX();
+//				firstClickY = screen.getMouseClickY();
+//				System.out.println(firstClickX);
+//				System.out.println(firstClickY);
+			while(!this.screen.ready())
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+		}
 	}
 
 	@Override
@@ -124,4 +146,5 @@ public class BejeweledBoard extends Board {
     	System.out.println("I am in run");
 		update();
 	}
+
 }
