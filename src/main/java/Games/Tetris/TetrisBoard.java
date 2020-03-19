@@ -173,5 +173,13 @@ public class TetrisBoard extends Board {
 	public void run() {
 		update();
 	}
-	
+
+
+	public int[][][] getConfigurations() {
+		return configurations;
+	}
+
+	public int[] getValues() {
+		return values;
+	}
 }

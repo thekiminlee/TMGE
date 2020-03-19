@@ -18,7 +18,7 @@ import tmge.engine.boardComponents.TileGenerator;
 public class TetrisScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
 	boolean ready = false;
-	Tile empty = TileGenerator.emptyTile();
+	//Tile empty = TileGenerator.emptyTile();
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL}; 
 	TetrisBoard board;
@@ -142,4 +142,15 @@ public class TetrisScreen implements Screen {
 		return ready;
 	}
 
+	public double getScreenWidth() {
+		return screenWidth;
+	}
+
+	public double getScreenHeight() {
+		return screenHeight;
+	}
+
+	public Color[] getPalette() {
+		return palette;
+	}
 }

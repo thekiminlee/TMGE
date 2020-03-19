@@ -1,5 +1,6 @@
 package tmge.engine;
 
+import javafx.application.Platform;
 import tmge.engine.Screen;
 import tmge.engine.boardComponents.Board;
 import tmge.engine.boardComponents.Tile;
@@ -9,7 +10,7 @@ import tmge.engine.boardComponents.Tile;
 
 /* THIS WILL END UP BEING A CONTROLLER CLASS FOR BOTH THE BOARD AND THE SCREEN CLASS */
 
-public class Game {
+public abstract class Game {
 	private Screen currentScreen;
 	private Board currentBoard;
 
@@ -35,5 +36,11 @@ public class Game {
 
 	public Tile[][] getCurrentBoard() { return this.currentBoard.getBoard();}
 
+	protected abstract void updateScreen();
+
+	protected abstract void updateBoard();
+
+	/*in theory this will end up calling both the screen and board update methods */
+	protected abstract void update();
 
 }
