@@ -14,15 +14,15 @@ import javafx.scene.input.MouseEvent;
 
 public class BejeweledBoard extends Board {
     private int score;
-    private int[][][] configurations = {{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}}};
-    private int[] values = {1,2,3,4,5,6};
-    private static final int ROWS = 20, COLUMNS = 10;
+    private int[][][] configurations = {{{0,0}},{{0,0}},{{0,0}},{{0,0}}};
+    private int[] values = {1,2,3,4};
+    private static final int ROWS = 8, COLUMNS = 8;
+    private ArrayList<Coordinate> listOfCoords;
 
     private Random seed = new Random(LocalTime.now().toNanoOfDay());
 
     BejeweledScreen screen;
 
-    
     public BejeweledBoard(BejeweledScreen screen){
     	super(new TileGame(ROWS, COLUMNS));
 		seed = new Random(LocalTime.now().toNanoOfDay());
@@ -30,7 +30,9 @@ public class BejeweledBoard extends Board {
 		this.screen = screen;
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++){
+				//Coordinate c = new Coordinate(row, col);
 				board[row][col] = TileGenerator.emptyTile();
+				//listOfCoords.add(new Coordinate(row, col));
 			}
 
 		System.out.println("Board created");
@@ -42,6 +44,7 @@ public class BejeweledBoard extends Board {
         for (Coordinate coords : list) {
             Tile tile = board[coords.getX()][coords.getY()];
             points += tile.getValue();
+            System.out.println(list);
 
             // Set empty Tile at the coordinate
             removeTile(coords.getX(), coords.getY());
@@ -110,6 +113,7 @@ public class BejeweledBoard extends Board {
 
 					fillAll();
 					this.screen.draw();
+					//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
 				}
 			});
 
