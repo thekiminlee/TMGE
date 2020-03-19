@@ -21,7 +21,7 @@ public class TileGenerator {
 	static double screenWidth, screenHeight;
 
 	static int columns, rows;
-	
+
 	public TileGenerator(double defaultWidth, double defaultHeight, int r, int c) {
 		screenWidth = defaultWidth;
 		screenHeight = defaultHeight;
@@ -101,17 +101,17 @@ public class TileGenerator {
 	public static Tile emptyTile() {
 		return empty;
 	}
-	
+
 	public static void setWindowDimensions(double width, double height) {
 		screenWidth = width;
 		screenHeight = height;
 	}
-	
+
 	public static void setGridDimensions(int rows, int columns) {
 		TileGenerator.rows = rows;
 		TileGenerator.columns = columns;
 	}
-	
+
 	private static int getRows() {
 		return rows;
 	}

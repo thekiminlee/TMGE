@@ -71,6 +71,7 @@ public class TetrisBoard extends Board {
 			while(!this.screen.ready())
 				try {
 					Thread.sleep(1000);
+					System.out.println("hm");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
