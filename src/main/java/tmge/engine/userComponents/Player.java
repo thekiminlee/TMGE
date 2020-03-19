@@ -1,4 +1,4 @@
-package jfx.game.Library;
+package tmge.engine.userComponents;
 
 public class Player {
     String name;
