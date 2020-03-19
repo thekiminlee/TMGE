@@ -19,9 +19,7 @@ public abstract class Board implements Runnable {
 
     /* This method allows the user to be able to remove a Piece to the board. User is able to extend Tile class and be able to
      * make more complicated Tile pieces such as a Group of Tiles which would be used for a game such as Tetris. */
-    public void removeTile(int row, int column) {
-    	board[row][column] = TileGenerator.emptyTile(new Coordinate(row, column));
-    }
+    public abstract void removeTile(int row, int column);
 
     /* This method will handle updating the board. Any updates to the board depending on clicks of the user will end up going into here */
     public abstract void update();

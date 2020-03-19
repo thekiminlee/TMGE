@@ -1,5 +1,8 @@
 package jfx.game.Library.Tetris;
 
+import java.time.LocalTime;
+import java.util.Random;
+
 import javafx.application.Platform;
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Coordinate;
@@ -9,10 +12,12 @@ import tmge.engine.gameComponents.TileGenerator;
 
 public class TetrisBoard extends Board {
 	static final int ROWS = 20, COLUMNS = 10;
-	static int delay = 1000;
-	static final int minimumDelay = 500;
+	int delay = 1000;
+	final int minimumDelay = 500;
+	Random seed;
 	boolean playing = true;
 	TetrisScreen screen;
+	TileGenerator generator;
 	Block activeBlock = null;
 	TileGame game;
 	BlockLogic logic;
@@ -22,10 +27,15 @@ public class TetrisBoard extends Board {
 	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
 		logic = new BlockLogic();
+		
+		seed = new Random(LocalTime.now().toNanoOfDay());
 		this.screen = screen;
+		generator = screen.getGenerator();
+		generator.setGridDimensions(ROWS, COLUMNS);
+		
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++)
-				board[row][col] = TileGenerator.emptyTile();
+				board[row][col] = generator.emptyTile();
 	}
 	
 	@Override
@@ -111,7 +121,7 @@ public class TetrisBoard extends Board {
 	}
 	
 	synchronized Block findFirstAvailableColumn() {
-		Block tileConfig = logic.getRandomBlock();
+		Block tileConfig = logic.getRandomBlock(generator);
 		int column;
 		boolean valid = false;
 		for (column = 0; column < COLUMNS; column++) {
@@ -173,7 +183,7 @@ public class TetrisBoard extends Board {
 		int column = 0;
 		for (Tile t: board[row]) {
 			score += t.getValue();
-			board[row][column] = TileGenerator.emptyTile(new Coordinate(row, column++));
+			board[row][column++] = generator.emptyTile();
 		}
 	}
 	
@@ -181,7 +191,7 @@ public class TetrisBoard extends Board {
 		for (int currentRow = row; currentRow > 0; currentRow--) {
 			for (int column = 0; column < COLUMNS; column++) {
 				board[currentRow][column] = board[currentRow - 1][column];
-				board[currentRow - 1][column] = TileGenerator.emptyTile(new Coordinate(currentRow, column));
+				removeTile(currentRow - 1, column);
 			}
 		}
 	}
@@ -202,7 +212,7 @@ public class TetrisBoard extends Board {
 	void makeMove(Tile t, int toRow, int toColumn) {
 		Coordinate previousCoords = t.getCoords();
 		board[toRow][toColumn] = t;
-		board[previousCoords.getX()][previousCoords.getY()] = TileGenerator.emptyTile();
+		board[previousCoords.getX()][previousCoords.getY()] = generator.emptyTile();
 		t.setCoords(toRow, toColumn);
 	}
 	
@@ -214,6 +224,15 @@ public class TetrisBoard extends Board {
 		playing = false;
 		screen.onEnd();
 		System.out.println("Game has ended");
+	}
+
+	@Override
+	public void removeTile(int row, int column) {
+		board[row][column] = generator.emptyTile();
+	}
+
+	public void setPlaying(boolean playing) {
+		this.playing = playing;
 	}
 	
 }

@@ -46,19 +46,19 @@ public class BlockLogic {
 		seed = new Random(LocalTime.now().toNanoOfDay());
 	}
 	
-	Block getRandomBlock() {
+	Block getRandomBlock(TileGenerator generator) {
 		int index = seed.nextInt(configurations.length);
-		return createBlock(index, 0);
+		return createBlock(index, 0, generator);
 	}
 	
 	BlockType getBlockType(int index) {
 		return BlockType.values()[index];
 	}
 	
-	public Block createBlock(int index, int offset) {
+	public Block createBlock(int index, int offset, TileGenerator generator) {
 		Tile[] tiles = new Tile[configurations[index].length];
 		for (int i = 0; i < configurations[index].length; i++) {
-			tiles[i] = TileGenerator.createTile(index, 1,
+			tiles[i] = generator.createTile(index, 1,
 					new Coordinate(configurations[index][i][0], configurations[index][i][1] + offset));
 		}
 		return new Block(tiles, getBlockType(index));

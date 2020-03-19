@@ -4,12 +4,19 @@ import java.net.URI;
 import java.nio.file.Paths;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
+import javafx.event.EventHandler;
+
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Screen;
 import tmge.engine.gameComponents.Tile;
@@ -18,38 +25,19 @@ import tmge.engine.gameComponents.TileGenerator;
 public class BejeweledScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml").toUri();
 	boolean ready = false;
-	Tile empty = TileGenerator.emptyTile();
+	TileGenerator generator;
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE};
 	BejeweledBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
+	int mouseClickX;
+	int mouseClickY;
+	int numOfClicks = 0;
 	
 	public BejeweledScreen()
 	{
 		createScreen(720.0 * 0.6, 640.0 - 48);
-	}
-	
-	void createScreen(double screenWidth, double screenHeight) {
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
-
-		board = new BejeweledBoard(this);
-		new Thread(board).start();
-		gameBox = new VBox[board.getRows()][board.getColumns()];
-
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns(), palette);
-		// init all vboxes, add them to a tracking data structure and the visual
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
-				VBox box = new VBox();
-				gameBox[row][column] = box;
-				setVBox(row, column, TileGenerator.emptyTile());
-			}
-		}
-//		Random seed = new Random();
-//		seed.setSeed(LocalTime.now().toNanoOfDay());
-		System.out.println("Screen created");
 	}
 	
 	@FXML VBox leftVBox;
@@ -61,11 +49,29 @@ public class BejeweledScreen implements Screen {
 	@Override
 	@FXML
 	public void initialize() {
-
 		// init all vboxes, add them to a tracking data structure and the visual
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {
-				gameGrid.add(gameBox[row][column], column, row);
+				VBox box = new VBox();
+				gameBox[row][column] = box;
+				int targetRow = row;
+				int targetCol = column;
+				gameBox[row][column].addEventHandler(MouseEvent.MOUSE_CLICKED,
+					new EventHandler<MouseEvent>() {
+						@Override
+						public void handle(MouseEvent e) {
+							//Node test = gameBox[row][column]
+							numOfClicks += 1;
+	//						System.out.println(numOfClicks);
+							mouseClickX = targetRow;
+							mouseClickY = targetCol;
+							if(numOfClicks == 2) numOfClicks = 0;
+							System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
+						}
+					}
+				);
+				gameGrid.add(box, column, row);
+				setVBox(row, column, generator.emptyTile());
 			}
 		}
 		
@@ -75,10 +81,26 @@ public class BejeweledScreen implements Screen {
 		ready = true;
 		System.out.println("Screen initialized");
 	}
+	
+	@FXML 
+	private void minimize() {
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		stage.setIconified(true);
 
-	private void setVBox(int row, int column, Tile tile) {
-		gameBox[row][column].getChildren().clear();
-		gameBox[row][column].getChildren().add(tile.getNode());
+	}
+	
+	@FXML 
+	private void maximize() {
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		stage.setMaximized(true);
+	}
+
+	@Override
+	@FXML
+	public void exit() {
+		board.setPlaying(false);
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+        stage.close();
 	}
 	
 	@Override
@@ -99,25 +121,6 @@ public class BejeweledScreen implements Screen {
 		this.ready = true;
 		System.out.println("draw");
 	}
-	
-	@FXML 
-	private void minimize() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
-		stage.setIconified(true);
-	}
-	
-	@FXML 
-	private void maximize() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
-		stage.setMaximized(true);
-	}
-
-	@Override
-	@FXML
-	public void exit() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
-        stage.close();
-	}
 
 	@Override
 	public void setReady(boolean ready) {
@@ -127,6 +130,80 @@ public class BejeweledScreen implements Screen {
 	@Override
 	public boolean ready() {
 		return ready;
+	}
+	
+	void createScreen(double screenWidth, double screenHeight) {
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+		
+		generator = new TileGenerator(screenWidth, screenHeight, palette);
+		board = new BejeweledBoard(this);
+		new Thread(board).start();
+		gameBox = new VBox[board.getRows()][board.getColumns()];
+
+		generator.addPolygon((color) -> {
+			return createDiamond(color);
+		});
+		generator.addPolygon((color) -> {
+			return createCircle(color);
+		});
+		generator.addPolygon((color) -> {
+			return createTriangle(color);
+		});
+		
+		System.out.println("Screen created");
+	}
+	
+	Node createDiamond(Color c) {
+		double minValue = Math.min(screenWidth / board.getColumns(),
+			screenHeight / board.getRows());
+		double maxValue = Math.max(screenWidth / board.getColumns(),
+			screenHeight / board.getRows());
+		Rectangle node = new Rectangle(minValue, minValue, c);
+		node.setRotate(45.0);
+		node.setTranslateY((maxValue - minValue)/2);
+		return node;
+	}
+	
+	Node createCircle(Color c) {
+		double minValue = Math.min(screenWidth / board.getColumns(),
+				screenHeight / board.getRows());
+		return new Circle(minValue*Math.sqrt(2)/2, c);
+	}
+
+	Node createTriangle(Color c) {
+		Polygon triangle = new Polygon();
+		// upper center, bottom left, bottom right
+		double width = screenWidth / board.getColumns();
+		double height = screenHeight / board.getRows();
+		triangle.getPoints().addAll(new Double[]{
+			width/2, 0.0,
+			0.0, height, 
+			width, height
+		});
+		triangle.setFill(c);
+		return triangle;
+	}
+
+	TileGenerator getGenerator() {
+		return generator;
+	}
+	
+	private void setVBox(int row, int column, Tile tile) {
+		gameBox[row][column].getChildren().clear();
+		gameBox[row][column].getChildren().add(tile.getNode());
+	}
+
+	public int getNumOfClicks() {
+		return numOfClicks;
+	}
+
+	public int getMouseClickX() {
+		return mouseClickX;
+	}
+
+	public int getMouseClickY() {
+		return mouseClickY;
 	}
 
 }

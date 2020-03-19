@@ -22,7 +22,7 @@ import tmge.engine.gameComponents.TileGenerator;
 public class TetrisScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
 	boolean ready = false;
-	Tile empty = TileGenerator.emptyTile();
+	TileGenerator generator;
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL}; 
 	TetrisBoard board;
@@ -35,11 +35,14 @@ public class TetrisScreen implements Screen {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 
+		generator = new TileGenerator(screenWidth, screenHeight, palette);
 		board = new TetrisBoard(this);
 		new Thread(board).start();
 		gameBox = new VBox[board.getRows()][board.getColumns()];
-		
-		new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns(), palette);
+	}
+	
+	TileGenerator getGenerator() {
+		return generator;
 	}
 	
 	@FXML VBox leftVBox;
@@ -57,7 +60,7 @@ public class TetrisScreen implements Screen {
 				VBox box = new VBox();
 				gameBox[row][column] = box;
 				gameGrid.add(box, column, row);
-				setVBox(row, column, TileGenerator.emptyTile());
+				setVBox(row, column, generator.emptyTile());
 			}
 		}
 		
@@ -65,6 +68,59 @@ public class TetrisScreen implements Screen {
 		rightVBox.getChildren().add(new Label("RIGHT"));
 		ready = true;
 		System.out.println("initialized");
+	}
+	
+	@FXML 
+	private void minimize() {
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		stage.setIconified(true);
+	}
+	
+	@FXML 
+	private void maximize() {
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		stage.setMaximized(true);
+	}
+	
+	@Override
+	@FXML
+	public void exit() {
+		board.setPlaying(false);
+		Stage stage = (Stage) leftVBox.getScene().getWindow();
+        stage.close();
+	}
+
+	@Override
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
+
+	@Override
+	public boolean ready() {
+		return ready;
+	}
+
+	@Override
+	public void draw() {
+		Tile[][] gameState = board.getBoard();
+		for (int row = 0; row < board.getRows(); row++) {
+			for (int column = 0; column < board.getColumns(); column++) {
+				Tile t = gameState[row][column];
+				setVBox(row, column, t);
+			}
+		}
+		Block activeBlock = board.getActiveBlock();
+		if (activeBlock != null)
+			for (Tile t: activeBlock.getTiles()) {
+				Coordinate coords = t.getCoords();
+				setVBox(coords.getX(), coords.getY(), t);
+			}
+		this.ready = true;
+	}
+	
+	@Override
+	public Board getBoard() {
+		return this.board;
 	}
 	
 	public void setVBox(int row, int column, Tile t) {
@@ -89,23 +145,6 @@ public class TetrisScreen implements Screen {
 //		rightVBox;
 //		gameGrid;
 //	}
-	
-	@FXML 
-	private void minimize() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
-		stage.setIconified(true);
-	}
-	
-	@FXML 
-	private void maximize() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
-		stage.setMaximized(true);
-	}
-	
-	@Override
-	public Board getBoard() {
-		return this.board;
-	}
 	
 	public void translateMovableBlock(BiFunction<TetrisBoard.Moves, Integer, Boolean> function) {
 		(leftVBox.getScene()).setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -133,45 +172,9 @@ public class TetrisScreen implements Screen {
             }
         });
 	}
-
-	@Override
-	public void draw() {
-		Tile[][] gameState = board.getBoard();
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
-				Tile t = gameState[row][column];
-				setVBox(row, column, t);
-			}
-		}
-		Block activeBlock = board.getActiveBlock();
-		if (activeBlock != null)
-			for (Tile t: activeBlock.getTiles()) {
-				Coordinate coords = t.getCoords();
-				setVBox(coords.getX(), coords.getY(), t);
-			}
-		this.ready = true;
-	}
 	
 	public void onEnd() {
 		// TODO: popup, start again?
 		exit();
 	}
-	
-	@Override
-	@FXML
-	public void exit() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
-        stage.close();
-	}
-	
-	@Override
-	public void setReady(boolean ready) {
-		this.ready = ready;
-	}
-
-	@Override
-	public boolean ready() {
-		return ready;
-	}
-
 }
