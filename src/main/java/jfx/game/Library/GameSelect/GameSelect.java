@@ -8,7 +8,7 @@ import jfx.game.Library.FXMLBuilder;
 import jfx.game.Library.Bejeweled.BejeweledScreen;
 import jfx.game.Library.Tetris.TetrisScreen;
 import tmge.engine.Engine;
-import tmge.engine.Screen;
+import tmge.engine.gameComponents.Screen;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

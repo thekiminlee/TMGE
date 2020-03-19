@@ -10,8 +10,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import tmge.engine.Screen;
 import tmge.engine.gameComponents.Board;
+import tmge.engine.gameComponents.Screen;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 

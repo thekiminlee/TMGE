@@ -1,22 +1,28 @@
-package tmge.engine.gameComponents;
+package jfx.game.Library.Tetris;
+
+import jfx.game.Library.Tetris.BlockLogic.BlockType;
+import tmge.engine.gameComponents.Coordinate;
+import tmge.engine.gameComponents.Tile;
 
 public class Block {
 	Tile[] tiles;
     private int value;
+    BlockType type;
 
-    public Block(Tile[] tiles) {
+    public Block(Tile[] tiles, BlockType type) {
     	int v = 0;
     	for (Tile t: tiles)
-    		v += t.value;
+    		v += t.getValue();
         this.value = v;
         this.tiles = tiles;
+        this.type = type;
     }
     
     public Block clone() {
     	Tile[] arr = new Tile[tiles.length];
     	for (int i = 0; i < tiles.length; i++)
     		arr[i] = tiles[i].clone();
-    	return new Block(arr);
+    	return new Block(arr, this.type);
     }
 
     public int getValue() {

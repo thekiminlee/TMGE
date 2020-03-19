@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import tmge.engine.Factory;
 /*
     This is a tile class where the board  will be made up of tile pieces
  */

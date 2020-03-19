@@ -11,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import tmge.engine.Screen;
+import tmge.engine.gameComponents.Screen;
 
 public class FXMLBuilder {
 	private static URL fxmlString = null;

@@ -2,25 +2,20 @@ package jfx.game.Library.Tetris;
 
 import java.net.URI;
 import java.nio.file.Paths;
-import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import tmge.engine.Screen;
-import tmge.engine.gameComponents.Block;
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Coordinate;
+import tmge.engine.gameComponents.Screen;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
@@ -112,12 +107,14 @@ public class TetrisScreen implements Screen {
 		return this.board;
 	}
 	
-	public void translateMovableBlock(Block activeBlock, BiFunction<TetrisBoard.Moves, Integer, Boolean> function) {
+	public void translateMovableBlock(BiFunction<TetrisBoard.Moves, Integer, Boolean> function) {
 		(leftVBox.getScene()).setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
             	switch (event.getCode()) {
             	case SPACE:
+            		function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, board.getRows());
+            		break;
             	case S:
 					function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, 1);
 					break;

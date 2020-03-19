@@ -1,7 +1,6 @@
-package tmge.engine;
+package tmge.engine.gameComponents;
 
 import javafx.scene.control.Alert;
-import tmge.engine.gameComponents.Board;
 
 /* This class needs to be implemented because it is what will allows different kind of screens to be created. This allows
     for flexibility on what can happen. This will be left up to the user on how they want to implement a Scene.
