@@ -141,7 +141,7 @@ public class GameSelect {
     			exit();
     			System.out.println("Getting TetrisScreen");
     			Screen screen = FXMLBuilder.getController();
-    			loadGame(screen);
+    			//loadGame(screen);
     		}
     	});
         
@@ -159,7 +159,7 @@ public class GameSelect {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			engine.startFXMLLoop(screen);
+			//engine.startFXMLLoop(screen);
 		});
     }
 

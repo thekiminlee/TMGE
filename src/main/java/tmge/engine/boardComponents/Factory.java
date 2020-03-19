@@ -1,4 +1,4 @@
-package tmge.engine.gameComponents;
+package tmge.engine.boardComponents;
 
 import java.util.concurrent.Callable;
 

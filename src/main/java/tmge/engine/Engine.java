@@ -1,6 +1,6 @@
 package tmge.engine;
 
-import tmge.engine.gameComponents.Board;
+import tmge.engine.boardComponents.Board;
 
 public class Engine {
     private boolean loopContinue;

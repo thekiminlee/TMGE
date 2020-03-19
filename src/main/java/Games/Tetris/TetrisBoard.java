@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.Random;
 
 import javafx.application.Platform;
-import tmge.engine.gameComponents.*;
+import tmge.engine.boardComponents.*;
 
 public class TetrisBoard extends Board {
 	static final int ROWS = 20, COLUMNS = 10;
@@ -12,7 +12,6 @@ public class TetrisBoard extends Board {
 	static final int minimumDelay = 500;
 	TetrisScreen screen;
 	Block activeBlock = null;
-	TileGame game;
 	Random seed;
 	
 	int[][][] configurations = {	

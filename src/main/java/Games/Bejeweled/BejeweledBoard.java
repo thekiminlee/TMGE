@@ -4,11 +4,11 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
-import tmge.engine.gameComponents.Board;
-import tmge.engine.gameComponents.Coordinate;
-import tmge.engine.gameComponents.Tile;
-import tmge.engine.gameComponents.TileGame;
-import tmge.engine.gameComponents.TileGenerator;
+import tmge.engine.boardComponents.Board;
+import tmge.engine.boardComponents.Coordinate;
+import tmge.engine.boardComponents.Tile;
+import tmge.engine.boardComponents.TileGame;
+import tmge.engine.boardComponents.TileGenerator;
 
 public class BejeweledBoard extends Board {
     private int score;

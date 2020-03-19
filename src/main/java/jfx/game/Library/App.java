@@ -12,10 +12,6 @@ import Games.GameSelect.GameSelect;
  * JavaFX App
  */
 public class App extends Application {
-	
-	void begin(String args[]) {
-		launch(args);
-	}
 
     @Override
     public void start(Stage stage) {

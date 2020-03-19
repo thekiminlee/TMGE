@@ -6,7 +6,7 @@ public class Game {
 	Screen currentScreen;
 	int rows;
 	int columns;
-	
+
 	public Game(int rows, int columns){
 		this.rows = rows;
 		this.columns = columns;
@@ -16,7 +16,7 @@ public class Game {
 	public void setCurrentScene(Screen screen){
 		currentScreen = screen;
 	}
-	
+
 	public String toString() {
 		return "";
 	}

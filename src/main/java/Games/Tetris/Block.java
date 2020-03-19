@@ -1,4 +1,7 @@
-package tmge.engine.gameComponents;
+package Games.Tetris;
+
+import tmge.engine.boardComponents.Coordinate;
+import tmge.engine.boardComponents.Tile;
 
 public class Block {
 	Tile[] tiles;
@@ -7,7 +10,7 @@ public class Block {
     public Block(Tile[] tiles) {
     	int v = 0;
     	for (Tile t: tiles)
-    		v += t.value;
+    		v += t.getValue();
         this.value = v;
         this.tiles = tiles;
     }

@@ -1,4 +1,4 @@
-package tmge.engine.gameComponents;
+package tmge.engine.boardComponents;
 
 public abstract class Board implements Runnable {
 	
@@ -29,7 +29,7 @@ public abstract class Board implements Runnable {
     public Tile[][] getBoard() {
     	return this.board;
     }
-    
+
     public int getRows() {
 		return game.getRows();
 	}

@@ -1,7 +1,8 @@
-package tmge.engine.gameComponents;
+package tmge.engine.boardComponents;
 
 import java.util.ArrayList;
 
+import Games.Tetris.Block;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

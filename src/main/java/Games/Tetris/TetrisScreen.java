@@ -11,9 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import tmge.engine.Screen;
-import tmge.engine.gameComponents.Board;
-import tmge.engine.gameComponents.Tile;
-import tmge.engine.gameComponents.TileGenerator;
+import tmge.engine.boardComponents.Board;
+import tmge.engine.boardComponents.Tile;
+import tmge.engine.boardComponents.TileGenerator;
 
 public class TetrisScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
@@ -129,6 +129,7 @@ public class TetrisScreen implements Screen {
 	public void exit() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
         stage.close();
+        System.exit(0);
 	}
 	
 	@Override

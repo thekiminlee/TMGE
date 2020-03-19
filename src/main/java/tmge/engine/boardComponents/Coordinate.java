@@ -1,4 +1,4 @@
-package tmge.engine.gameComponents;
+package tmge.engine.boardComponents;
 
 public class Coordinate{
     private int x;
