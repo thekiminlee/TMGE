@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfx.game.Library.Tetris.TetrisScreen">
+   <children>
+      <BorderPane>
+         <left>
+            <HBox BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="leftVBox" prefWidth="144.0" />
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <GridPane fx:id="gameGrid">
+            </GridPane>
+               </children>
+            </HBox>
+         </left>
+         <top>
+            <AnchorPane prefHeight="48.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="576.0" onMouseClicked="#minimize" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@arrow-down.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D height="48.0" width="48.0" />
+                     </viewport>
+                  </ImageView>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="624.0" onMousePressed="#maximize" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@arrow-up.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D height="48.0" width="48.0" />
+                     </viewport>
+                  </ImageView>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="672.0" onMousePressed="#exit" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@close.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D height="48.0" width="48.0" />
+                     </viewport>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </top>
+         <center>
+            <Separator orientation="VERTICAL" prefHeight="200.0" BorderPane.alignment="CENTER" />
+         </center>
+         <right>
+            <HBox BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane fx:id="gameGrid1" />
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox fx:id="leftVBox1" prefWidth="144.0" />
+               </children>
+            </HBox>
+         </right>
+      </BorderPane>
+   </children>
+</AnchorPane>
