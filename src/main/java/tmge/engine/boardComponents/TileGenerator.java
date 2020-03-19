@@ -86,10 +86,8 @@ public class TileGenerator {
 
 	static Node createTriangle(Color c) {
 		Polygon triangle = new Polygon();
-		triangle.getPoints().addAll(new Double[]{
-			getWidth() / getColumns(), 0.0, 0.0, getHeight() / getRows(), 
-				(getWidth() / getColumns())*2, 0.0
-		});
+		triangle.getPoints().addAll(getWidth() / getColumns(), 0.0, 0.0, getHeight() / getRows(),
+				(getWidth() / getColumns())*2, 0.0);
 		triangle.setFill(c);
 		return triangle;
 	}

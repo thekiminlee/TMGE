@@ -1,4 +1,4 @@
-package jfx.game.Library;
+package jfx.game.UI;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

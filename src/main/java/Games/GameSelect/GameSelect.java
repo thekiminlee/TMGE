@@ -3,8 +3,8 @@ package Games.GameSelect;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import jfx.game.Library.App;
-import jfx.game.Library.FXMLBuilder;
+import jfx.game.UI.App;
+import jfx.game.UI.FXMLBuilder;
 import Games.Bejeweled.BejeweledScreen;
 import Games.Tetris.TetrisScreen;
 import tmge.engine.Engine;

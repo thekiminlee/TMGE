@@ -1,4 +1,4 @@
-package jfx.game.Library;
+package tmge.engine;
 
 import tmge.engine.Screen;
 

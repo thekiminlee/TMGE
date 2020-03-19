@@ -1,4 +1,4 @@
-package jfx.game.Library;
+package jfx.game.UI;
 
 import java.net.URI;
 
