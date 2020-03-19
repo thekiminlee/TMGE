@@ -17,6 +17,7 @@ public class TetrisBoard extends Board {
 	TileGame game;
 	BlockLogic logic;
 	int score = 0;
+	public enum Moves { TRANSLATE_VERTICAL, TRANSLATE_HORIZONTAL, ROTATE_CLOCKWISE };
 	
 	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
@@ -56,7 +57,6 @@ public class TetrisBoard extends Board {
 		}
 	}
 	
-	public enum Moves { TRANSLATE_VERTICAL, TRANSLATE_HORIZONTAL, ROTATE_CLOCKWISE };
 //	synchronized void attemptAction(Block block, Moves moveType, int n) {
 	synchronized void attemptAction(Moves moveType, int n) {
 		switch (moveType) {
@@ -156,10 +156,12 @@ public class TetrisBoard extends Board {
 	void checkForMatches(Block block) {
 		int[] bounds = block.getBounds();
 		for (int row = bounds[0]; row <= bounds[2]; row++)
-			if (rowIsFull(row))
+			if (rowIsFull(row)) {
 				applyMatch(row);
+				settleRowsAbove(row);
+			}
 	}
-	
+
 	boolean rowIsFull(int row) {
 		for (Tile t: board[row])
 			if (t.getValue() == 0)
@@ -171,7 +173,16 @@ public class TetrisBoard extends Board {
 		int column = 0;
 		for (Tile t: board[row]) {
 			score += t.getValue();
-			board[row][column++] = TileGenerator.emptyTile();
+			board[row][column] = TileGenerator.emptyTile(new Coordinate(row, column++));
+		}
+	}
+	
+	private void settleRowsAbove(int row) {
+		for (int currentRow = row; currentRow > 0; currentRow--) {
+			for (int column = 0; column < COLUMNS; column++) {
+				board[currentRow][column] = board[currentRow - 1][column];
+				board[currentRow - 1][column] = TileGenerator.emptyTile(new Coordinate(currentRow, column));
+			}
 		}
 	}
 	
