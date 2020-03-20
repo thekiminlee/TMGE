@@ -125,8 +125,10 @@ public class BejeweledBoard extends Board {
 
 		for (Object matchTile : matchSet ) {
 			Tile match = Tile.class.cast(matchTile);
+			score += match.getValue();
 			System.out.println(match.getCoords());
 			board[match.getCoords().getX()][match.getCoords().getY()] = null;
+
 			//applyGravity();
 		}
 	}
