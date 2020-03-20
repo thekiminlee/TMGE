@@ -4,8 +4,11 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.stream.*;
 import java.lang.Math;
 
 
@@ -27,7 +30,7 @@ public class BejeweledBoard extends Board {
 	private Random seed;
 	private Tile t1, t2 = null;
 	private int clicked = 0;
-	private Map<Integer, List<Tile>> matchList;
+	private Set<Tile> matchSet;
 
 	BejeweledScreen screen;
 
@@ -46,11 +49,53 @@ public class BejeweledBoard extends Board {
 	playing = true;
 		System.out.println("Board created");
 }
+	// Vertical Matching After Swap:
+	public void verticalMatch(Tile originTile1, Tile originTile2, Set matchSet) {
+		// Checklist for Origin Tiles:
+		List<Tile> checkList = new ArrayList<Tile>();
+		checkList.add(originTile1);
+		checkList.add(originTile2);
 
-	// Matching on board
-	public void horizontalMatch(Tile originTile1, Tile originTile2) {
-		boolean validMatch = false;
+		for (Tile originTile : checkList) {
+			Coordinate originTileCoord = originTile.getCoords();
+			// Check Upward:
+			List<Tile> matchList = new ArrayList<Tile>();
+			matchList.add(originTile);
+			int originValue = originTile.getValue();
+			for ( int i = originTileCoord.getX() - 1; i > -1; i-- ) {
+				if (originValue == board[i][originTileCoord.getY()].getValue()){
+					matchList.add(board[i][originTileCoord.getY()]);
+				} else{ break; }
+			}
 
+			// Check Downward:
+			for ( int i = originTileCoord.getX() + 1; i < this.getRows(); i++ ){
+				if (originValue == board[i][originTileCoord.getY()].getValue()){
+					matchList.add(board[i][originTileCoord.getY()]);
+				} else { break; }
+			}
+
+			// Clear Tiles (if Valid Match):
+			if (matchList.size() >= 3 ){
+				for ( Tile matchTile : matchList ) {
+					System.out.println(matchTile);
+					removeTile(matchTile.getCoords().getX(), matchTile.getCoords().getY());
+				}
+			}
+
+			// Reset Tiles (! ValidMatch ):
+			if ( matchList.size() < 3 ) {
+				System.out.println("No Matches, reverting to original.");
+				Tile temp = originTile1;
+				setTileAt(originTile1.getCoords(), originTile2);
+				setTileAt(originTile2.getCoords(), temp);
+			}
+		}
+//
+
+	}
+	// Horizontal Matching After Swap:
+	public void horizontalMatch(Tile originTile1, Tile originTile2, Set matchSet) {
 		List<Tile> checkList = new ArrayList<Tile>();
 		checkList.add(originTile1);
 		checkList.add(originTile2);
@@ -75,12 +120,18 @@ public class BejeweledBoard extends Board {
 
 			// Clear Tiles (if Valid Match):
 			if (matchList.size() >= 3 ){
-				validMatch = true;
-				System.out.println(validMatch);
 				for ( Tile matchTile : matchList ) {
 					System.out.println(matchTile);
 					removeTile(matchTile.getCoords().getX(), matchTile.getCoords().getY());
 				}
+			}
+
+			// Reset Tiles (! ValidMatch ):
+			if ( matchList.size() < 3 ) {
+				System.out.println("No Matches, reverting to original.");
+				Tile temp = originTile1;
+				setTileAt(originTile1.getCoords(), originTile2);
+				setTileAt(originTile2.getCoords(), temp);
 			}
 
 			// Testing:
@@ -88,13 +139,7 @@ public class BejeweledBoard extends Board {
 			System.out.println("Match List Identified: " + matchList);
 		}
 
-		// Reset Tiles (! ValidMatch ):
-		if ( validMatch == false ) {
-			System.out.println("No Matches, reverting to original.");
-			Tile temp = originTile1;
-			setTileAt(originTile1.getCoords(), originTile2);
-			setTileAt(originTile2.getCoords(), temp);
-		}
+
 
 	}
 
@@ -146,7 +191,9 @@ public class BejeweledBoard extends Board {
 			setTileAt(lastClicked, temp1);
 			temp2.setCoords(coords);
 			setTileAt(coords, temp2);
-			horizontalMatch(temp1, temp2);
+			//
+			verticalMatch(temp1, temp2, matchSet);
+			horizontalMatch(temp1, temp2, matchSet);
 		} else {
 			System.out.println("Invalid move");
 		}
