@@ -42,6 +42,7 @@ public class BejeweledScreen implements Screen {
 	int mouseClickY;
     private final int PADDING = 3;
     boolean clicked = false;
+    int clicks = 0;
 	
 	public BejeweledScreen()
 	{
@@ -78,10 +79,12 @@ public class BejeweledScreen implements Screen {
 						@Override
 						public void handle(MouseEvent e) {
 							//Node test = gameBox[row][column]
+							clicks += 1;
 							mouseClickX = targetRow;
 							mouseClickY = targetCol;
 							clicked = true;
-							System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
+							if(clicks > 2) clicks = 0;
+//							System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
 						}
 					}
 				);
@@ -98,6 +101,10 @@ public class BejeweledScreen implements Screen {
 
 	public boolean isClicked(){
 		return clicked;
+	}
+
+	public int getClicks(){
+		return clicks;
 	}
 
 	@FXML 

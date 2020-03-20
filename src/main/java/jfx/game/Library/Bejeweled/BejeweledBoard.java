@@ -20,7 +20,8 @@ public class BejeweledBoard extends Board {
     private TileGenerator generator;
     private boolean playing;
     private Random seed;
-    private Tile selected = null;
+    private Tile t1, t2 = null;
+    boolean canSwap = false;
     private int clicked = 0;
 
     BejeweledScreen screen;
@@ -88,6 +89,7 @@ public class BejeweledBoard extends Board {
 	}
 
 	public void swap(Tile t1, Tile t2){
+		Tile temp = t2;
 
 	}
 
@@ -115,19 +117,32 @@ public class BejeweledBoard extends Board {
 			fillAll();
 //			System.out.println("UPDATE IN BJ board");
 			this.screen.setReady(false);
+
 			Platform.runLater(() -> {
-				if(selected == null) {
-//				if(this.screen.ready())
-//				{
+				if(!canSwap) {
 					this.screen.draw();
-//					System.out.print(this.screen.getMouseClickX());
-//					System.out.println(this.screen.getMouseClickY());
-//					System.out.println(board[screen.getMouseClickX()][screen.getMouseClickY()].getValue());
-//					selected = board[screen.getMouseClickX()][screen.getMouseClickY()];
+					if(screen.isClicked()) {
+//						System.out.print(this.screen.getMouseClickX());
+//						System.out.println(this.screen.getMouseClickY());
+//						System.out.println(board[screen.getMouseClickX()][screen.getMouseClickY()].getValue());
+//
+						if (this.screen.getClicks() == 1) {
+							t1 = board[screen.getMouseClickX()][screen.getMouseClickY()];
+							System.out.println("first click");
+						} else {
+							t2 = board[screen.getMouseClickX()][screen.getMouseClickY()];
+							System.out.println("second click");
+//							canSwap = true;
+							System.out.println(t1.getValue());
+							System.out.println(t2.getValue());
+						}
 
+						//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
+					}
+				}
+				else {
 
-					//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
-//				}
+					canSwap = false;
 				}
 			});
 
