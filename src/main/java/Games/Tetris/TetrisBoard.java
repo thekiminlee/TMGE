@@ -9,176 +9,30 @@ import tmge.engine.boardComponents.*;
 
 public class TetrisBoard extends Board {
 	static final int ROWS = 20, COLUMNS = 10;
-	static int delay = 1000;
-	static final int minimumDelay = 500;
-	TetrisScreen screen;
-	Block activeBlock = null;
+	int delay = 1000;
+	final int minimumDelay = 500;
 	Random seed;
-	
-	int[][][] configurations = {	
-		{ // Square
-			{1,1}, {1,0},
-			{0,1}, {0,0}
-		}, 
-		{ // Line
-			{0,3}, {0,2}, {0,1}, {0,0}
-		}, 
-		{ // Z
-			{1,2},	{1,1},
-					{0,1},	{0,0}
-		},
-		{ // S
-					{1,1},	{1,0},
-			{0,2},	{0,1}
-		},
-		{ // T
-			{1,2},	{1,1},	{1,0},
-					{0,1}
-		},
-		{ // L
-			{1, 2},	{1, 1},	{1, 0},
-							{0, 0}
-		},
-		{ // reverse L
-			{1, 2},	{1, 1},	{1, 0},
-			{0, 2}
-		}
-	};
-	int[] values = {1,1,1,1,1,1,1};
+	boolean playing = true;
+	TetrisScreen screen;
+	TileGenerator generator;
+	Block activeBlock = null;
+	TileGame game;
+	BlockLogic logic;
+	int score = 0;
+	public enum Moves { TRANSLATE_VERTICAL, TRANSLATE_HORIZONTAL, ROTATE_CLOCKWISE };
 
-	/*
-	public TetrisBoard(TetrisScreen screen) {
+	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
+		logic = new BlockLogic();
+
 		seed = new Random(LocalTime.now().toNanoOfDay());
-		TileGenerator.registerTileConfigurations(configurations, values);
 		this.screen = screen;
+		generator = screen.getGenerator();
+		generator.setGridDimensions(ROWS, COLUMNS);
+
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++)
-				board[row][col] = TileGenerator.emptyTile();
-	}*/
-
-	public TetrisBoard() {
-		super(new TileGame(ROWS, COLUMNS));
-		seed = new Random(LocalTime.now().toNanoOfDay());
-		TileGenerator.registerTileConfigurations(configurations, values);
-		for (int row = 0; row < ROWS; row++)
-			for (int col = 0; col < COLUMNS; col++)
-				board[row][col] = TileGenerator.emptyTile();
-	}
-
-
-	@Override
-	public void update() {
-		while (true) {
-			System.out.println("update");
-			this.screen.setReady(false);
-			Platform.runLater(() -> {
-				if (activeBlock == null)
-					createMovableBlock();
-				else {
-					settle();
-				}
-				this.screen.draw();
-			});
-			while(!this.screen.ready())
-				try {
-					Thread.sleep(1000);
-					System.out.println("hm");
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-		}
-	}
-	
-	void gameover() {
-		// TODO: show popup with results
-		System.out.println("Game has ended");
-	}
-	
-	boolean rangeCheck(int row, int column) {
-		return row >= 0 && row < ROWS &&
-				column >= 0 && column < COLUMNS;
-	}
-	
-	boolean occupied(int row, int column) {
-		return board[row][column] != TileGenerator.emptyTile();
-	}
-	
-	// Can a tile be dropped at this location?
-	boolean canDropTile(int row, int column) {
-		return rangeCheck(row, column) && !occupied(row, column);
-	}
-	
-	synchronized int findFirstAvailableColumn(int config) {
-		int column;
-		
-		boolean valid = false;
-		for (column = 0; column < COLUMNS; column++) {
-			for (int tile = 0; tile < configurations[config].length; tile++) {
-				int row = configurations[config][tile][0];
-				int col = configurations[config][tile][1];
-				if (!canDropTile(row, col + column)) {
-					valid = false;
-					break;
-				} else valid = true;
-			}
-			if (valid) return column;
-		}
-		return -1;
-	}
-	
-	void createMovableBlock() {
-		int config = seed.nextInt(configurations.length);
-		int column = findFirstAvailableColumn(config);
-
-		System.out.println("Creating tiles");
-		if (column < 0) { // no place to drop the tile
-			gameover();
-		} else { // add tile to board, register movement
-			Block movableBlock = TileGenerator.createBlock(config, column);
-			activeBlock = movableBlock;
-			for (int i = 0; i < activeBlock.size(); i++) {
-				// add to board
-				int row = configurations[config][i][0];
-				int col = configurations[config][i][1] + column;
-				System.out.println("inserted tile at: " + row + ", " + col);
-				board[row][col] = activeBlock.get(i);
-				// make Block movable, set empty tiles above
-			}
-		}
-	}
-	
-	void settle() {
-		boolean canSettle = blockCanMove(activeBlock, 1, 0);
-		if (!canSettle) {
-			activeBlock = null;
-			return;
-		} else {
-			for (Tile t: activeBlock.getTiles()) {
-				Coordinate c = t.getCoords();	
-				makeMove(c.getX(), c.getY(), c.getX() + 1, c.getY());
-			}
-		}
-	}
-	
-	boolean blockCanMove(Block block, int row, int column) {
-		boolean canMove = true;
-		for (Tile t: activeBlock.getTiles()) {
-			Coordinate c = t.getCoords();
-			Coordinate cPrime = new Coordinate(c.getX() + row, c.getY() + column);
-			if (!rangeCheck(cPrime.getX(), cPrime.getY()) ||
-				(occupied(cPrime.getX(), cPrime.getY()) && !activeBlock.contains(cPrime))) {
-				canMove = false;
-			}
-		}
-		return canMove;
-	}
-	
-	void makeMove(int fromRow, int fromColumn, int toRow, int toColumn) {
-		Tile t = board[fromRow][fromColumn];
-		t.setCoords(toRow, toColumn);
-		board[toRow][toColumn] = t;
-		board[fromRow][fromColumn] = TileGenerator.emptyTile();
+				board[row][col] = generator.emptyTile();
 	}
 
 	@Override
@@ -186,12 +40,196 @@ public class TetrisBoard extends Board {
 		update();
 	}
 
-
-	public int[][][] getConfigurations() {
-		return configurations;
+	@Override
+	public void update() {
+		while (playing) {
+			System.out.println("update");
+			this.screen.setReady(false);
+			Platform.runLater(() -> {
+				if (activeBlock == null)
+					createMovableBlock();
+				else {
+					attemptAction(Moves.TRANSLATE_VERTICAL, 1);
+				}
+				this.screen.draw();
+			});
+			while(!this.screen.ready()) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (!playing) break;
+		}
 	}
 
-	public int[] getValues() {
-		return values;
+	//	synchronized void attemptAction(Block block, Moves moveType, int n) {
+	synchronized void attemptAction(Moves moveType, int n) {
+		switch (moveType) {
+			case TRANSLATE_VERTICAL:
+				while (activeBlock != null && n-- > 0) {
+					activeBlock = attemptMoveDown(activeBlock, 1);
+					System.out.println(n);
+					System.out.println(activeBlock);
+				}
+				break;
+			case TRANSLATE_HORIZONTAL:
+				activeBlock = attemptMoveHorizontal(activeBlock, n);
+				break;
+			case ROTATE_CLOCKWISE:
+				activeBlock = logic.rotateBlock(activeBlock);
+				break;
+		}
 	}
+
+	synchronized Block attemptMoveDown(Block block, int row) {
+		if (block == null) return null;
+		if (blockCanMove(block, row, 0)) {
+			block.add(row, 0);
+			return block;
+		} else {
+			addTiles(block);
+			checkForMatches(block);
+			return null;
+		}
+	}
+
+	Block attemptMoveHorizontal(Block block, int column) {
+		if (block == null) return null;
+		if (blockCanMove(block, 0, column)) {
+			block.add(0, column);
+		}
+		return block;
+	}
+
+	boolean rangeCheck(int row, int column) {
+		return row >= 0 && row < ROWS &&
+				column >= 0 && column < COLUMNS;
+	}
+
+	boolean occupied(int row, int column) {
+		return board[row][column].getValue() > 0;
+	}
+
+	// Can a tile be dropped at this location?
+	boolean canDropTile(int row, int column) {
+		return rangeCheck(row, column) && !occupied(row, column);
+	}
+
+	synchronized Block findFirstAvailableColumn() {
+		Block tileConfig = logic.getRandomBlock(generator);
+		int column;
+		boolean valid = false;
+		for (column = 0; column < COLUMNS; column++) {
+			for (Tile t: tileConfig.getTiles()) {
+				int row = t.getCoords().getX();
+				int col = t.getCoords().getY();
+				if (!canDropTile(row, col + column)) {
+					valid = false;
+					break;
+				} else valid = true;
+			}
+			if (valid) {
+				tileConfig.add(0, column);
+				return tileConfig;
+			}
+		}
+		return null;
+	}
+
+	void createMovableBlock() {
+		Block block = findFirstAvailableColumn();
+		if (block == null) {
+			// no place to drop the tile
+			gameover();
+		} else {
+			activeBlock = block;
+			// add tile to board, register movement
+			screen.translateMovableBlock((m, n) -> {
+				attemptAction(m, n);
+				return true;
+			});
+		}
+	}
+
+	void addTiles(Block block) {
+		for (Tile t: block.getTiles()) {
+			Coordinate coords = t.getCoords();
+			board[coords.getX()][coords.getY()] = t;
+		}
+	}
+
+	void checkForMatches(Block block) {
+		int[] bounds = block.getBounds();
+		for (int row = bounds[0]; row <= bounds[2]; row++)
+			if (rowIsFull(row)) {
+				applyMatch(row);
+				settleRowsAbove(row);
+			}
+	}
+
+	boolean rowIsFull(int row) {
+		for (Tile t: board[row])
+			if (t.getValue() == 0)
+				return false;
+		return true;
+	}
+
+	void applyMatch(int row) {
+		int column = 0;
+		for (Tile t: board[row]) {
+			score += t.getValue();
+			board[row][column++] = generator.emptyTile();
+		}
+	}
+
+	private void settleRowsAbove(int row) {
+		for (int currentRow = row; currentRow > 0; currentRow--) {
+			for (int column = 0; column < COLUMNS; column++) {
+				board[currentRow][column] = board[currentRow - 1][column];
+				removeTile(currentRow - 1, column);
+			}
+		}
+	}
+
+	boolean blockCanMove(Block block, int row, int column) {
+		if (block == null) return false;
+		System.out.println("<" + Integer.toString(row) + ", " + Integer.toString(column) + ">:" + block);
+		for (Tile t: block.getTiles()) {
+			Coordinate c = t.getCoords();
+			Coordinate cPrime = new Coordinate(c.getX() + row, c.getY() + column);
+			if (!canDropTile(cPrime.getX(), cPrime.getY())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	void makeMove(Tile t, int toRow, int toColumn) {
+		Coordinate previousCoords = t.getCoords();
+		board[toRow][toColumn] = t;
+		board[previousCoords.getX()][previousCoords.getY()] = generator.emptyTile();
+		t.setCoords(toRow, toColumn);
+	}
+
+	Block getActiveBlock() {
+		return activeBlock;
+	}
+
+	void gameover() {
+		playing = false;
+		screen.onEnd();
+		System.out.println("Game has ended");
+	}
+
+	@Override
+	public void removeTile(int row, int column) {
+		board[row][column] = generator.emptyTile();
+	}
+
+	public void setPlaying(boolean playing) {
+		this.playing = playing;
+	}
+
 }

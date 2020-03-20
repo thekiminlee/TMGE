@@ -10,31 +10,29 @@ import tmge.engine.boardComponents.Board;
 //update was removed from here hm....
 
 public interface Screen {
-	Board board = null;
-	boolean ready = false;
-	
-	Board getBoard();
+    Board board = null;
+    boolean ready = false;
+
+    Board getBoard();
 
     //public abstract void loadScene(int ye);
 
     /* Any important data initialization that will be used in this Scene in the future.*/
-    void initialize(Game game);
+    void initialize();
 
     /* Required components that will be redrawn after every update() method is called */
     void draw();
 
     /* Some actions that will be done at the end of the exit. This can be applying a new screen and calling Engine.startLoop on it */
     void exit();
-    
+
     void setReady(boolean ready);
     boolean ready();
-    
-	static void sendError(String err) {
-		Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+
+    static void sendError(String err) {
+        Alert alertMessage = new Alert(Alert.AlertType.ERROR);
         alertMessage.setHeaderText(null);
         alertMessage.setContentText(err);
         alertMessage.showAndWait();
-	}
-
-
+    }
 }
