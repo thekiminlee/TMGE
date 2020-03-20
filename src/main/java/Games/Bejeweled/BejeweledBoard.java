@@ -3,7 +3,9 @@ package Games.Bejeweled;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.Math;
 
+import javafx.application.Platform;
 import tmge.engine.boardComponents.Board;
 import tmge.engine.boardComponents.Coordinate;
 import tmge.engine.boardComponents.Tile;
@@ -11,58 +13,115 @@ import tmge.engine.boardComponents.TileGame;
 import tmge.engine.boardComponents.TileGenerator;
 
 public class BejeweledBoard extends Board {
-    private int score;
-    private int[][][] configurations = {{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}}};
-    private int[] values = {1,2,3,4,5,6};
-    private static final int ROWS = 20, COLUMNS = 10;
-    private Random seed = new Random(LocalTime.now().toNanoOfDay());
-    
-    public BejeweledBoard(){
-    	super(new TileGame(ROWS, COLUMNS));
-    	TileGenerator.registerTileConfigurations(configurations, values);
+	private int score;
+	private int[][][] configurations = { { { 0, 0 } }, { { 0, 0 } }, { { 0, 0 } }, { { 0, 0 } } };
+	private int[] values = { 1, 2, 3, 4 };
+	private static final int ROWS = 8, COLUMNS = 8;
+	private ArrayList<Coordinate> listOfCoords;
+	private TileGenerator generator;
+	private boolean playing;
+	private Random seed;
+	private Tile t1, t2 = null;
+	private int clicked = 0;
 
+	BejeweledScreen screen;
+
+	public BejeweledBoard(BejeweledScreen screen) {
+		super(new TileGame(ROWS, COLUMNS));
+		seed = new Random(LocalTime.now().toNanoOfDay());
+		this.screen = screen;
+		generator = screen.getGenerator();
+		generator.setGridDimensions(ROWS, COLUMNS);
+		for (int row = 0; row < ROWS; row++)
+			for (int col = 0; col < COLUMNS; col++) {
+				// Coordinate c = new Coordinate(row, col);
+				board[row][col] = generator.emptyTile();
+				// listOfCoords.add(new Coordinate(row, col));
+			}
+		playing = true;
 		System.out.println("Board created");
-    }
+	}
 
-    //Matching on board
-    public int applyMatch(ArrayList<Coordinate> list) {
-        int points = 0;
-        for (Coordinate coords : list) {
-            Tile tile = board[coords.getX()][coords.getY()];
-            points += tile.getValue();
+	// Matching on board
+	public int applyMatch(ArrayList<Coordinate> list) {
+		int points = 0;
+		for (Coordinate coords : list) {
+			Tile tile = board[coords.getX()][coords.getY()];
+			points += tile.getValue();
+			System.out.println(list);
 
-            // Set empty Tile at the coordinate
-            removeTile(coords.getX(), coords.getY());
-        }
+			// Set empty Tile at the coordinate
+			removeTile(coords.getX(), coords.getY());
+		}
 
-        return points;
-    }
+		return points;
+	}
 
-    //GRAVITY OF THE GAME THAT HANDLES DROPPING
-    public void applyGravity() {
-    	for (int row = this.getRows() - 1; row > 0; row++) {
-    		for (int column = this.getColumns() - 1; column >= 0; column++) {
-    			if (board[row][column] == null)
-    				removeTile(row, column);
-    			else if (board[row][column] == TileGenerator.emptyTile(new Coordinate(row, column))) {
-    				addTile(row, column, board[row - 1][column]);
-    				removeTile(row - 1, column);
-    			}
-    		}
-    	}
-    	fillTopRow();
-    }
-    
-    public void fillTopRow() {
-    	for (int column = 0; column < this.getColumns(); column++)
-    		if (!occupied(board[0][column]))
-    			board[0][column] = TileGenerator.createTile(seed.nextInt(configurations.length), new Coordinate(0, column));
-    }
+	// GRAVITY OF THE GAME THAT HANDLES DROPPING
+	public void applyGravity() {
+		for (int row = this.getRows() - 1; row > 0; row++) {
+			for (int column = this.getColumns() - 1; column >= 0; column++) {
+				if (board[row][column] == null)
+					removeTile(row, column);
+				else if (board[row][column] == generator.emptyTile()) {
+					addTile(row, column, board[row - 1][column]);
+					removeTile(row - 1, column);
+				}
+			}
+		}
+		fillRow(0);
+	}
 
-    public boolean occupied(Tile t) {
-    	return (t != null) && (t != TileGenerator.emptyTile());
-    }
-    
+	public void fillRow(int row) {
+		for (int column = 0; column < this.getColumns(); column++) {
+			int rand = seed.nextInt(configurations.length);
+			if (!occupied(board[row][column])) {
+				board[row][column] = generator.createCustomTile(rand, rand, values[rand], new Coordinate(row, column));
+			}
+		}
+	}
+
+	public void fillAll() {
+		for (int row = 0; row < this.getRows(); row++) {
+			fillRow(row);
+		}
+	}
+
+	private boolean isValid(Coordinate coords, Coordinate lastClicked) {
+		if ((Math.abs(coords.getX() - lastClicked.getX()) == 1) && (coords.getY() == lastClicked.getY()))
+			return true;
+		else if ((Math.abs(coords.getY() - lastClicked.getY()) == 1) && (coords.getX() == lastClicked.getX()))
+			return true;
+		else if ((Math.abs(coords.getX() - lastClicked.getX()) == 1)
+				&& (Math.abs(coords.getY() - lastClicked.getY()) == 1))
+			return true;
+		return false;
+	}
+
+	public void swap(Coordinate coords, Coordinate lastClicked) {
+		if (isValid(coords, lastClicked)) {
+			Tile temp1 = getTileAt(coords), temp2 = getTileAt(lastClicked);
+			temp1.setCoords(lastClicked);
+			setTileAt(lastClicked, temp1);
+			temp2.setCoords(coords);
+			setTileAt(coords, temp2);
+		} else {
+			System.out.println("Invalid move");
+		}
+	}
+
+	public Tile getTileAt(Coordinate coords) {
+		return board[coords.getX()][coords.getY()];
+	}
+
+	public void setTileAt(Coordinate coords, Tile t) {
+		board[coords.getX()][coords.getY()] = t;
+	}
+
+	public boolean occupied(Tile t) {
+		return (t != null) && (t != generator.emptyTile());
+	}
+
 	@Override
 	public void addTile(int row, int column, Tile t) {
 		if (t == null)
@@ -73,18 +132,23 @@ public class BejeweledBoard extends Board {
 
 	@Override
 	public void removeTile(int row, int column) {
-		this.board[row][column] = TileGenerator.emptyTile();
-		
+		this.board[row][column] = generator.emptyTile();
 	}
 
 	@Override
 	public void update() {
-		// TODO Main loop for game
-		System.out.println("Update called");
+
+		
 	}
 
 	@Override
 	public void run() {
+		System.out.println("I am in run");
 		update();
 	}
+
+	public void setPlaying(boolean playing) {
+		this.playing = playing;
+	}
+
 }

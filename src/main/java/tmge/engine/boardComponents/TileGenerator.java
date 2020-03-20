@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
-import Games.Tetris.Block;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Polygon;
 
 public class TileGenerator {
 
@@ -53,12 +50,17 @@ public class TileGenerator {
 		Color tileColor = palette[colorIndex];
 		System.out.println("Color: " + Integer.valueOf(colorIndex) + ", Shape: " + Integer.valueOf(shapeIndex));
 		Tile t = new Tile(score, coord, tileColor, shapesAvailable.get(shapeIndex));
+//		System.out.println(t.getColor());
+//		if (palette != null && colorIndex < palette.length)
+//			tileColor = palette[colorIndex];
+//		else
+//			tileColor = emptyColor;
 		return t;
 	}
 
 	Node createSquare(Color c, int padding) {
 		Rectangle rect = new Rectangle((getWidth() / getColumns()) - 2*padding,
-				(getHeight() / getRows()) - 2*padding, c);
+										(getHeight() / getRows()) - 2*padding, c);
 		rect.setTranslateX(padding);
 		rect.setTranslateY(padding);
 		return rect;
