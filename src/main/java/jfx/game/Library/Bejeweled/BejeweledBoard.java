@@ -88,8 +88,8 @@ public class BejeweledBoard extends Board {
 		}
 	}
 
-	public void swap(Tile t1, Tile t2){
-		Tile temp = t1;
+	public void swap(){
+		Tile temp = t1.clone();
 		board[t1.getCoords().getX()][t1.getCoords().getY()]= board[t2.getCoords().getX()][t2.getCoords().getY()];
 		board[t2.getCoords().getX()][t2.getCoords().getY()]= board[temp.getCoords().getX()][temp.getCoords().getY()];
 		canSwap = true;
@@ -132,7 +132,13 @@ public class BejeweledBoard extends Board {
 							t1 = board[screen.getMouseClickX()][screen.getMouseClickY()];
 						} else {
 							t2 = board[screen.getMouseClickX()][screen.getMouseClickY()];
-							swap(t1, t2);
+//							removeTile(t1.getCoords().getX(), t1.getCoords().getY());
+//							removeTile(t2.getCoords().getX(), t2.getCoords().getY());
+							System.out.print(t1.getValue());
+							System.out.println(t2.getValue());
+							swap();
+//							System.out.print(t1.getValue());
+//							System.out.println(t2.getValue());
 						}
 
 						//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
