@@ -30,7 +30,7 @@ public class BejeweledBoard extends Board {
 	private Random seed;
 	private Tile t1, t2 = null;
 	private Set<Tile> matchSet;
-	static final int startTime = 60;
+	static final int startTime = 3;
 	int timeSeconds = startTime;
 	private int[] shapeScore = new int[]{20, 30, 40, 50};
 
@@ -220,10 +220,14 @@ public class BejeweledBoard extends Board {
 			this.timeSeconds -= 1;
 			this.screen.updateTimer(this.timeSeconds);
 			this.screen.updateScore(this.score);
-			if(this.timeSeconds == 0) setPlaying(false);
+
 			Platform.runLater(() -> {
 				fillAll();
 				this.screen.draw();
+				if(this.timeSeconds == 0) {
+					setPlaying(false);
+					screen.displayAlertBox();
+				}
 			});
 
 			while (!this.screen.ready() && playing)

@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
@@ -21,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
@@ -36,7 +39,7 @@ public class BejeweledScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml").toUri();
 	boolean ready;
 	TileGenerator generator;
-	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
+	final Color[] palette = {Color.RED, Color.BLUEVIOLET, Color.CHARTREUSE,
 			Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE};
 	BejeweledBoard board;
 	double screenWidth, screenHeight;
@@ -256,6 +259,30 @@ public class BejeweledScreen implements Screen {
 	void updateGameTimeAndScore(){
 		gameTime.setText(Integer.toString(this.timer));
 		gameScore.setText(Integer.toString(this.score));
+	}
+
+	void displayAlertBox(){
+		Stage window = new Stage();
+
+		window.initModality((Modality.APPLICATION_MODAL));
+		window.setTitle("GAME OVER");
+		window.setMinWidth(550);
+		window.setMinHeight(550);
+
+		Label label = new Label("TIME HAS RUN OUT. GAME IS OVER");
+		label.setStyle("-fx-font-size: 2em;");
+
+		Button newGameButton = new Button("Click button for 2nd game");
+		newGameButton.setStyle("-fx-font-size: 2em;");
+		newGameButton.setOnAction(e -> window.close());
+
+		VBox layout = new VBox(10);
+		layout.getChildren().addAll(label, newGameButton);
+		layout.setAlignment(Pos.CENTER);
+
+		Scene scene = new Scene(layout);
+		window.setScene(scene);
+		window.showAndWait();
 	}
 
 }
