@@ -3,11 +3,14 @@ package Games.GameSelect;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import Games.Tetris.TetrisBoard;
+import Games.Tetris.TetrisGame;
 import jfx.game.UI.App;
 import jfx.game.UI.FXMLBuilder;
 import Games.Bejeweled.BejeweledScreen;
 import Games.Tetris.TetrisScreen;
 import tmge.engine.Engine;
+import tmge.engine.Game;
 import tmge.engine.Screen;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -122,7 +125,7 @@ public class GameSelect {
     			// open the new game and close the game select window, behind the scenes a BejeweledScreen is created
     			App.startGame(BejeweledScreen.link, new AnchorPane(), false);
     			exit();
-    			Screen screen = FXMLBuilder.getController();
+    			//Screen screen = FXMLBuilder.getController();
     			//loadGame(screen);
     		}
     	});
@@ -140,7 +143,9 @@ public class GameSelect {
     			App.startGame(TetrisScreen.link, new AnchorPane(), false);
     			exit();
     			System.out.println("Getting TetrisScreen");
-    			Screen screen = FXMLBuilder.getController();
+    			TetrisGame game = (TetrisGame)FXMLBuilder.getController();
+    			//game.setBoard(new TetrisBoard());
+    			//game.setScreen(new TetrisScreen());
     			//loadGame(screen);
     		}
     	});

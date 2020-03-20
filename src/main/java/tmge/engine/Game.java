@@ -1,7 +1,5 @@
 package tmge.engine;
 
-import javafx.application.Platform;
-import tmge.engine.Screen;
 import tmge.engine.boardComponents.Board;
 import tmge.engine.boardComponents.Tile;
 
@@ -14,11 +12,13 @@ public abstract class Game {
 	private Screen currentScreen;
 	private Board currentBoard;
 
-
+	/*
 	public Game(Screen currentScreen, Board currentBoard) {
 		this.currentScreen = currentScreen;
 		this.currentBoard = currentBoard;
-	}
+	}*/
+
+	public Game(){}
 
 	public void setCurrentScene(Screen screen){
 		currentScreen = screen;

@@ -5,6 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import Games.Tetris.TetrisBoard;
+import Games.Tetris.TetrisGame;
+import Games.Tetris.TetrisScreen;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +16,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import tmge.engine.Game;
 import tmge.engine.Screen;
 
 public class FXMLBuilder {
 	private static URL fxmlString = null;
-	private static Screen controller = null;
+	private static Game controller = null;
 	
 	public static void setFXML(URI link) {
 		try {
@@ -28,7 +32,7 @@ public class FXMLBuilder {
 		}
 	}
 	
-	public static Screen getController() {
+	public static Game getController() {
 		return controller;
 	}
 	
@@ -44,8 +48,9 @@ public class FXMLBuilder {
 			loader.setLocation(fxmlString);
 			System.out.println(loader.getLocation());
 			pane = (Parent) loader.load();
-			// references a screen-derived class
 			controller = loader.getController();
+			controller.setCurrentBoard(new TetrisBoard());
+			controller.setCurrentScene(new TetrisScreen());
 			return new Scene(pane);
 		} catch (IOException e) {
 			e.printStackTrace();

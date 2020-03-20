@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.Random;
 
 import javafx.application.Platform;
+import tmge.engine.Game;
 import tmge.engine.boardComponents.*;
 
 public class TetrisBoard extends Board {
@@ -44,8 +45,9 @@ public class TetrisBoard extends Board {
 		}
 	};
 	int[] values = {1,1,1,1,1,1,1};
-	
-	TetrisBoard(TetrisScreen screen) {
+
+	/*
+	public TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
 		seed = new Random(LocalTime.now().toNanoOfDay());
 		TileGenerator.registerTileConfigurations(configurations, values);
@@ -53,7 +55,17 @@ public class TetrisBoard extends Board {
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++)
 				board[row][col] = TileGenerator.emptyTile();
+	}*/
+
+	public TetrisBoard() {
+		super(new TileGame(ROWS, COLUMNS));
+		seed = new Random(LocalTime.now().toNanoOfDay());
+		TileGenerator.registerTileConfigurations(configurations, values);
+		for (int row = 0; row < ROWS; row++)
+			for (int col = 0; col < COLUMNS; col++)
+				board[row][col] = TileGenerator.emptyTile();
 	}
+
 
 	@Override
 	public void update() {
