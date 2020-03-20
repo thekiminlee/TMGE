@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import tmge.engine.Game;
 import tmge.engine.Screen;
 import tmge.engine.boardComponents.Board;
 import tmge.engine.boardComponents.Tile;
@@ -50,7 +51,6 @@ public class BejeweledScreen implements Screen {
 	@FXML Menu fileMenu;
 	@FXML Menu helpMenu;
 	
-	@Override
 	@FXML
 	public void initialize() {
 		// init all vboxes, add them to a tracking data structure and the visual
@@ -76,6 +76,11 @@ public class BejeweledScreen implements Screen {
 	@Override
 	public Board getBoard() {
 		return board;
+	}
+
+	@Override
+	public void initialize(Game game) {
+
 	}
 
 	@Override

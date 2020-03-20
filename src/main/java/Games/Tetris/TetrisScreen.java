@@ -22,9 +22,11 @@ public class TetrisScreen implements Screen {
 	//Tile empty = TileGenerator.emptyTile();
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL}; 
-	TetrisBoard board;
+	//TetrisBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
+
+	TetrisGame game;
 
 	/*
 	public TetrisScreen() {
@@ -34,29 +36,21 @@ public class TetrisScreen implements Screen {
 
 	public TetrisScreen(){
 		createScreen(720.0 * 0.6, 640.0 - 48);
-
 	}
 
 	void createScreen(double screenWidth, double screenHeight) {
-
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-
-		//board = new TetrisBoard(this);
-		//new Thread(board).start();
-		//gameBox = new VBox[board.getRows()][board.getColumns()];
-		
-		//new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
-		//TileGenerator.registerPalette(palette);
 	}
 
+	/*
 	@FXML VBox leftVBox;
 	@FXML VBox rightVBox;
 	@FXML GridPane gameGrid;
 	@FXML Menu fileMenu;
-	@FXML Menu helpMenu;
+	@FXML Menu helpMenu;*/
 
-	public void initialize() {
+	public void initialize(Game controller) {
 		//new TileGenerator(screenWidth, screenHeight, board.getRows(), board.getColumns());
 		//TileGenerator.registerPalette(palette);
 		
@@ -64,17 +58,20 @@ public class TetrisScreen implements Screen {
 //		seed.setSeed(LocalTime.now().toNanoOfDay());
 		
 		// init all vboxes, add them to a tracking data structure and the visual
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+
+		game = (TetrisGame)controller;
+		gameBox = new VBox[game.getRows()][game.getColumns()];
+
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				VBox box = new VBox();
 				gameBox[row][column] = box;
-				gameGrid.add(box, column, row);
+				game.getGameGrid().add(box, column, row);
 				setVBox(row, column, TileGenerator.emptyTile());
 			}
 		}
-		
-		leftVBox.getChildren().add(new Label("LEFT"));
-		rightVBox.getChildren().add(new Label("RIGHT"));
+		game.getLeftVBox().getChildren().add(new Label("LEFT"));
+		game.getRightVBox().getChildren().add(new Label("RIGHT"));
 		ready = true;
 		System.out.println("initialized");
 	}
@@ -103,13 +100,13 @@ public class TetrisScreen implements Screen {
 //	}
 
 	private void minimize() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		Stage stage = (Stage) game.getLeftVBox().getScene().getWindow();
 		stage.setIconified(true);
 	}
 	
 
 	private void maximize() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		Stage stage = (Stage) game.getLeftVBox().getScene().getWindow();
 		stage.setMaximized(true);
 	}
 
@@ -120,10 +117,10 @@ public class TetrisScreen implements Screen {
 
 	@Override
 	public void draw() {
-		Tile[][] gameState = board.getBoard();
-		System.out.println(board);
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+		Tile[][] gameState = game.getBoard();
+		System.out.println(game.getBoard());
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				Tile t = gameState[row][column];
 				setVBox(row, column, t);
 			}
@@ -135,7 +132,7 @@ public class TetrisScreen implements Screen {
 	@Override
 	@FXML
 	public void exit() {
-		Stage stage = (Stage) leftVBox.getScene().getWindow();
+		Stage stage = (Stage) game.getLeftVBox().getScene().getWindow();
         stage.close();
         System.exit(0);
 	}
@@ -160,5 +157,9 @@ public class TetrisScreen implements Screen {
 
 	public Color[] getPalette() {
 		return palette;
+	}
+
+	public void test(){
+		System.out.print("test");
 	}
 }

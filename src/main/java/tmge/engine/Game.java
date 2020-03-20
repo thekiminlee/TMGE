@@ -9,8 +9,8 @@ import tmge.engine.boardComponents.Tile;
 /* THIS WILL END UP BEING A CONTROLLER CLASS FOR BOTH THE BOARD AND THE SCREEN CLASS */
 
 public abstract class Game {
-	private Screen currentScreen;
-	private Board currentBoard;
+	protected Screen currentScreen;
+	protected Board currentBoard;
 
 	/*
 	public Game(Screen currentScreen, Board currentBoard) {
@@ -27,11 +27,11 @@ public abstract class Game {
 	public void setCurrentBoard(Board board) {currentBoard = board;}
 
 	public int getRows() {
-		return this.currentBoard.getRows();
+		return currentBoard.getRows();
 	}
 
 	public int getColumns() {
-		return this.currentBoard.getColumns();
+		return currentBoard.getColumns();
 	}
 
 	public Tile[][] getCurrentBoard() { return this.currentBoard.getBoard();}

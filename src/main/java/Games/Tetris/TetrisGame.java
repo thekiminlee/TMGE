@@ -1,5 +1,6 @@
 package Games.Tetris;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -22,8 +23,22 @@ public class TetrisGame extends Game {
     double screenWidth;
     double screenHeight;
 
+    TetrisScreen currentScreen;
+    TetrisBoard currentBoard;
+
+    @FXML
+    VBox leftVBox;
+    @FXML
+    VBox rightVBox;
+    @FXML
+    GridPane gameGrid;
+    @FXML
+    Menu fileMenu;
+    @FXML Menu helpMenu;
+
+    /*
     TetrisScreen screen;
-    TetrisBoard board;
+    TetrisBoard board;*/
 
     /*
     public TetrisGame(TetrisScreen currentScreen, TetrisBoard currentBoard) {
@@ -37,19 +52,23 @@ public class TetrisGame extends Game {
     public TetrisGame(){}
 
     public void setScreen(TetrisScreen screen) {
-        this.screen = screen;
+        this.currentScreen = screen;
     }
 
     public void setBoard(TetrisBoard board) {
-        this.board = board;
+        this.currentBoard = board;
     }
 
     @FXML
     public void initialize(){
         System.out.println("hm");
-        /*
         setScreen(new TetrisScreen());
-        setBoard(new TetrisBoard()); */
+        setBoard(new TetrisBoard());
+        currentBoard.getBoard();
+        currentScreen.initialize(this);
+        Platform.runLater(()-> {
+            currentScreen.draw();
+        });
         //screen.initialize();
     }
 
@@ -66,16 +85,6 @@ public class TetrisGame extends Game {
     protected void update(){
         System.out.println("no");
     }
-
-    @FXML
-    VBox leftVBox;
-    @FXML
-    VBox rightVBox;
-    @FXML
-    GridPane gameGrid;
-    @FXML
-    Menu fileMenu;
-    @FXML Menu helpMenu;
 
 
     @FXML
@@ -97,5 +106,52 @@ public class TetrisGame extends Game {
         System.exit(0);
     }
 
+    public static URI getLink() {
+        return link;
+    }
 
+    public double getScreenWidth() {
+        return screenWidth;
+    }
+
+    public double getScreenHeight() {
+        return screenHeight;
+    }
+
+    public TetrisScreen getScreen() {
+        return (TetrisScreen) currentScreen;
+    }
+
+    public Tile[][] getBoard() {
+        System.out.println("testing");
+        return currentBoard.getBoard();
+    }
+
+    public VBox getLeftVBox() {
+        return leftVBox;
+    }
+
+    public VBox getRightVBox() {
+        return rightVBox;
+    }
+
+    public GridPane getGameGrid() {
+        return gameGrid;
+    }
+
+    public Menu getFileMenu() {
+        return fileMenu;
+    }
+
+    public Menu getHelpMenu() {
+        return helpMenu;
+    }
+
+    public int getRows() {
+        return currentBoard.getRows();
+    }
+
+    public int getColumns() {
+        return currentBoard.getColumns();
+    }
 }
