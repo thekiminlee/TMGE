@@ -18,6 +18,8 @@ public abstract class Game {
 		this.currentBoard = currentBoard;
 	}
 
+	public Game(){}
+
 	public void setCurrentScene(Screen screen){
 		currentScreen = screen;
 	}

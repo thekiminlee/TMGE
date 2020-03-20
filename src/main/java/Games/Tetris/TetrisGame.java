@@ -49,7 +49,9 @@ public class TetrisGame extends Game {
         TileGenerator.registerTileConfigurations(currentBoard.getConfigurations(),currentBoard.getValues());
     }*/
 
-    public TetrisGame(){}
+    public TetrisGame(){
+        super();
+    }
 
     public void setScreen(TetrisScreen screen) {
         this.currentScreen = screen;
@@ -61,6 +63,7 @@ public class TetrisGame extends Game {
 
     @FXML
     public void initialize(){
+        /*
         System.out.println("hm");
         setScreen(new TetrisScreen());
         setBoard(new TetrisBoard());
@@ -68,7 +71,7 @@ public class TetrisGame extends Game {
         currentScreen.initialize(this);
         Platform.runLater(()-> {
             currentScreen.draw();
-        });
+        });*/
         //screen.initialize();
     }
 
