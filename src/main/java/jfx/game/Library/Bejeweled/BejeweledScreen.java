@@ -83,7 +83,7 @@ public class BejeweledScreen implements Screen {
 							mouseClickX = targetRow;
 							mouseClickY = targetCol;
 							clicked = true;
-							if(clicks > 2) clicks = 0;
+							if(clicks > 2) clicks = 1;
 //							System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
 						}
 					}

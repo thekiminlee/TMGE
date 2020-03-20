@@ -132,19 +132,17 @@ public class BejeweledBoard extends Board {
 						} else {
 							t2 = board[screen.getMouseClickX()][screen.getMouseClickY()];
 							System.out.println("second click");
-//							canSwap = true;
 							System.out.println(t1.getValue());
 							System.out.println(t2.getValue());
+							canSwap = true;
+
 						}
 
 						//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
 					}
 				}
-				else {
-
-					canSwap = false;
-				}
 			});
+			canSwap = false;
 
 			while(!this.screen.ready() && playing)
 				try {
