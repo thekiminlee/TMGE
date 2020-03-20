@@ -31,6 +31,7 @@ public class BejeweledBoard extends Board {
 	private Tile t1, t2 = null;
 	static final int startTime = 5;
 	int timeSeconds = startTime;
+	private boolean firstGame = true;
 	private int[] shapeScore = new int[]{20, 30, 40, 50};
 	private Set<Tile> matchSet = new HashSet<Tile>();
 
@@ -229,8 +230,13 @@ public class BejeweledBoard extends Board {
 				this.screen.draw();
 				if(this.timeSeconds == 0) {
 					setPlaying(false);
-					screen.displayAlertBox();
+					if(!firstGame) {
+						this.firstGame = false;
+						screen.displayAlertBox();
+						resetGame();
+					}
 				}
+
 			});
 
 			while (!this.screen.ready() && playing)
@@ -240,6 +246,13 @@ public class BejeweledBoard extends Board {
 					e.printStackTrace();
 				}
 		}
+	}
+
+	public void resetGame(){
+		this.score = 0;
+		this.timeSeconds = this.startTime;
+
+		setPlaying(true);
 	}
 
 	@Override

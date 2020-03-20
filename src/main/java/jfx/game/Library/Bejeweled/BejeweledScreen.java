@@ -35,8 +35,6 @@ import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class BejeweledScreen implements Screen {
-	// C:\Users\malco\Desktop\TMGE\src\main\java\jfx\game\resources\fxml\bejeweled-singleplayer.fxml
-	// src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml").toUri();
 	boolean ready;
 	TileGenerator generator;
@@ -275,7 +273,7 @@ public class BejeweledScreen implements Screen {
 
 		Button newGameButton = new Button("Click button for 2nd game");
 		newGameButton.setStyle("-fx-font-size: 2em;");
-		newGameButton.setOnAction(e -> this.exit());
+		newGameButton.setOnAction(e -> this.makeNewGame(window));
 
 		VBox layout = new VBox(10);
 		layout.getChildren().addAll(label, newGameButton);
@@ -284,6 +282,12 @@ public class BejeweledScreen implements Screen {
 		Scene scene = new Scene(layout);
 		window.setScene(scene);
 		window.showAndWait();
+	}
+
+	void makeNewGame(Stage window){
+		window.close();
+//		this.exit();
+//		this.initialize();
 	}
 
 }
