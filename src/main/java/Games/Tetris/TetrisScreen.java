@@ -59,7 +59,7 @@ public class TetrisScreen implements Screen {
 		
 		// init all vboxes, add them to a tracking data structure and the visual
 
-		game = (TetrisGame)controller;
+		game = (TetrisGame) controller;
 		gameBox = new VBox[game.getRows()][game.getColumns()];
 
 		for (int row = 0; row < game.getRows(); row++) {

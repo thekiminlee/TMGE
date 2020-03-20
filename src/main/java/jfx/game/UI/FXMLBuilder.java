@@ -21,7 +21,7 @@ import tmge.engine.Screen;
 
 public class FXMLBuilder {
 	private static URL fxmlString = null;
-	private static Game controller = null;
+	private static Screen controller = null;
 	
 	public static void setFXML(URI link) {
 		try {
@@ -32,7 +32,7 @@ public class FXMLBuilder {
 		}
 	}
 	
-	public static Game getController() {
+	public static Screen getController() {
 		return controller;
 	}
 	
@@ -44,6 +44,7 @@ public class FXMLBuilder {
 	 */
 	public static <T> Scene buildScene(Parent pane) {
 		try {
+			/*
 			FXMLLoader loader =  new FXMLLoader();
 			loader.setLocation(fxmlString);
 			System.out.println(loader.getLocation());
@@ -51,6 +52,13 @@ public class FXMLBuilder {
 			controller = loader.getController();
 			controller.setCurrentBoard(new TetrisBoard());
 			controller.setCurrentScene(new TetrisScreen());
+			*/
+			FXMLLoader loader =  new FXMLLoader();
+			loader.setLocation(fxmlString);
+			System.out.println(loader.getLocation());
+			pane = (Parent) loader.load();
+			// references a screen-derived class
+			controller = loader.getController();
 			return new Scene(pane);
 		} catch (IOException e) {
 			e.printStackTrace();
