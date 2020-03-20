@@ -21,7 +21,6 @@ public class BejeweledBoard extends Board {
     private boolean playing;
     private Random seed;
     private Tile t1, t2 = null;
-    boolean canSwap = false;
     private int clicked = 0;
 
     BejeweledScreen screen;
@@ -94,7 +93,6 @@ public class BejeweledBoard extends Board {
 		setTileAt(lastClicked, temp1);
 		temp2.setCoords(coords);
 		setTileAt(coords, temp2);
-		canSwap = true;
 	}
 	
 	public Tile getTileAt(Coordinate coords) {
@@ -133,7 +131,6 @@ public class BejeweledBoard extends Board {
 				fillAll();
 				this.screen.draw();
 			});
-			canSwap = false;
 
 			while(!this.screen.ready() && playing)
 				try {
