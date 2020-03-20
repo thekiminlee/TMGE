@@ -35,7 +35,8 @@ import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class BejeweledScreen implements Screen {
-
+	// C:\Users\malco\Desktop\TMGE\src\main\java\jfx\game\resources\fxml\bejeweled-singleplayer.fxml
+	// src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml").toUri();
 	boolean ready;
 	TileGenerator generator;
