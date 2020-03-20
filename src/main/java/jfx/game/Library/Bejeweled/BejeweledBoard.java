@@ -88,11 +88,21 @@ public class BejeweledBoard extends Board {
 		}
 	}
 
-	public void swap(Tile t1, Tile t2){
-		Tile temp = t1;
-		board[t1.getCoords().getX()][t1.getCoords().getY()]= board[t2.getCoords().getX()][t2.getCoords().getY()];
-		board[t2.getCoords().getX()][t2.getCoords().getY()]= board[temp.getCoords().getX()][temp.getCoords().getY()];
+	public void swap(Coordinate coords, Coordinate lastClicked){
+		Tile temp1 = getTileAt(coords), temp2 = getTileAt(lastClicked);
+		temp1.setCoords(lastClicked);
+		setTileAt(lastClicked, temp1);
+		temp2.setCoords(coords);
+		setTileAt(coords, temp2);
 		canSwap = true;
+	}
+	
+	public Tile getTileAt(Coordinate coords) {
+		return board[coords.getX()][coords.getY()];
+	}
+	
+	public void setTileAt(Coordinate coords, Tile t) {
+		board[coords.getX()][coords.getY()] = t;
 	}
 
     public boolean occupied(Tile t) {
@@ -116,28 +126,12 @@ public class BejeweledBoard extends Board {
 	public void update() {
 
     	while(playing) {
-			fillAll();
 //			System.out.println("UPDATE IN BJ board");
 			this.screen.setReady(false);
 
 			Platform.runLater(() -> {
-				if(!canSwap) {
-					this.screen.draw();
-					if(screen.isClicked()) {
-//						System.out.print(this.screen.getMouseClickX());
-//						System.out.println(this.screen.getMouseClickY());
-//						System.out.println(board[screen.getMouseClickX()][screen.getMouseClickY()].getValue());
-//
-						if (this.screen.getClicks() == 1) {
-							t1 = board[screen.getMouseClickX()][screen.getMouseClickY()];
-						} else {
-							t2 = board[screen.getMouseClickX()][screen.getMouseClickY()];
-							swap(t1, t2);
-						}
-
-						//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
-					}
-				}
+				fillAll();
+				this.screen.draw();
 			});
 			canSwap = false;
 

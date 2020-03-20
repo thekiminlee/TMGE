@@ -79,4 +79,8 @@ public class Tile implements Factory<Node> {
 	public Color getColor() {
 		return color;
 	}
+
+	public void setCoords(Coordinate coords) {
+		this.coords = coords;
+	}
 }

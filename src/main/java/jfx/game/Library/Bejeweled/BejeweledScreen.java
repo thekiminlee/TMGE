@@ -25,27 +25,29 @@ import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 
 import tmge.engine.gameComponents.Board;
+import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Screen;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class BejeweledScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/bejeweled-singleplayer.fxml").toUri();
-	boolean ready = false;
+	boolean ready;
 	TileGenerator generator;
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE};
 	BejeweledBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
-	int mouseClickX;
-	int mouseClickY;
+	Coordinate lastClicked;
     private final int PADDING = 3;
     boolean clicked = false;
     int clicks = 0;
 	
 	public BejeweledScreen()
 	{
+		ready = false;
+		lastClicked = null;
 		screenWidth = 720.0 * 0.6;
 		screenHeight = 640.0 - 48;
 		createScreen();
@@ -78,12 +80,13 @@ public class BejeweledScreen implements Screen {
 					new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent e) {
-							//Node test = gameBox[row][column]
-							clicks += 1;
-							mouseClickX = targetRow;
-							mouseClickY = targetCol;
-							clicked = true;
-							if(clicks > 2) clicks = 1;
+							Coordinate coords = new Coordinate(targetRow, targetCol);
+							if (lastClicked == null) {
+								lastClicked = coords;
+							} else if (!coords.equals(lastClicked)) {
+								board.swap(coords, lastClicked);
+								lastClicked = null;
+							}
 //							System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
 						}
 					}
@@ -97,14 +100,6 @@ public class BejeweledScreen implements Screen {
 
 		ready = true;
 		System.out.println("Screen initialized");
-	}
-
-	public boolean isClicked(){
-		return clicked;
-	}
-
-	public int getClicks(){
-		return clicks;
 	}
 
 	@FXML 
@@ -227,14 +222,6 @@ public class BejeweledScreen implements Screen {
 	private void updatePane(int row, int column, Tile tile) {
 		gameBox[row][column].getChildren().clear();
 		gameBox[row][column].getChildren().add(tile.getNode());
-	}
-
-	public int getMouseClickX() {
-		return mouseClickX;
-	}
-
-	public int getMouseClickY() {
-		return mouseClickY;
 	}
 
 }
