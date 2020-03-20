@@ -29,8 +29,10 @@ public class BejeweledBoard extends Board {
 	private boolean playing;
 	private Random seed;
 	private Tile t1, t2 = null;
-	private int clicked = 0;
 	private Set<Tile> matchSet;
+	static final int startTime = 60;
+	int timeSeconds = startTime;
+	private int[] shapeScore = new int[]{20, 30, 40, 50};
 
 	BejeweledScreen screen;
 
@@ -135,27 +137,12 @@ public class BejeweledBoard extends Board {
 			}
 
 			// Testing:
-			System.out.println("Origin Tile: " + originTile);
-			System.out.println("Match List Identified: " + matchList);
+//			System.out.println("Origin Tile: " + originTile);
+//			System.out.println("Match List Identified: " + matchList);
 		}
 
 
 
-	}
-
-	// GRAVITY OF THE GAME THAT HANDLES DROPPING
-	public void applyGravity() {
-		for (int row = this.getRows() - 1; row > 0; row++) {
-			for (int column = this.getColumns() - 1; column >= 0; column++) {
-				if (board[row][column] == null)
-					removeTile(row, column);
-				else if (board[row][column] == generator.emptyTile()) {
-					addTile(row, column, board[row - 1][column]);
-					removeTile(row - 1, column);
-				}
-			}
-		}
-		fillRow(0);
 	}
 
 	public void fillRow(int row) {
@@ -230,7 +217,10 @@ public class BejeweledBoard extends Board {
 		while (playing) {
 			// System.out.println("UPDATE IN BJ board");
 			this.screen.setReady(false);
-
+			this.timeSeconds -= 1;
+			this.screen.updateTimer(this.timeSeconds);
+			this.screen.updateScore(this.score);
+			if(this.timeSeconds == 0) setPlaying(false);
 			Platform.runLater(() -> {
 				fillAll();
 				this.screen.draw();
