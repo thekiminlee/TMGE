@@ -1,127 +1,95 @@
 package tmge.engine.boardComponents;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.function.Function;
 
-import Games.Tetris.Block;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Polygon;
 
 public class TileGenerator {
 	
-	private static int[][][] tileConfigurations;
-	private static int[] tileScores;
-	static Color[] palette;
+	static Color[] palette = null;
 	enum Shapes {SQUARE, DIAMOND, CIRCLE, STAR};
-	
-	private static Tile empty = emptyTile(new Coordinate(0,0));
-	
-	static double screenWidth, screenHeight;
 
-	static int columns, rows;
-
-	public TileGenerator(double defaultWidth, double defaultHeight, int r, int c) {
+	final Color emptyColor = Color.valueOf("040d06");
+	private Tile empty;
+	
+	double screenWidth, screenHeight;
+	int columns, rows;
+	
+	ArrayList<Function<Color, Node>> shapesAvailable;
+	
+	public TileGenerator(double defaultWidth, double defaultHeight, int padding, Color[] colors) {
 		screenWidth = defaultWidth;
 		screenHeight = defaultHeight;
-		columns = c;
-		rows = r;
-	}
-	
-	public static void registerTileConfigurations(int[][][] configs, int[] values) {
-		tileConfigurations = configs;
-		tileScores = values;
-	}
-	
-	public static void registerPalette(Color[] colors) {
 		palette = colors;
-	}
-	
-	public static Tile createTile(int index, Coordinate coord) {
-		return new Tile(tileScores[index], coord, () -> {
-			return createSquare(palette[index]);
+		shapesAvailable = new ArrayList<Function<Color, Node>>();
+		shapesAvailable.add((color) -> {
+			return createSquare(color, padding);
 		});
+		empty = new Tile(0, new Coordinate(0,0), emptyColor, (color) -> {
+			return createSquare(color, padding);
+		});;
 	}
 	
-	public static ArrayList<Tile> createTiles(int index, int column) {
-		ArrayList<Tile> list = new ArrayList<Tile>();
-		for (int i = 0; i < tileConfigurations[index].length; i++) {
-			list.add(
-				new Tile(tileScores[index],
-					new Coordinate(tileConfigurations[index][i][0], tileConfigurations[index][i][1] + column),
-					() -> { return createSquare(palette[index]); }
-				)
-			);
-		}
-		return list;
-	}
-
-	public static Block createBlock(int index, int column) {
-		Tile[] tiles = new Tile[tileConfigurations[index].length];
-		for (int i = 0; i < tileConfigurations[index].length; i++) {
-			tiles[i] = new Tile(
-				tileScores[index],
-				new Coordinate(tileConfigurations[index][i][0], tileConfigurations[index][i][1] + column),
-				() -> { return createSquare(palette[index]); }
-			);
-		}
-		return new Block(tiles);
+	public Tile createTile(int index, int score, Coordinate coord) {
+		return createCustomTile(index, 0, score, coord);
 	}
 	
-	static Node createSquare(Color c) {
-		return new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
+	public void addPolygon(Function<Color, Node> function) {
+		shapesAvailable.add(function);
 	}
 	
-	static Node createDiamond(Color c) {
-		Rectangle node = new Rectangle(getWidth() / getColumns(), getHeight() / getRows(), c);
-		node.setRotate(45.0);
-		return node;
+	public void addAllPolygons(Collection<Function<Color, Node>> functionCollection) {
+		shapesAvailable.addAll(functionCollection);
 	}
 	
-	static Node createCircle(Color c) {
-		double minValue = Math.min(getWidth() / getColumns(), getHeight() / getRows());
-		return new Circle(minValue, c);
-	}
-
-	static Node createTriangle(Color c) {
-		Polygon triangle = new Polygon();
-		triangle.getPoints().addAll(getWidth() / getColumns(), 0.0, 0.0, getHeight() / getRows(),
-				(getWidth() / getColumns())*2, 0.0);
-		triangle.setFill(c);
-		return triangle;
-	}
-	
-	public static Tile emptyTile(Coordinate coords) {
-		return new Tile(0, coords, () -> {
-			return createSquare(Color.valueOf("040d06"));
-		});
+	public Tile createCustomTile(int colorIndex, int shapeIndex, int score, Coordinate coord) {
+		Color tileColor = palette[colorIndex];
+		System.out.println("Color: " + Integer.valueOf(colorIndex) + ", Shape: " + Integer.valueOf(shapeIndex));
+		Tile t = new Tile(score, coord, tileColor, shapesAvailable.get(shapeIndex));
+//		System.out.println(t.getColor());
+//		if (palette != null && colorIndex < palette.length)
+//			tileColor = palette[colorIndex];
+//		else
+//			tileColor = emptyColor;
+		return t;
 	}
 	
-	public static Tile emptyTile() {
+	Node createSquare(Color c, int padding) {
+		Rectangle rect = new Rectangle((getWidth() / getColumns()) - 2*padding,
+										(getHeight() / getRows()) - 2*padding, c);
+		rect.setTranslateX(padding);
+		rect.setTranslateY(padding);
+		return rect;
+	}
+	
+	public Tile emptyTile() {
 		return empty;
 	}
-
-	public static void setWindowDimensions(double width, double height) {
+	
+	public void setWindowDimensions(double width, double height) {
 		screenWidth = width;
 		screenHeight = height;
 	}
-
-	public static void setGridDimensions(int rows, int columns) {
-		TileGenerator.rows = rows;
-		TileGenerator.columns = columns;
+	
+	public void setGridDimensions(int rows, int columns) {
+		this.rows = rows;
+		this.columns = columns;
 	}
-
-	private static int getRows() {
+	
+	private int getRows() {
 		return rows;
 	}
-	private static int getColumns() {
+	private int getColumns() {
 		return columns;
 	}
-	private static double getWidth() {
+	private double getWidth() {
 		return screenWidth;
 	}
-	private static double getHeight() {
+	private double getHeight() {
 		return screenHeight;
 	}
 	

@@ -18,7 +18,7 @@ public interface Screen {
     //public abstract void loadScene(int ye);
 
     /* Any important data initialization that will be used in this Scene in the future.*/
-    void initialize(Game game);
+    void initialize();
 
     /* Required components that will be redrawn after every update() method is called */
     void draw();
