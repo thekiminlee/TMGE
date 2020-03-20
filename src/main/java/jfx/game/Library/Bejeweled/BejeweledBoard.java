@@ -29,10 +29,10 @@ public class BejeweledBoard extends Board {
 	private boolean playing;
 	private Random seed;
 	private Tile t1, t2 = null;
-	private Set<Tile> matchSet;
 	static final int startTime = 60;
 	int timeSeconds = startTime;
 	private int[] shapeScore = new int[]{20, 30, 40, 50};
+	private Set<Tile> matchSet = new HashSet<Tile>();
 
 	BejeweledScreen screen;
 
@@ -77,20 +77,9 @@ public class BejeweledBoard extends Board {
 				} else { break; }
 			}
 
-			// Clear Tiles (if Valid Match):
-			if (matchList.size() >= 3 ){
-				for ( Tile matchTile : matchList ) {
-					System.out.println(matchTile);
-					removeTile(matchTile.getCoords().getX(), matchTile.getCoords().getY());
-				}
-			}
-
-			// Reset Tiles (! ValidMatch ):
-			if ( matchList.size() < 3 ) {
-				System.out.println("No Matches, reverting to original.");
-				Tile temp = originTile1;
-				setTileAt(originTile1.getCoords(), originTile2);
-				setTileAt(originTile2.getCoords(), temp);
+			// Add Tiles to MatchSet:
+			if (matchList.size() >= 3){
+				matchSet.addAll(matchList);
 			}
 		}
 //
@@ -120,29 +109,34 @@ public class BejeweledBoard extends Board {
 				} else { break; }
 			}
 
-			// Clear Tiles (if Valid Match):
-			if (matchList.size() >= 3 ){
-				for ( Tile matchTile : matchList ) {
-					System.out.println(matchTile);
-					removeTile(matchTile.getCoords().getX(), matchTile.getCoords().getY());
-				}
-			}
-
-			// Reset Tiles (! ValidMatch ):
-			if ( matchList.size() < 3 ) {
-				System.out.println("No Matches, reverting to original.");
-				Tile temp = originTile1;
-				setTileAt(originTile1.getCoords(), originTile2);
-				setTileAt(originTile2.getCoords(), temp);
+			// Add Tiles to MatchSet:
+			if (matchList.size() >= 3){
+				matchSet.addAll(matchList);
 			}
 
 			// Testing:
 //			System.out.println("Origin Tile: " + originTile);
 //			System.out.println("Match List Identified: " + matchList);
 		}
+	}
 
+	// Clear Tiles and Apply Gravity
+	public void clearAndGravity( Set matchSet ){
 
+		for (Object matchTile : matchSet ) {
+			Tile match = Tile.class.cast(matchTile);
+			System.out.println(match.getCoords());
+			board[match.getCoords().getX()][match.getCoords().getY()] = null;
+			//applyGravity();
+		}
+	}
 
+	// Reset Tiles (No Matches)
+	public void resetTiles(Tile originTile1, Tile originTile2){
+		System.out.println("No Matches, reverting to original.");
+		Tile temp = originTile1;
+		setTileAt(originTile1.getCoords(), originTile2);
+		setTileAt(originTile2.getCoords(), temp);
 	}
 
 	public void fillRow(int row) {
@@ -181,6 +175,12 @@ public class BejeweledBoard extends Board {
 			//
 			verticalMatch(temp1, temp2, matchSet);
 			horizontalMatch(temp1, temp2, matchSet);
+			if (matchSet.size() >= 3){
+				clearAndGravity(matchSet);
+				matchSet.clear();
+			} else {
+				resetTiles(temp1, temp2);
+			}
 		} else {
 			System.out.println("Invalid move");
 		}
