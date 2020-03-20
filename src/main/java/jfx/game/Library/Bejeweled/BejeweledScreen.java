@@ -275,7 +275,7 @@ public class BejeweledScreen implements Screen {
 
 		Button newGameButton = new Button("Click button for 2nd game");
 		newGameButton.setStyle("-fx-font-size: 2em;");
-		newGameButton.setOnAction(e -> window.close());
+		newGameButton.setOnAction(e -> this.exit());
 
 		VBox layout = new VBox(10);
 		layout.getChildren().addAll(label, newGameButton);

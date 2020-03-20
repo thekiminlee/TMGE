@@ -29,7 +29,7 @@ public class BejeweledBoard extends Board {
 	private boolean playing;
 	private Random seed;
 	private Tile t1, t2 = null;
-	static final int startTime = 60;
+	static final int startTime = 5;
 	int timeSeconds = startTime;
 	private int[] shapeScore = new int[]{20, 30, 40, 50};
 	private Set<Tile> matchSet = new HashSet<Tile>();
