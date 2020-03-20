@@ -89,8 +89,10 @@ public class BejeweledBoard extends Board {
 	}
 
 	public void swap(Tile t1, Tile t2){
-		Tile temp = t2;
-
+		Tile temp = t1;
+		board[t1.getCoords().getX()][t1.getCoords().getY()]= board[t2.getCoords().getX()][t2.getCoords().getY()];
+		board[t2.getCoords().getX()][t2.getCoords().getY()]= board[temp.getCoords().getX()][temp.getCoords().getY()];
+		canSwap = true;
 	}
 
     public boolean occupied(Tile t) {
@@ -128,14 +130,9 @@ public class BejeweledBoard extends Board {
 //
 						if (this.screen.getClicks() == 1) {
 							t1 = board[screen.getMouseClickX()][screen.getMouseClickY()];
-							System.out.println("first click");
 						} else {
 							t2 = board[screen.getMouseClickX()][screen.getMouseClickY()];
-							System.out.println("second click");
-							System.out.println(t1.getValue());
-							System.out.println(t2.getValue());
-							canSwap = true;
-
+							swap(t1, t2);
 						}
 
 						//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
