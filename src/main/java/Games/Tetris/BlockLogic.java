@@ -66,6 +66,7 @@ public class BlockLogic {
     }
 
     public Block rotateBlock(Block block) {
+        
         return block;
     }
 }

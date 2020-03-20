@@ -16,11 +16,12 @@ public class TetrisBoard extends Board {
 	TetrisScreen screen;
 	TileGenerator generator;
 	Block activeBlock = null;
-	TileGame game;
 	BlockLogic logic;
 	int score = 0;
 	public enum Moves { TRANSLATE_VERTICAL, TRANSLATE_HORIZONTAL, ROTATE_CLOCKWISE };
 
+	TetrisGame game;
+	/*
 	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
 		logic = new BlockLogic();
@@ -33,6 +34,13 @@ public class TetrisBoard extends Board {
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++)
 				board[row][col] = generator.emptyTile();
+	}*/
+
+	TetrisBoard(int rows, int columns){
+		super(rows,columns);
+		logic = new BlockLogic();
+		seed = new Random(LocalTime.now().toNanoOfDay());
+		generator = game.getGenerator();
 	}
 
 	@Override

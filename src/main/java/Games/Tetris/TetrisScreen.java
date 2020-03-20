@@ -181,16 +181,24 @@ public class TetrisScreen implements Screen {
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
 
+	TetrisGame game;
+
 	public TetrisScreen() { createScreen(720.0 * 0.6, 640.0 - 48); }
 
 	void createScreen(double screenWidth, double screenHeight) {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 
+		game = new TetrisGame();
+		game.setScreen(this);
+		game.setBoard(
+				new TetrisBoard(game.getRows(),game.getColumns())
+				);
+
 		generator = new TileGenerator(screenWidth, screenHeight, 0, palette);
-		board = new TetrisBoard(this);
-		new Thread(board).start();
-		gameBox = new VBox[board.getRows()][board.getColumns()];
+		//board = new TetrisBoard(game.getRows(),game.getColumns());
+		//new Thread(board).start();
+		gameBox = new VBox[game.getRows()][game.getColumns()];
 	}
 
 	TileGenerator getGenerator() {

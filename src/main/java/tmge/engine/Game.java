@@ -13,10 +13,11 @@ public abstract class Game {
 	protected Board currentBoard;
 	protected boolean playing;
 
+	/*
 	public Game(Screen currentScreen, Board currentBoard) {
 		this.currentScreen = currentScreen;
 		this.currentBoard = currentBoard;
-	}
+	}*/
 
 	public Game(){}
 

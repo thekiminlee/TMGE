@@ -1,15 +1,27 @@
 package tmge.engine.boardComponents;
 
+import tmge.engine.Game;
+
 public abstract class Board implements Runnable {
 	
     protected Tile[][] board;
-    TileGame game;
     long delay = 1000;
-    
+    Game game;
+
+    /*
     protected Board(TileGame game) {
         board = new Tile[game.getRows()][game.getColumns()];
         this.game = game;
-    }
+    }*/
+	/*
+    protected Board(Game game) {
+    	board = new Tile[game.getRows()][game.getColumns()];
+
+	}*/
+
+	protected Board(int rows, int columns){
+		board = new Tile[rows][columns];
+	}
 
     /* This method allows the user to be able to add a Piece to the board. User is able to extend Tile class and be able to
     * make more complicated Tile pieces such as a Group of Tiles which would be used for a game such as Tetris. */

@@ -23,43 +23,21 @@ public class TetrisGame extends Game {
     double screenWidth;
     double screenHeight;
 
-    TetrisScreen currentScreen;
-    TetrisBoard currentBoard;
+    TileGenerator generator;
 
-    @FXML
-    VBox leftVBox;
-    @FXML
-    VBox rightVBox;
-    @FXML
-    GridPane gameGrid;
-    @FXML
-    Menu fileMenu;
-    @FXML Menu helpMenu;
-
-    /*
-    TetrisScreen screen;
-    TetrisBoard board;*/
-
-    /*
     public TetrisGame(TetrisScreen currentScreen, TetrisBoard currentBoard) {
         super(currentScreen,currentBoard);
 
-        new TileGenerator(currentScreen.getScreenWidth(),currentScreen.getScreenHeight(),currentBoard.getRows(),currentBoard.getColumns());
-        TileGenerator.registerPalette(currentScreen.getPalette());
-        TileGenerator.registerTileConfigurations(currentBoard.getConfigurations(),currentBoard.getValues());
-    }*/
+        //new TileGenerator(currentScreen.getScreenWidth(),currentScreen.getScreenHeight(),currentBoard.getRows(),currentBoard.getColumns());
+        //TileGenerator.registerPalette(currentScreen.getPalette());
+        //TileGenerator.registerTileConfigurations(currentBoard.getConfigurations(),currentBoard.getValues());
+    }
+
 
     public TetrisGame(){
         super();
     }
 
-    public void setScreen(TetrisScreen screen) {
-        this.currentScreen = screen;
-    }
-
-    public void setBoard(TetrisBoard board) {
-        this.currentBoard = board;
-    }
 
     @FXML
     public void initialize(){
@@ -90,24 +68,6 @@ public class TetrisGame extends Game {
     }
 
 
-    @FXML
-    private void minimize() {
-        Stage stage = (Stage) leftVBox.getScene().getWindow();
-        stage.setIconified(true);
-    }
-
-    @FXML
-    private void maximize() {
-        Stage stage = (Stage) leftVBox.getScene().getWindow();
-        stage.setMaximized(true);
-    }
-
-    @FXML
-    public void exit() {
-        Stage stage = (Stage) leftVBox.getScene().getWindow();
-        stage.close();
-        System.exit(0);
-    }
 
     public static URI getLink() {
         return link;
@@ -130,26 +90,6 @@ public class TetrisGame extends Game {
         return currentBoard.getBoard();
     }
 
-    public VBox getLeftVBox() {
-        return leftVBox;
-    }
-
-    public VBox getRightVBox() {
-        return rightVBox;
-    }
-
-    public GridPane getGameGrid() {
-        return gameGrid;
-    }
-
-    public Menu getFileMenu() {
-        return fileMenu;
-    }
-
-    public Menu getHelpMenu() {
-        return helpMenu;
-    }
-
     public int getRows() {
         return currentBoard.getRows();
     }
@@ -157,4 +97,29 @@ public class TetrisGame extends Game {
     public int getColumns() {
         return currentBoard.getColumns();
     }
+
+    public TileGenerator getGenerator(){
+        return generator;
+    }
+
+    public void setScreen(TetrisScreen screen) {
+        this.currentScreen = screen;
+    }
+
+    public void setBoard(TetrisBoard board) {
+        this.currentBoard = board;
+    }
+
+    public void setScreenWidth(double screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    public void setScreenHeight(double screenHeight) {
+        this.screenHeight = screenHeight;
+    }
+
+    public void setGenerator(TileGenerator generator) {
+        this.generator = generator;
+    }
+
 }
