@@ -38,7 +38,7 @@ public class GameSelect {
     Button clickToStart;
     
     Scene scene, scene1;
-    String relativeDirectory = "src/main/java/jfx/game/resources/images/";
+    String relativeDirectory = "C:\\Users\\malco\\Desktop\\TMGE\\src\\main\\java\\jfx\\game\\resources\\images\\";
     
     public Scene start(Stage stage) {
     	//Title Screen

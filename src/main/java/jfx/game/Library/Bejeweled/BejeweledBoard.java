@@ -2,8 +2,12 @@ package jfx.game.Library.Bejeweled;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Map;
+import java.util.HashMap;
 import java.lang.Math;
+
 
 import javafx.application.Platform;
 import tmge.engine.gameComponents.Board;
@@ -23,6 +27,7 @@ public class BejeweledBoard extends Board {
 	private Random seed;
 	private Tile t1, t2 = null;
 	private int clicked = 0;
+	private Map<Integer, List<Tile>> matchList;
 
 	BejeweledScreen screen;
 
@@ -37,24 +42,60 @@ public class BejeweledBoard extends Board {
 				// Coordinate c = new Coordinate(row, col);
 				board[row][col] = generator.emptyTile();
 				// listOfCoords.add(new Coordinate(row, col));
-			}
-		playing = true;
-		System.out.println("Board created");
 	}
+	playing = true;
+		System.out.println("Board created");
+}
 
 	// Matching on board
-	public int applyMatch(ArrayList<Coordinate> list) {
-		int points = 0;
-		for (Coordinate coords : list) {
-			Tile tile = board[coords.getX()][coords.getY()];
-			points += tile.getValue();
-			System.out.println(list);
+	public void horizontalMatch(Tile originTile1, Tile originTile2) {
+		boolean validMatch = false;
 
-			// Set empty Tile at the coordinate
-			removeTile(coords.getX(), coords.getY());
+		List<Tile> checkList = new ArrayList<Tile>();
+		checkList.add(originTile1);
+		checkList.add(originTile2);
+
+		for ( Tile originTile : checkList ) {
+			Coordinate originTileCoord = originTile.getCoords();
+			// Check LEFT:
+			List<Tile> matchList = new ArrayList<Tile>();
+			matchList.add(originTile);
+			int originValue = originTile.getValue();
+			for (int i = originTileCoord.getY()-1; i > -1; i--){
+				if(originValue == board[originTileCoord.getX()][i].getValue()){
+					matchList.add(board[originTileCoord.getX()][i]);
+				} else{ break; }
+			}
+			// Check RIGHT:
+			for (int i = originTileCoord.getY()+1; i < this.getColumns(); i++){
+				if(originValue == board[originTileCoord.getX()][i].getValue()){
+					matchList.add(board[originTileCoord.getX()][i]);
+				} else { break; }
+			}
+
+			// Clear Tiles (if Valid Match):
+			if (matchList.size() >= 3 ){
+				validMatch = true;
+				System.out.println(validMatch);
+				for ( Tile matchTile : matchList ) {
+					System.out.println(matchTile);
+					removeTile(matchTile.getCoords().getX(), matchTile.getCoords().getY());
+				}
+			}
+
+			// Testing:
+			System.out.println("Origin Tile: " + originTile);
+			System.out.println("Match List Identified: " + matchList);
 		}
 
-		return points;
+		// Reset Tiles (! ValidMatch ):
+		if ( validMatch == false ) {
+			System.out.println("No Matches, reverting to original.");
+			Tile temp = originTile1;
+			setTileAt(originTile1.getCoords(), originTile2);
+			setTileAt(originTile2.getCoords(), temp);
+		}
+
 	}
 
 	// GRAVITY OF THE GAME THAT HANDLES DROPPING
@@ -105,6 +146,7 @@ public class BejeweledBoard extends Board {
 			setTileAt(lastClicked, temp1);
 			temp2.setCoords(coords);
 			setTileAt(coords, temp2);
+			horizontalMatch(temp1, temp2);
 		} else {
 			System.out.println("Invalid move");
 		}
