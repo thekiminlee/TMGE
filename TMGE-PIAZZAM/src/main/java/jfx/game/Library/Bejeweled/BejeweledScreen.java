@@ -29,6 +29,9 @@ public class BejeweledScreen implements Screen {
 	BejeweledBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
+	int mouseClickX;
+	int mouseClickY;
+	int numOfClicks = 0;
 	
 	public BejeweledScreen()
 	{
@@ -74,6 +77,11 @@ public class BejeweledScreen implements Screen {
 					@Override
 					public void handle(MouseEvent e) {
 						//Node test = gameBox[row][column]
+						numOfClicks += 1;
+//						System.out.println(numOfClicks);
+						mouseClickX = targetRow;
+						mouseClickY = targetCol;
+						if(numOfClicks == 2) numOfClicks = 0;
 						System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
 					}
 				});
@@ -87,6 +95,18 @@ public class BejeweledScreen implements Screen {
 
 		ready = true;
 		System.out.println("Screen initialized");
+	}
+
+	public int getNumOfClicks() {
+		return numOfClicks;
+	}
+
+	public int getMouseClickX() {
+		return mouseClickX;
+	}
+
+	public int getMouseClickY() {
+		return mouseClickY;
 	}
 
 	private void setVBox(int row, int column, Tile tile) {
