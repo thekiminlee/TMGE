@@ -1,7 +1,6 @@
 package jfx.game.Library.Bejeweled;
 
 import java.util.ArrayList;
-import jfx.game.Library.Bejeweled.JewelMatchDecorator;
 
 /*
 HorizontalMatch Class:
@@ -20,74 +19,70 @@ public class HorizontalMatch extends JewelMatchDecorator {
     };
 
     @Override
-    public ArrayList<Coordinate> findMatch(Jewel location, Jewel[][] gameGrid) {
+    public ArrayList<Coordinate> findMatch(Jewel originalJewel, Jewel[][] gameGrid) {
 
-        ArrayList<Coordinate> list;
+        ArrayList<Coordinate> matchList;
 
         if (jewelMatch != null) {
-            list = jewelMatch.findMatch(location, gameGrid);
-            if (list != null)
-                return list;
+            matchList = jewelMatch.findMatch(originalJewel, gameGrid);
+            if (matchList != null)
+                return matchList;
         }
 
-        list = new ArrayList<Coordinate>();
-        int colSize = gameGrid.length;
+        matchList = new ArrayList<Coordinate>();
         int rowSize = gameGrid[0].length;
 
-        int x = location.getCoordinates().getX();
-        int y = location.getCoordinates().getY();
-        list.add(location.getCoordinates());
+        Coordinate originalCoord = originalJewel.getCoordinates();
+        int x = originalCoord.getX();
+        int y = originalCoord.getY();
+        matchList.add(originalCoord);
 
-        Jewel matchJewel = location;
+        Jewel matchJewel = originalJewel;
 
         // LEFT MATCH
-        for (int j = 1; j < 3; j++) {
-            y -= 1;
-            if (y > -1) {
+        for (int i = 1; i < 3; ++i) {
+            if (--y > -1) {
                 Jewel jewel = gameGrid[x][y];
                 if (matchJewel.matchJewelNames(jewel.getName())) {
-                    Coordinate coords = new Coordinate(x, y);
-                    list.add(coords);
+                    matchList.add(new Coordinate(x, y));
                     matchJewel = jewel;
                 } else {
-                    list.clear();
+                    matchList.clear();
                     break;
                 }
             } else {
-                list.clear();
+                matchList.clear();
                 break;
             }
         }
-        if (list.size() == 3) {
-            return list;
+        if (matchList.size() == 3) {
+            return matchList;
         }
-        list.add(location.getCoordinates());
 
-        y = location.getCoordinates().getY();
-        matchJewel = location;
+        matchList.add(originalCoord);
+
+        y = originalCoord.getY();
+        matchJewel = originalJewel;
 
         // RIGHT MATCH
-        for (int j = 1; j < 3; j++) {
-            y += j;
-            if (y < rowSize) {
+        for (int i = 1; i < 3; ++i) {
+            if (++y < rowSize) {
                 Jewel jewel = gameGrid[x][y];
                 if (matchJewel.matchJewelNames(jewel.getName())) {
-                    Coordinate coords = new Coordinate(x, y);
-                    list.add(coords);
+                    matchList.add(new Coordinate(x, y));
                     matchJewel = jewel;
                 } else {
-                    list.clear();
+                    matchList.clear();
                     return null;
                 }
             } else {
-                list.clear();
+                matchList.clear();
                 return null;
             }
         }
-        if (list.size() == 3) {
-            return list;
+        if (matchList.size() == 3) {
+            return matchList;
         }
         return null;
-
     }
 }

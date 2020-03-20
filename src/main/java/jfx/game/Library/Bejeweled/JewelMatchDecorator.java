@@ -16,7 +16,7 @@ public class JewelMatchDecorator implements JewelMatch {
         this.jewelMatch = jewelMatch;
     }
 
-    public ArrayList<Coordinate> findMatch(Jewel location, Jewel[][] gameGrid) {
+    public ArrayList<Coordinate> findMatch(Jewel originalCoord, Jewel[][] gameGrid) {
         return null; // placeholder
     }
 }
