@@ -50,7 +50,7 @@ public class TileGenerator {
 		Color tileColor = palette[colorIndex];
 		System.out.println("Color: " + Integer.valueOf(colorIndex) + ", Shape: " + Integer.valueOf(shapeIndex));
 		Tile t = new Tile(score, coord, tileColor, shapesAvailable.get(shapeIndex));
-		System.out.println(t.getColor());
+//		System.out.println(t.getColor());
 //		if (palette != null && colorIndex < palette.length)
 //			tileColor = palette[colorIndex];
 //		else

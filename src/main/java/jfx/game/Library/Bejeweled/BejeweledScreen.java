@@ -40,8 +40,8 @@ public class BejeweledScreen implements Screen {
 	VBox[][] gameBox;
 	int mouseClickX;
 	int mouseClickY;
-	int numOfClicks = 0;
     private final int PADDING = 3;
+    boolean clicked = false;
 	
 	public BejeweledScreen()
 	{
@@ -78,11 +78,9 @@ public class BejeweledScreen implements Screen {
 						@Override
 						public void handle(MouseEvent e) {
 							//Node test = gameBox[row][column]
-							numOfClicks += 1;
-	//						System.out.println(numOfClicks);
 							mouseClickX = targetRow;
 							mouseClickY = targetCol;
-							if(numOfClicks == 2) numOfClicks = 0;
+							clicked = true;
 							System.out.println(Integer.toString(targetRow) + " " + Integer.toString(targetCol));
 						}
 					}
@@ -97,7 +95,11 @@ public class BejeweledScreen implements Screen {
 		ready = true;
 		System.out.println("Screen initialized");
 	}
-	
+
+	public boolean isClicked(){
+		return clicked;
+	}
+
 	@FXML 
 	private void minimize() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
@@ -127,7 +129,7 @@ public class BejeweledScreen implements Screen {
 	@Override
 	public void draw() {
 		Tile[][] gameState = board.getBoard();
-		System.out.println(board);
+//		System.out.println(board);
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {
 				Tile t = gameState[row][column];
@@ -135,7 +137,7 @@ public class BejeweledScreen implements Screen {
 			}
 		}
 		this.ready = true;
-		System.out.println("draw");
+//		System.out.println("draw");
 	}
 
 	@Override
@@ -218,10 +220,6 @@ public class BejeweledScreen implements Screen {
 	private void updatePane(int row, int column, Tile tile) {
 		gameBox[row][column].getChildren().clear();
 		gameBox[row][column].getChildren().add(tile.getNode());
-	}
-
-	public int getNumOfClicks() {
-		return numOfClicks;
 	}
 
 	public int getMouseClickX() {

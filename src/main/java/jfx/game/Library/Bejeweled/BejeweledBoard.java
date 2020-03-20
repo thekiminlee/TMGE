@@ -20,6 +20,8 @@ public class BejeweledBoard extends Board {
     private TileGenerator generator;
     private boolean playing;
     private Random seed;
+    private Tile selected = null;
+    private int clicked = 0;
 
     BejeweledScreen screen;
 
@@ -110,28 +112,25 @@ public class BejeweledBoard extends Board {
 	public void update() {
 
     	while(playing) {
-
-			System.out.println("UPDATE IN BJ board");
+			fillAll();
+//			System.out.println("UPDATE IN BJ board");
 			this.screen.setReady(false);
 			Platform.runLater(() -> {
-				if(this.screen.ready())
-				{
-
-					fillAll();
+				if(selected == null) {
+//				if(this.screen.ready())
+//				{
 					this.screen.draw();
-					System.out.println(screen.getNumOfClicks());
+//					System.out.print(this.screen.getMouseClickX());
+//					System.out.println(this.screen.getMouseClickY());
+//					System.out.println(board[screen.getMouseClickX()][screen.getMouseClickY()].getValue());
+//					selected = board[screen.getMouseClickX()][screen.getMouseClickY()];
+
+
 					//applyMatch(TileGenerator.createTiles(ROWS,COLUMNS));
+//				}
 				}
 			});
 
-//			int clicks = screen.getNumOfClicks();
-			System.out.println(screen.getNumOfClicks());
-//			int firstClickX, firstClickY, secondClickX, secondClickY;
-//			if(clicks == 1){
-//				firstClickX = screen.getMouseClickX();
-//				firstClickY = screen.getMouseClickY();
-//				System.out.println(firstClickX);
-//				System.out.println(firstClickY);
 			while(!this.screen.ready() && playing)
 				try {
 					Thread.sleep(1000);
