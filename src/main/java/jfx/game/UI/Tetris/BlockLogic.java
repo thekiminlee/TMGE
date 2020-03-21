@@ -40,7 +40,7 @@ public class BlockLogic {
 			{0, 2}
 		}
 	};
-	enum BlockType { SQUARE, LINE, Z, S, T, L, REVERSE_L };
+	public enum BlockType { SQUARE, LINE, Z, S, T, L, REVERSE_L };
 
 	Random seed;
 	
