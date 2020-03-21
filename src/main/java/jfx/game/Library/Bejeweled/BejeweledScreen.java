@@ -152,7 +152,7 @@ public class BejeweledScreen implements Screen {
 	@Override
 	public void draw() {
 		Tile[][] gameState = board.getBoard();
-		// System.out.println(board);
+
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {
 				Tile t = gameState[row][column];
@@ -161,7 +161,6 @@ public class BejeweledScreen implements Screen {
 		}
 		this.ready = true;
 		updateGameTimeAndScore();
-		// System.out.println("draw");
 	}
 
 	@Override
@@ -301,6 +300,7 @@ public class BejeweledScreen implements Screen {
 		Scene scene = new Scene(layout);
 		window.setScene(scene);
 		window.showAndWait();
+		exit();
 	}
 
 }
