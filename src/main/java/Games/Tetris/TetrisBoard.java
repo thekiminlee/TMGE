@@ -49,6 +49,35 @@ public class TetrisBoard extends Board {
 		System.out.println(board);
 	}
 
+	@Override
+	public void run() {
+		update();
+	}
+
+	@Override
+	public void update() {
+		while (playing) {
+			System.out.println("update");
+			game.getScreen().setReady(false);
+			Platform.runLater(() -> {
+				if (activeBlock == null)
+					createMovableBlock();
+				else {
+					attemptAction(Moves.TRANSLATE_VERTICAL, 1);
+				}
+				game.getScreen().draw();
+			});
+			while(!game.getScreen().ready()) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (!playing) break;
+		}
+	}
+
 	//	synchronized void attemptAction(Block block, Moves moveType, int n) {
 	synchronized void attemptAction(Moves moveType, int n) {
 		switch (moveType) {
@@ -132,7 +161,6 @@ public class TetrisBoard extends Board {
 			activeBlock = block;
 			// add tile to board, register movement
 			game.getScreen().translateMovableBlock((m, n) -> {
-				System.out.print("inside the function");
 				attemptAction(m, n);
 				return true;
 			});

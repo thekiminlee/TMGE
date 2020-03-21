@@ -2,7 +2,7 @@ package tmge.engine.boardComponents;
 
 import tmge.engine.Game;
 
-public abstract class Board {
+public abstract class Board implements Runnable {
 
     protected Tile[][] board;
     long delay = 1000;
@@ -37,8 +37,7 @@ public abstract class Board {
     public abstract void removeTile(int row, int column);
 
     /* This method will handle updating the board. Any updates to the board depending on clicks of the user will end up going into here */
-	/* write this into the Controller part */
-    //public abstract void update();
+    public abstract void update();
     
     public Tile[][] getBoard() {
     	return this.board;
