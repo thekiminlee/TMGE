@@ -19,7 +19,7 @@ import tmge.engine.gameComponents.TileGame;
 import tmge.engine.gameComponents.TileGenerator;
 
 public class BejeweledBoard extends Board {
-	private int score;
+	public int score;
 	private int[][][] configurations = { { { 0, 0 } }, { { 0, 0 } }, { { 0, 0 } }, { { 0, 0 } } };
 	private int[] values = { 1, 2, 3, 4 };
 	private static final int ROWS = 8, COLUMNS = 8;
@@ -30,20 +30,19 @@ public class BejeweledBoard extends Board {
 	private Tile t1, t2 = null;
 	static final int startTime = 60;
 	int timeSeconds = startTime;
-	private boolean firstGame = true;
+	public boolean firstGame = true;
 	private int[] shapeScore = new int[] { 20, 30, 40, 50 };
 	private Set<Tile> matchSet = new HashSet<Tile>();
 
-	private int scoreFirst;
-	private int scoreSecond;
+	public int scoreFirst;
+	public int scoreSecond;
 
-	BejeweledScreen screen;
+	BejeweledGame game;
 
-	public BejeweledBoard(BejeweledScreen screen) {
-		super(new TileGame(ROWS, COLUMNS));
+	public BejeweledBoard(BejeweledGame game) {
+		super(ROWS,COLUMNS);
 		seed = new Random(LocalTime.now().toNanoOfDay());
-		this.screen = screen;
-		generator = screen.getGenerator();
+		generator = game.getGenerator();
 		generator.setGridDimensions(ROWS, COLUMNS);
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++) {
@@ -276,4 +275,83 @@ public class BejeweledBoard extends Board {
 		this.playing = playing;
 	}
 
+	public int getScore() {
+		return score;
+	}
+
+	public int[][][] getConfigurations() {
+		return configurations;
+	}
+
+	public int[] getValues() {
+		return values;
+	}
+
+	public static int getROWS() {
+		return ROWS;
+	}
+
+	public static int getCOLUMNS() {
+		return COLUMNS;
+	}
+
+	public ArrayList<Coordinate> getListOfCoords() {
+		return listOfCoords;
+	}
+
+	public TileGenerator getGenerator() {
+		return generator;
+	}
+
+	public boolean isPlaying() {
+		return playing;
+	}
+
+	public Random getSeed() {
+		return seed;
+	}
+
+	public Tile getT1() {
+		return t1;
+	}
+
+	public Tile getT2() {
+		return t2;
+	}
+
+	public static int getStartTime() {
+		return startTime;
+	}
+
+	public int getTimeSeconds() {
+		return timeSeconds;
+	}
+
+	public boolean isFirstGame() {
+		return firstGame;
+	}
+
+	public int[] getShapeScore() {
+		return shapeScore;
+	}
+
+	public Set<Tile> getMatchSet() {
+		return matchSet;
+	}
+
+	public int getScoreFirst() {
+		return scoreFirst;
+	}
+
+	public int getScoreSecond() {
+		return scoreSecond;
+	}
+
+	public BejeweledGame getGame() {
+		return game;
+	}
+
+	public void setTimeSeconds(int timeSeconds) {
+		this.timeSeconds = timeSeconds;
+	}
 }

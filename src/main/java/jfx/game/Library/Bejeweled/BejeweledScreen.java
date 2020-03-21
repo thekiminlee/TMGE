@@ -28,6 +28,8 @@ import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 
+import jfx.game.Library.Tetris.TetrisBoard;
+import jfx.game.Library.Tetris.TetrisGame;
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Screen;
@@ -41,7 +43,6 @@ public class BejeweledScreen implements Screen {
 	TileGenerator generator;
 	final Color[] palette = { Color.RED, Color.BLUEVIOLET, Color.CHARTREUSE, Color.DARKORANGE, Color.CRIMSON,
 			Color.POWDERBLUE };
-	BejeweledBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
 	Coordinate lastClicked;
@@ -53,12 +54,34 @@ public class BejeweledScreen implements Screen {
 	Label gameTime = new Label();
 	Label gameScore = new Label();
 
+	BejeweledGame game;
+
 	public BejeweledScreen() {
 		ready = false;
 		lastClicked = null;
 		screenWidth = 720.0 * 0.6;
 		screenHeight = 640.0 - 48;
-		createScreen();
+
+		game = new BejeweledGame();
+		game.setScreen(this);
+		game.setBoard(new BejeweledBoard(game));
+		game.createGenerator();
+
+		//generator = new TileGenerator(screenWidth, screenHeight, 3, palette);
+		//board = new BejeweledBoard(this);
+		//new Thread(board).start();
+		gameBox = new VBox[game.getRows()][game.getColumns()];
+
+		game.getGenerator().addPolygon((color) -> {
+			return createDiamond(color);
+		});
+		game.getGenerator().addPolygon((color) -> {
+			return createCircle(color);
+		});
+		game.getGenerator().addPolygon((color) -> {
+			return createTriangle(color);
+		});
+
 	}
 
 	@FXML
@@ -76,11 +99,11 @@ public class BejeweledScreen implements Screen {
 	@FXML
 	public void initialize() {
 		// init all vboxes, add them to a tracking data structure and the visual
-		double width = screenWidth / board.getColumns();
-		double height = screenHeight / board.getRows();
+		double width = screenWidth / game.getColumns();
+		double height = screenHeight / game.getRows();
 
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				VBox box = new VBox();
 				box.setPrefSize(width, height);
 				box.setMinSize(width, height);
@@ -96,7 +119,7 @@ public class BejeweledScreen implements Screen {
 						if (lastClicked == null) {
 							lastClicked = coords;
 						} else if (!coords.equals(lastClicked)) {
-							board.swap(coords, lastClicked);
+							game.swap(coords, lastClicked);
 							lastClicked = null;
 						}
 						// System.out.println(Integer.toString(targetRow) + " " +
@@ -121,6 +144,7 @@ public class BejeweledScreen implements Screen {
 
 		ready = true;
 		System.out.println("Screen initialized");
+		new Thread(game).start();
 	}
 
 	@FXML
@@ -139,7 +163,7 @@ public class BejeweledScreen implements Screen {
 	@Override
 	@FXML
 	public void exit() {
-		board.setPlaying(false);
+		game.setPlaying(false);
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
 		stage.close();
 	}
@@ -151,10 +175,10 @@ public class BejeweledScreen implements Screen {
 
 	@Override
 	public void draw() {
-		Tile[][] gameState = board.getBoard();
+		Tile[][] gameState = game.getBoard();
 
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				Tile t = gameState[row][column];
 				updatePane(row, column, t);
 			}
@@ -173,31 +197,15 @@ public class BejeweledScreen implements Screen {
 		return ready;
 	}
 
-	void createScreen() {
-		generator = new TileGenerator(screenWidth, screenHeight, 3, palette);
-		board = new BejeweledBoard(this);
-		//new Thread(board).start();
-		gameBox = new VBox[board.getRows()][board.getColumns()];
-		generator.addPolygon((color) -> {
-			return createDiamond(color);
-		});
-		generator.addPolygon((color) -> {
-			return createCircle(color);
-		});
-		generator.addPolygon((color) -> {
-			return createTriangle(color);
-		});
 
-		System.out.println("Screen created");
-	}
 
 	void changeLabelSetting(Label l) {
 		l.setStyle("-fx-font-size: 2em;");
 	}
 
 	Node createDiamond(Color c) {
-		double width = (screenWidth / board.getColumns()) - 2 * PADDING;
-		double height = (screenHeight / board.getRows()) - 2 * PADDING;
+		double width = (screenWidth / game.getColumns()) - 2 * PADDING;
+		double height = (screenHeight / game.getRows()) - 2 * PADDING;
 		Polygon node = new Polygon();
 		node.getPoints().addAll(new Double[] { 0.0, height / 2, width / 2, 0.0, width, height / 2, width / 2, height });
 		node.setFill(c);
@@ -207,8 +215,8 @@ public class BejeweledScreen implements Screen {
 	}
 
 	Node createCircle(Color c) {
-		double width = (screenWidth / board.getColumns()) - 2 * PADDING;
-		double height = (screenHeight / board.getRows()) - 2 * PADDING;
+		double width = (screenWidth / game.getColumns()) - 2 * PADDING;
+		double height = (screenHeight / game.getRows()) - 2 * PADDING;
 		double minValue = Math.min(width, height);
 		Circle node = new Circle(minValue * Math.sqrt(2) / 2, c);
 		double diameter = node.getRadius() * 2;
@@ -222,8 +230,8 @@ public class BejeweledScreen implements Screen {
 	Node createTriangle(Color c) {
 		Polygon node = new Polygon();
 		// upper center, bottom left, bottom right
-		double width = (screenWidth / board.getColumns()) - 2 * PADDING;
-		double height = (screenHeight / board.getRows()) - 2 * PADDING;
+		double width = (screenWidth / game.getColumns()) - 2 * PADDING;
+		double height = (screenHeight / game.getRows()) - 2 * PADDING;
 		node.getPoints().addAll(new Double[] { width / 2, 0.0, 0.0, height, width, height });
 		node.setFill(c);
 		node.setTranslateX(PADDING);
@@ -303,4 +311,83 @@ public class BejeweledScreen implements Screen {
 		exit();
 	}
 
+	public static URI getLink() {
+		return link;
+	}
+
+	public boolean isReady() {
+		return ready;
+	}
+
+	public Color[] getPalette() {
+		return palette;
+	}
+
+	public double getScreenWidth() {
+		return screenWidth;
+	}
+
+	public double getScreenHeight() {
+		return screenHeight;
+	}
+
+	public VBox[][] getGameBox() {
+		return gameBox;
+	}
+
+	public Coordinate getLastClicked() {
+		return lastClicked;
+	}
+
+	public int getPADDING() {
+		return PADDING;
+	}
+
+	public Label getTimerLabel() {
+		return timerLabel;
+	}
+
+	public Label getScoreLabel() {
+		return scoreLabel;
+	}
+
+	public int getTimer() {
+		return timer;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public Label getGameTime() {
+		return gameTime;
+	}
+
+	public Label getGameScore() {
+		return gameScore;
+	}
+
+	public BejeweledGame getGame() {
+		return game;
+	}
+
+	public VBox getLeftVBox() {
+		return leftVBox;
+	}
+
+	public VBox getRightVBox() {
+		return rightVBox;
+	}
+
+	public GridPane getGameGrid() {
+		return gameGrid;
+	}
+
+	public Menu getFileMenu() {
+		return fileMenu;
+	}
+
+	public Menu getHelpMenu() {
+		return helpMenu;
+	}
 }

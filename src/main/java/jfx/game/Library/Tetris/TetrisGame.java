@@ -32,15 +32,6 @@ public class TetrisGame extends Game implements Runnable {
         generator = new TileGenerator(currentScreen.getScreenWidth(),currentScreen.getScreenHeight(),0,currentScreen.getPalette());
     }
 
-    protected void updateScreen(){
-
-    }
-
-    protected void updateBoard(){
-
-
-    }
-
     @Override
     public void run() {
         update();

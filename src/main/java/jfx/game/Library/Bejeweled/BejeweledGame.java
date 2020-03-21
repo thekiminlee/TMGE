@@ -5,6 +5,7 @@ import jfx.game.Library.Tetris.Block;
 import jfx.game.Library.Tetris.TetrisBoard;
 import jfx.game.Library.Tetris.TetrisScreen;
 import tmge.engine.Game;
+import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Tile;
 import tmge.engine.gameComponents.TileGenerator;
 
@@ -19,8 +20,8 @@ public class BejeweledGame extends Game implements Runnable {
 
     TileGenerator generator;
 
-    TetrisScreen currentScreen;
-    TetrisBoard currentBoard;
+    BejeweledScreen currentScreen;
+    BejeweledBoard currentBoard;
 
 
     public BejeweledGame(){
@@ -28,16 +29,7 @@ public class BejeweledGame extends Game implements Runnable {
     }
 
     public void createGenerator(){
-        generator = new TileGenerator(currentScreen.getScreenWidth(),currentScreen.getScreenHeight(),0,currentScreen.getPalette());
-    }
-
-    protected void updateScreen(){
-
-    }
-
-    protected void updateBoard(){
-
-
+        generator = new TileGenerator(currentScreen.getScreenWidth(),currentScreen.getScreenHeight(),3,currentScreen.getPalette());
     }
 
     @Override
@@ -50,38 +42,49 @@ public class BejeweledGame extends Game implements Runnable {
 
         while (playing) {
             // System.out.println("UPDATE IN BJ board");
-            this.screen.setReady(false);
-            this.timeSeconds -= 1;
-            this.screen.updateTimer(this.timeSeconds);
-            this.screen.updateScore(this.score);
+            currentScreen.setReady(false);
+            //this.timeSeconds -= 1;
+            subtractTime(-1);
+            currentScreen.updateTimer(currentBoard.getTimeSeconds());
+            currentScreen.updateScore(currentBoard.getScore());
 
             Platform.runLater(() -> {
-                fillAll();
-                this.screen.draw();
-                if (this.timeSeconds == 0) {
-                    if (firstGame) {
-                        scoreFirst = score;
-                        this.firstGame = false;
-                        screen.displayAlertBox();
-                        resetGame();
+                currentBoard.fillAll();
+                //fillAll();
+                //this.screen.draw();
+                currentScreen.draw();
+                if (currentBoard.getTimeSeconds() == 0) {
+                    //if (firstGame) {
+                    if (currentBoard.isFirstGame())
+
+                        //scoreFirst = score;
+                        currentBoard.scoreFirst = currentBoard.score;
+                        //this.firstGame = false;
+                        currentBoard.firstGame = false;
+                        currentScreen.displayAlertBox();
+                        currentBoard.resetGame();
                     } else {
-                        scoreSecond = score;
+                        currentBoard.scoreSecond = currentBoard.score;
+                        //scoreSecond = score;
                         setPlaying(false);
-                        screen.gameEnd(scoreFirst, scoreSecond);
+                        currentScreen.gameEnd(currentBoard.scoreFirst, currentBoard.scoreSecond);
                     }
-                }
-
-            });
-
-            while (!this.screen.ready() && playing)
+                });
+            }
+            while (!currentScreen.ready() && playing)
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
         }
-    }
 
+
+    private void subtractTime(int i) {
+        int j = currentBoard.getTimeSeconds();
+        j -= i;
+        currentBoard.setTimeSeconds(j);
+    }
 
 
     public static URI getLink() {
@@ -96,8 +99,8 @@ public class BejeweledGame extends Game implements Runnable {
         return screenHeight;
     }
 
-    public TetrisScreen getScreen() {
-        return (TetrisScreen) currentScreen;
+    public BejeweledScreen getScreen() {
+        return (BejeweledScreen) currentScreen;
     }
 
     public Tile[][] getBoard() {
@@ -113,15 +116,17 @@ public class BejeweledGame extends Game implements Runnable {
         return currentBoard.getColumns();
     }
 
+
+
     public TileGenerator getGenerator(){
         return generator;
     }
 
-    public void setScreen(TetrisScreen screen) {
+    public void setScreen(BejeweledScreen screen) {
         this.currentScreen = screen;
     }
 
-    public void setBoard(TetrisBoard board) {
+    public void setBoard(BejeweledBoard board) {
         this.currentBoard = board;
     }
 
@@ -141,17 +146,7 @@ public class BejeweledGame extends Game implements Runnable {
         currentBoard.setPlaying(playing);
     }
 
-    public Block getActiveBlock(){
-        return currentBoard.getActiveBlock();
+    public void swap(Coordinate coords, Coordinate last){
+        currentBoard.swap(coords,last);
     }
-
-    int getScore() {
-        return currentBoard.getScore();
-    }
-
-
-    void clearBoard() {
-        currentBoard.clearBoard();
-    }
-
 }
