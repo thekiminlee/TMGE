@@ -64,12 +64,12 @@ public class TetrisGame extends Game implements Runnable {
         while (currentBoard.getPlaying()) {
             System.out.println("update");
             currentScreen.setReady(false);
-            if (currentBoard.getActiveBlock() == null)
-                currentBoard.createMovableBlock();
-            else {
-                currentBoard.attemptAction(TetrisBoard.Moves.TRANSLATE_VERTICAL, 1);
-            }
             Platform.runLater(() -> {
+                if (currentBoard.getActiveBlock() == null)
+                    currentBoard.createMovableBlock();
+                else {
+                    currentBoard.attemptAction(TetrisBoard.Moves.TRANSLATE_VERTICAL, 1);
+                }
                 currentScreen.draw();
             });
             while(!currentScreen.ready()) {
@@ -145,4 +145,6 @@ public class TetrisGame extends Game implements Runnable {
     public Block getActiveBlock(){
         return currentBoard.getActiveBlock();
     }
+
+
 }

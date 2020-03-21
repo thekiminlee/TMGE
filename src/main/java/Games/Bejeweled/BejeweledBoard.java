@@ -135,17 +135,7 @@ public class BejeweledBoard extends Board {
 		this.board[row][column] = generator.emptyTile();
 	}
 
-	@Override
-	public void update() {
 
-		
-	}
-
-	@Override
-	public void run() {
-		System.out.println("I am in run");
-		update();
-	}
 
 	public void setPlaying(boolean playing) {
 		this.playing = playing;

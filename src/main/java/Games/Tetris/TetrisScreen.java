@@ -194,7 +194,6 @@ public class TetrisScreen implements Screen {
 		game.setBoard(new TetrisBoard(game));
 		game.getGenerator();
 
-		//new Thread(game).start();
 		System.out.println(game.getRows());
 		System.out.println(game.getColumns());
 		//generator = new TileGenerator(screenWidth, screenHeight, 0, palette);
@@ -231,6 +230,8 @@ public class TetrisScreen implements Screen {
 		rightVBox.getChildren().add(new Label("RIGHT"));
 		ready = true;
 		System.out.println("initialized");
+		new Thread(game).start();
+
 	}
 
 	@FXML
@@ -310,12 +311,12 @@ public class TetrisScreen implements Screen {
 //	}
 
 	public void translateMovableBlock(BiFunction<TetrisBoard.Moves, Integer, Boolean> function) {
-		(leftVBox.getScene()).setOnKeyPressed(new EventHandler<KeyEvent>() {
+		leftVBox.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
 				switch (event.getCode()) {
 					case SPACE:
-						function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, board.getRows());
+						function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, game.getRows());
 						break;
 					case S:
 						function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, 1);
