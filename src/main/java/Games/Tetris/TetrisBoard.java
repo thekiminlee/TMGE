@@ -13,7 +13,6 @@ public class TetrisBoard extends Board {
 	final int minimumDelay = 500;
 	Random seed;
 	boolean playing = true;
-	TetrisScreen screen;
 	TileGenerator generator;
 	Block activeBlock = null;
 	BlockLogic logic;
@@ -36,11 +35,18 @@ public class TetrisBoard extends Board {
 				board[row][col] = generator.emptyTile();
 	}*/
 
-	TetrisBoard(int rows, int columns){
-		super(rows,columns);
+	TetrisBoard(TetrisGame game){
+		super(ROWS,COLUMNS);
+		this.game = game;
 		logic = new BlockLogic();
 		seed = new Random(LocalTime.now().toNanoOfDay());
 		generator = game.getGenerator();
+		generator.setGridDimensions(ROWS,COLUMNS);
+
+		for (int row = 0; row < ROWS; row++)
+			for (int col = 0; col < COLUMNS; col++)
+				board[row][col] = generator.emptyTile();
+		System.out.println(board);
 	}
 
 	@Override
@@ -52,16 +58,16 @@ public class TetrisBoard extends Board {
 	public void update() {
 		while (playing) {
 			System.out.println("update");
-			this.screen.setReady(false);
+			game.getScreen().setReady(false);
 			Platform.runLater(() -> {
 				if (activeBlock == null)
 					createMovableBlock();
 				else {
 					attemptAction(Moves.TRANSLATE_VERTICAL, 1);
 				}
-				this.screen.draw();
+				game.getScreen().draw();
 			});
-			while(!this.screen.ready()) {
+			while(!game.getScreen().ready()) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -154,7 +160,7 @@ public class TetrisBoard extends Board {
 		} else {
 			activeBlock = block;
 			// add tile to board, register movement
-			screen.translateMovableBlock((m, n) -> {
+			game.getScreen().translateMovableBlock((m, n) -> {
 				attemptAction(m, n);
 				return true;
 			});
@@ -227,7 +233,7 @@ public class TetrisBoard extends Board {
 
 	void gameover() {
 		playing = false;
-		screen.onEnd();
+		game.getScreen().onEnd();
 		System.out.println("Game has ended");
 	}
 
@@ -238,6 +244,18 @@ public class TetrisBoard extends Board {
 
 	public void setPlaying(boolean playing) {
 		this.playing = playing;
+	}
+
+	public static int getStaticRows(){
+		return ROWS;
+	}
+
+	public static int getStaticColumns(){
+		return COLUMNS;
+	}
+
+	public boolean getPlaying(){
+		return playing;
 	}
 
 }

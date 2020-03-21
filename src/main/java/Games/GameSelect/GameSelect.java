@@ -142,8 +142,10 @@ public class GameSelect {
     			// open the new game and close the game select window, behind the scenes a TetrisScreen is created
     			App.startGame(TetrisScreen.link, new AnchorPane(), false);
     			exit();
+                Screen screen = FXMLBuilder.getController();
+                //loadGame(screen);
     			System.out.println("Getting TetrisScreen");
-    			TetrisGame game = (TetrisGame)FXMLBuilder.getController();
+    			//TetrisGame game = (TetrisGame)FXMLBuilder.getController();
     			//game.setBoard(new TetrisBoard());
     			//game.setScreen(new TetrisScreen());
     			//loadGame(screen);
@@ -156,7 +158,6 @@ public class GameSelect {
     }
     
     private void loadGame(Screen screen) {
-    	//Engine engine = new Engine();
 		Platform.runLater(() -> {
 			while (!screen.ready())
     			try {

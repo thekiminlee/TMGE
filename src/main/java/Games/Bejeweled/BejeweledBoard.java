@@ -27,7 +27,7 @@ public class BejeweledBoard extends Board {
 	BejeweledScreen screen;
 
 	public BejeweledBoard(BejeweledScreen screen) {
-		super(new TileGame(ROWS, COLUMNS));
+		super(ROWS, COLUMNS);
 		seed = new Random(LocalTime.now().toNanoOfDay());
 		this.screen = screen;
 		generator = screen.getGenerator();

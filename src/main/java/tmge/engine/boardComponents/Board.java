@@ -3,10 +3,11 @@ package tmge.engine.boardComponents;
 import tmge.engine.Game;
 
 public abstract class Board implements Runnable {
-	
+
     protected Tile[][] board;
     long delay = 1000;
-    Game game;
+    int rows;
+    int columns;
 
     /*
     protected Board(TileGame game) {
@@ -21,6 +22,8 @@ public abstract class Board implements Runnable {
 
 	protected Board(int rows, int columns){
 		board = new Tile[rows][columns];
+		this.rows = rows;
+		this.columns = columns;
 	}
 
     /* This method allows the user to be able to add a Piece to the board. User is able to extend Tile class and be able to
@@ -41,10 +44,10 @@ public abstract class Board implements Runnable {
     }
 
     public int getRows() {
-		return game.getRows();
+		return rows;
 	}
 	public int getColumns() {
-		return game.getColumns();
+		return columns;
 	}
 	
 	public long getDelay() {

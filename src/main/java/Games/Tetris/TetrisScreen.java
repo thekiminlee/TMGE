@@ -174,10 +174,8 @@ public class TetrisScreen implements Screen {
 public class TetrisScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
 	boolean ready = false;
-	TileGenerator generator;
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 			Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL};
-	TetrisBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
 
@@ -189,21 +187,25 @@ public class TetrisScreen implements Screen {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 
+
 		game = new TetrisGame();
 		game.setScreen(this);
-		game.setBoard(
-				new TetrisBoard(game.getRows(),game.getColumns())
-				);
+		game.createGenerator();
+		game.setBoard(new TetrisBoard(game));
+		game.getGenerator();
 
-		generator = new TileGenerator(screenWidth, screenHeight, 0, palette);
+		//new Thread(game).start();
+		System.out.println(game.getRows());
+		System.out.println(game.getColumns());
+		//generator = new TileGenerator(screenWidth, screenHeight, 0, palette);
 		//board = new TetrisBoard(game.getRows(),game.getColumns());
 		//new Thread(board).start();
 		gameBox = new VBox[game.getRows()][game.getColumns()];
 	}
 
-	TileGenerator getGenerator() {
+	/*TileGenerator getGenerator() {
 		return generator;
-	}
+	}*/
 
 	@FXML VBox leftVBox;
 	@FXML VBox rightVBox;
@@ -215,12 +217,13 @@ public class TetrisScreen implements Screen {
 	@FXML
 	public void initialize() {
 		// init all vboxes, add them to a tracking data structure and the visual
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				VBox box = new VBox();
 				gameBox[row][column] = box;
 				gameGrid.add(box, column, row);
-				setVBox(row, column, generator.emptyTile());
+				setVBox(row, column, game.getGenerator().emptyTile());
 			}
 		}
 
@@ -245,7 +248,7 @@ public class TetrisScreen implements Screen {
 	@Override
 	@FXML
 	public void exit() {
-		board.setPlaying(false);
+		game.setPlaying(false);
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
 		stage.close();
 	}
@@ -262,14 +265,14 @@ public class TetrisScreen implements Screen {
 
 	@Override
 	public void draw() {
-		Tile[][] gameState = board.getBoard();
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+		Tile[][] gameState = game.getBoard();
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				Tile t = gameState[row][column];
 				setVBox(row, column, t);
 			}
 		}
-		Block activeBlock = board.getActiveBlock();
+		Block activeBlock = game.getActiveBlock();
 		if (activeBlock != null)
 			for (Tile t: activeBlock.getTiles()) {
 				Coordinate coords = t.getCoords();
@@ -336,5 +339,53 @@ public class TetrisScreen implements Screen {
 	public void onEnd() {
 		// TODO: popup, start again?
 		exit();
+	}
+
+	public static URI getLink() {
+		return link;
+	}
+
+	public boolean isReady() {
+		return ready;
+	}
+
+	public Color[] getPalette() {
+		return palette;
+	}
+
+	public double getScreenWidth() {
+		return screenWidth;
+	}
+
+	public double getScreenHeight() {
+		return screenHeight;
+	}
+
+	public VBox[][] getGameBox() {
+		return gameBox;
+	}
+
+	public TetrisGame getGame() {
+		return game;
+	}
+
+	public VBox getLeftVBox() {
+		return leftVBox;
+	}
+
+	public VBox getRightVBox() {
+		return rightVBox;
+	}
+
+	public GridPane getGameGrid() {
+		return gameGrid;
+	}
+
+	public Menu getFileMenu() {
+		return fileMenu;
+	}
+
+	public Menu getHelpMenu() {
+		return helpMenu;
 	}
 }
