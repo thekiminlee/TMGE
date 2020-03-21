@@ -27,15 +27,13 @@ public class TetrisBoard extends Board {
 	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
 		logic = new BlockLogic();
-		
+		score = 0;
 		seed = new Random(LocalTime.now().toNanoOfDay());
 		this.screen = screen;
 		generator = screen.getGenerator();
 		generator.setGridDimensions(ROWS, COLUMNS);
 		
-		for (int row = 0; row < ROWS; row++)
-			for (int col = 0; col < COLUMNS; col++)
-				board[row][col] = generator.emptyTile();
+		clearBoard();
 	}
 	
 	@Override
@@ -65,6 +63,12 @@ public class TetrisBoard extends Board {
 			}
 			if (!playing) break;
 		}
+	}
+	
+	void clearBoard() {
+		for (int row = 0; row < ROWS; row++)
+			for (int col = 0; col < COLUMNS; col++)
+				board[row][col] = generator.emptyTile();
 	}
 	
 //	synchronized void attemptAction(Block block, Moves moveType, int n) {
@@ -167,11 +171,13 @@ public class TetrisBoard extends Board {
 	
 	void checkForMatches(Block block) {
 		int[] bounds = block.getBounds();
+		int matchScore = score;
 		for (int row = bounds[0]; row <= bounds[2]; row++)
 			if (rowIsFull(row)) {
 				applyMatch(row);
 				settleRowsAbove(row);
 			}
+		score = (int) (Math.pow((score - matchScore), 2.0) * 10);
 	}
 
 	boolean rowIsFull(int row) {
@@ -187,6 +193,7 @@ public class TetrisBoard extends Board {
 			score += t.getValue();
 			board[row][column++] = generator.emptyTile();
 		}
+		score += 1;
 	}
 	
 	private void settleRowsAbove(int row) {
@@ -220,6 +227,10 @@ public class TetrisBoard extends Board {
 	
 	Block getActiveBlock() {
 		return activeBlock;
+	}
+	
+	int getScore() {
+		return score;
 	}
 	
 	void gameover() {

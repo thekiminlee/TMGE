@@ -6,12 +6,16 @@ import java.util.function.BiFunction;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Coordinate;
@@ -22,6 +26,8 @@ import tmge.engine.gameComponents.TileGenerator;
 public class TetrisScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
 	boolean ready = false;
+	boolean playerOneFinished = false;
+	int playerOneScore = 0;
 	TileGenerator generator;
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
 				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL}; 
@@ -127,23 +133,36 @@ public class TetrisScreen implements Screen {
 		gameBox[row][column].getChildren().add(t.getNode());
 	}
 	
-	// TODO: time permitting, make everything resizable
-//	private void resizeElements() {
-//		Stage stage = (Stage) leftVBox.getScene().getWindow();
-//		
-//		screenWidth = stage.getWidth();
-//		screenHeight = stage.getHeight();
-//		TileGenerator.setWindowDimensions(screenWidth, screenHeight);
-//		
-//		leftVBox.layoutXProperty().addListener(new ChangeListener<Number>() {
-//			@Override
-//			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//				// TODO Auto-generated method stub	
-//			}
-//		});
-//		rightVBox;
-//		gameGrid;
-//	}
+	void displayAlertBox() {
+		Stage window = new Stage();
+
+		window.initModality((Modality.APPLICATION_MODAL));
+		window.setTitle("GAME OVER");
+		window.setMinWidth(550);
+		window.setMinHeight(550);
+
+		Label label = new Label("GAME OVER");
+		label.setStyle("-fx-font-size: 2em;");
+		
+		Label score = new Label("You scored: " + board.getScore());
+		label.setStyle("-fx-font-size: 2em;");
+
+		Button newGameButton = new Button("Click button for 2nd game");
+		newGameButton.setStyle("-fx-font-size: 2em;");
+		newGameButton.setOnAction(e -> this.makeNewGame(window));
+
+		VBox layout = new VBox(10);
+		layout.getChildren().addAll(label, score, newGameButton);
+		layout.setAlignment(Pos.CENTER);
+
+		Scene scene = new Scene(layout);
+		window.setScene(scene);
+		window.showAndWait();
+	}
+	
+	void makeNewGame(Stage window) {
+		window.close();
+	}
 	
 	public void translateMovableBlock(BiFunction<TetrisBoard.Moves, Integer, Boolean> function) {
 		(leftVBox.getScene()).setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -173,7 +192,37 @@ public class TetrisScreen implements Screen {
 	}
 	
 	public void onEnd() {
-		// TODO: popup, start again?
+		if (!playerOneFinished) {
+			playerOneFinished = true;
+			playerOneScore = board.getScore();
+			displayAlertBox();
+			board.clearBoard();
+			board.setPlaying(true);
+		}
+		else {
+			gameEnd();
+		}
+	}
+	
+	public void gameEnd() {
+		Stage window = new Stage();
+
+		window.initModality(Modality.APPLICATION_MODAL);
+		window.setTitle("GAME OVER");
+		window.setMinWidth(550);
+		window.setMinHeight(550);
+
+		Label label = new Label("GAME 2 ENDED");
+		label.setStyle("-fx-font-size: 2em;");
+		Label scores = new Label("First Player: " + playerOneScore + "\nSecond Player: " + board.getScore());
+
+		VBox layout = new VBox(10);
+		layout.getChildren().addAll(label, scores);
+		layout.setAlignment(Pos.CENTER);
+
+		Scene scene = new Scene(layout);
+		window.setScene(scene);
+		window.showAndWait();
 		exit();
 	}
 }
