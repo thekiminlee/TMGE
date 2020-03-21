@@ -58,7 +58,7 @@ public class Block {
 	}
 	
 	public int[] getBounds() {
-		// returns  [top left, bottom right]
+		// returns  [left, top, right, bottom]
 		Coordinate coords = tiles[0].getCoords();
 		int smallestX, smallestY, largestX, largestY; 
 		smallestX = largestX = coords.getX();

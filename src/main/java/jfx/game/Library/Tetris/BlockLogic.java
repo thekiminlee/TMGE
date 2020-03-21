@@ -2,6 +2,8 @@ package jfx.game.Library.Tetris;
 
 import java.time.LocalTime;
 import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import tmge.engine.gameComponents.Coordinate;
 import tmge.engine.gameComponents.Tile;
@@ -64,7 +66,37 @@ public class BlockLogic {
 		return new Block(tiles, getBlockType(index));
 	}
 	
-	public Block rotateBlock(Block block) {
+	public Block rotateBlock(Block block, int maxRows, int maxCols) {
+		int[] bounds = block.getBounds(); // bounds[0] = leftmost X, bounds[1] = topmost Y
+		
+		// translate block into a vertically and horizontally flipped 4x4, block appears at the bottom
+		BiFunction<Coordinate, Coordinate, Coordinate> f = (c, coordOffset) -> {
+			// treat tile as if it had a minimum of <0,0>
+			int index = 4*(c.getX() - coordOffset.getX()) + (c.getY() - coordOffset.getY());
+			int col = index%4;
+			int row = index/4;
+			
+			// put into inverted 4x4
+			index = 3 - row + 4 * col;
+			return new Coordinate(index/4 + coordOffset.getX(), index%4 + coordOffset.getY());	
+		};
+		
+		// apply above for each tile
+		Coordinate temp;
+		for (Tile t: block.getTiles()) {
+			temp = new Coordinate(bounds[0], bounds[1]);
+			t.setCoords(f.apply(t.getCoords(), temp));
+		}
+		
+		// shift each tile back up to the top left of the 4x4
+		int[] newBounds = block.getBounds();
+		int rowFix = newBounds[0] - bounds[0];
+		int colFix = newBounds[1] - bounds[1];
+		for (Tile t: block.getTiles()) {
+			temp = t.getCoords();
+			t.setCoords(temp.getX() - rowFix, temp.getY() - colFix);
+		}
+		
 		return block;
 	}
 }

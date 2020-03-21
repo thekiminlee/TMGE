@@ -73,17 +73,19 @@ public class TetrisBoard extends Board {
 		case TRANSLATE_VERTICAL:
 			while (activeBlock != null && n-- > 0) {
 				activeBlock = attemptMoveDown(activeBlock, 1);
-				System.out.println(n);
-				System.out.println(activeBlock);
 			}
 			break;
 		case TRANSLATE_HORIZONTAL:
 			activeBlock = attemptMoveHorizontal(activeBlock, n);
 			break;
 		case ROTATE_CLOCKWISE:
-			activeBlock = logic.rotateBlock(activeBlock);
+			activeBlock = rotate();
 			break;
 		}
+	}
+	
+	Block rotate() {
+		return (activeBlock != null) ? logic.rotateBlock(activeBlock, ROWS, COLUMNS) : null;
 	}
 	
 	synchronized Block attemptMoveDown(Block block, int row) {

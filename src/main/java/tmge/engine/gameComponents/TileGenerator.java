@@ -48,13 +48,7 @@ public class TileGenerator {
 	
 	public Tile createCustomTile(int colorIndex, int shapeIndex, int score, Coordinate coord) {
 		Color tileColor = palette[colorIndex];
-		System.out.println("Color: " + Integer.valueOf(colorIndex) + ", Shape: " + Integer.valueOf(shapeIndex));
 		Tile t = new Tile(score, coord, tileColor, shapesAvailable.get(shapeIndex));
-//		System.out.println(t.getColor());
-//		if (palette != null && colorIndex < palette.length)
-//			tileColor = palette[colorIndex];
-//		else
-//			tileColor = emptyColor;
 		return t;
 	}
 	

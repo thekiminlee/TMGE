@@ -67,7 +67,6 @@ public class TetrisScreen implements Screen {
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
 		ready = true;
-		System.out.println("initialized");
 	}
 	
 	@FXML 
