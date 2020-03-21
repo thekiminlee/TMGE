@@ -22,7 +22,7 @@ import tmge.engine.Screen;
 public class FXMLBuilder {
 	private static URL fxmlString = null;
 	private static Screen controller = null;
-	
+
 	public static void setFXML(URI link) {
 		try {
 			fxmlString = link.toURL();
@@ -31,11 +31,11 @@ public class FXMLBuilder {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Screen getController() {
 		return controller;
 	}
-	
+
 	/*	buildScene
 	 * 	Loads an fxml file and attaches a pane that is filled in based on the FXML file
 	 * 	Verifies the FXML file recognizes the appropriate controller (loader.getController
@@ -65,7 +65,7 @@ public class FXMLBuilder {
 			return null;
 		}
 	}
-	
+
 	public static <T> Stage buildStage(Scene scene, boolean isModal) {
 		Stage stage;
 		if (isModal) {
@@ -76,14 +76,14 @@ public class FXMLBuilder {
 		}
 		return stage;
 	}
-	
+
 	public <T> void build(Scene scene, boolean isModal) {
 		Stage stage = buildStage(scene, isModal);
-		
+
 		stage.setScene(scene);
 		stage.show();
 	}
-	
+
 	public static <T> void build(Parent pane, boolean isModal) {
 		Scene scene = buildScene(pane);
 		Stage stage = buildStage(scene, isModal);

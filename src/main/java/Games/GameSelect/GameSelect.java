@@ -39,10 +39,11 @@ public class GameSelect {
     Button tetrisGameStartButton;
 
     Button clickToStart;
-    
+
     Scene scene, scene1;
+    //src/main/java/jfx/game/resources/images/
     String relativeDirectory = "src/main/java/jfx/game/resources/images/";
-    
+
     public Scene start(Stage stage) {
     	//Title Screen
         StackPane titleScreen = new StackPane();
@@ -85,11 +86,11 @@ public class GameSelect {
         Scene scene = new Scene(titleScreen, 900,480);
         return scene;
     }
-    	
+
     public BorderPane addChooseGameScreen() {
         BorderPane border = new BorderPane();
 		HBox buttonBox = addGames();
-		
+
 		border.setBackground(
 			new Background(
 				new BackgroundImage(loadImage(relativeDirectory + "ChooseGameScreen.png"),
@@ -100,18 +101,18 @@ public class GameSelect {
 
         buttonBox.setAlignment(Pos.CENTER);
         border.setCenter(buttonBox);
-        
+
         return border;
     }
-    
+
     public HBox addGames(){
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(10);
         //hbox.setStyle("-fx-background-color: #336699;");
-        
+
         hbox.setAlignment(Pos.CENTER);
-        
+
         String buttonStyle = "-fx-background-color: transparent;  -fx-text-fill: #e81010; -fx-font-size: 17px; -fx-font-family: 'Comic Sans MS'; -fx-height: 100px; -fx-weight: 100px";
         //Bejeweled Button
         bejeweledGameStartButton = new Button();
@@ -129,7 +130,7 @@ public class GameSelect {
     			//loadGame(screen);
     		}
     	});
-        
+
         //Tetris Button
         tetrisGameStartButton = new Button();
         tetrisGameStartButton.setStyle(buttonStyle);
@@ -151,12 +152,12 @@ public class GameSelect {
     			//loadGame(screen);
     		}
     	});
-        
+
         hbox.getChildren().addAll(bejeweledGameStartButton, tetrisGameStartButton);
 
         return hbox;
     }
-    
+
     private void loadGame(Screen screen) {
 		Platform.runLater(() -> {
 			while (!screen.ready())
@@ -177,7 +178,7 @@ public class GameSelect {
     		return null;
     	}
     }
-    
+
 	public void exit() {
 		((Stage)scene1.getWindow()).close();
 	}

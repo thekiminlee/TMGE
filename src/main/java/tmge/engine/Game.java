@@ -43,7 +43,7 @@ public abstract class Game {
 
 	/*in theory this will end up calling both the screen and board update methods */
 	protected abstract void update();
-	
+
 	public void setPlaying(boolean playing) {
 		this.playing = playing;
 	}

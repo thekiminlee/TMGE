@@ -1,4 +1,4 @@
-package tmge.engine;
+package tmge.engine.gameComponents;
 
 import javafx.scene.control.Alert;
 import tmge.engine.boardComponents.Board;
