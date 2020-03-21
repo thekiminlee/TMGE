@@ -219,6 +219,7 @@ public class BejeweledBoard extends Board {
 	public void update() {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		while (playing) {
 			// System.out.println("UPDATE IN BJ board");
 			this.screen.setReady(false);
@@ -258,6 +259,9 @@ public class BejeweledBoard extends Board {
 		this.timeSeconds = this.startTime;
 
 		setPlaying(true);
+=======
+		
+>>>>>>> parent of 414b207... MVC for Tetris Done
 =======
 		
 >>>>>>> parent of 414b207... MVC for Tetris Done
