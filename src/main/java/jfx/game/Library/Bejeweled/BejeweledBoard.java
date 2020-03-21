@@ -226,6 +226,7 @@ public class BejeweledBoard extends Board {
 		this.board[row][column] = generator.emptyTile();
 	}
 
+	/*
 	@Override
 	public void update() {
 
@@ -261,7 +262,7 @@ public class BejeweledBoard extends Board {
 					e.printStackTrace();
 				}
 		}
-	}
+	}*/
 
 	public void resetGame() {
 		this.score = 0;
@@ -270,11 +271,6 @@ public class BejeweledBoard extends Board {
 		setPlaying(true);
 	}
 
-	@Override
-	public void run() {
-		System.out.println("I am in run");
-		update();
-	}
 
 	public void setPlaying(boolean playing) {
 		this.playing = playing;

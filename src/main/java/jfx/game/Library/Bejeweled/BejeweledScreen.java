@@ -176,7 +176,7 @@ public class BejeweledScreen implements Screen {
 	void createScreen() {
 		generator = new TileGenerator(screenWidth, screenHeight, 3, palette);
 		board = new BejeweledBoard(this);
-		new Thread(board).start();
+		//new Thread(board).start();
 		gameBox = new VBox[board.getRows()][board.getColumns()];
 		generator.addPolygon((color) -> {
 			return createDiamond(color);

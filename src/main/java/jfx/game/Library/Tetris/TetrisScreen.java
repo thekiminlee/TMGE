@@ -34,17 +34,27 @@ public class TetrisScreen implements Screen {
 	TetrisBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
-	
+
+	TetrisGame game;
+
+
 	public TetrisScreen() { createScreen(720.0 * 0.6, 640.0 - 48); }
 	
 	void createScreen(double screenWidth, double screenHeight) {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 
+		game = new TetrisGame();
+		game.setScreen(this);
+		game.createGenerator();
+		game.setBoard(new TetrisBoard(game));
+		game.getGenerator();
+
+		/*
 		generator = new TileGenerator(screenWidth, screenHeight, 0, palette);
 		board = new TetrisBoard(this);
-		new Thread(board).start();
-		gameBox = new VBox[board.getRows()][board.getColumns()];
+		new Thread(board).start();*/
+		gameBox = new VBox[game.getRows()][game.getColumns()];
 	}
 	
 	TileGenerator getGenerator() {
@@ -61,18 +71,19 @@ public class TetrisScreen implements Screen {
 	@FXML
 	public void initialize() {
 		// init all vboxes, add them to a tracking data structure and the visual
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				VBox box = new VBox();
 				gameBox[row][column] = box;
 				gameGrid.add(box, column, row);
-				setVBox(row, column, generator.emptyTile());
+				setVBox(row, column, game.getGenerator().emptyTile());
 			}
 		}
 		
 		leftVBox.getChildren().add(new Label("LEFT"));
 		rightVBox.getChildren().add(new Label("RIGHT"));
 		ready = true;
+		new Thread(game).start();
 	}
 	
 	@FXML 
@@ -90,7 +101,7 @@ public class TetrisScreen implements Screen {
 	@Override
 	@FXML
 	public void exit() {
-		board.setPlaying(false);
+		game.setPlaying(false);
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
         stage.close();
 	}
@@ -107,14 +118,14 @@ public class TetrisScreen implements Screen {
 
 	@Override
 	public void draw() {
-		Tile[][] gameState = board.getBoard();
-		for (int row = 0; row < board.getRows(); row++) {
-			for (int column = 0; column < board.getColumns(); column++) {
+		Tile[][] gameState = game.getBoard();
+		for (int row = 0; row < game.getRows(); row++) {
+			for (int column = 0; column < game.getColumns(); column++) {
 				Tile t = gameState[row][column];
 				setVBox(row, column, t);
 			}
 		}
-		Block activeBlock = board.getActiveBlock();
+		Block activeBlock = game.getActiveBlock();
 		if (activeBlock != null)
 			for (Tile t: activeBlock.getTiles()) {
 				Coordinate coords = t.getCoords();
@@ -144,7 +155,7 @@ public class TetrisScreen implements Screen {
 		Label label = new Label("GAME OVER");
 		label.setStyle("-fx-font-size: 2em;");
 		
-		Label score = new Label("You scored: " + board.getScore());
+		Label score = new Label("You scored: " + game.getScore());
 		label.setStyle("-fx-font-size: 2em;");
 
 		Button newGameButton = new Button("Click button for 2nd game");
@@ -170,7 +181,7 @@ public class TetrisScreen implements Screen {
             public void handle(KeyEvent event) {
             	switch (event.getCode()) {
             	case SPACE:
-            		function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, board.getRows());
+            		function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, game.getRows());
             		break;
             	case S:
 					function.apply(TetrisBoard.Moves.TRANSLATE_VERTICAL, 1);
@@ -194,10 +205,10 @@ public class TetrisScreen implements Screen {
 	public void onEnd() {
 		if (!playerOneFinished) {
 			playerOneFinished = true;
-			playerOneScore = board.getScore();
+			playerOneScore = game.getScore();
 			displayAlertBox();
-			board.clearBoard();
-			board.setPlaying(true);
+			game.clearBoard();
+			game.setPlaying(true);
 		}
 		else {
 			gameEnd();
@@ -214,7 +225,7 @@ public class TetrisScreen implements Screen {
 
 		Label label = new Label("GAME 2 ENDED");
 		label.setStyle("-fx-font-size: 2em;");
-		Label scores = new Label("First Player: " + playerOneScore + "\nSecond Player: " + board.getScore());
+		Label scores = new Label("First Player: " + playerOneScore + "\nSecond Player: " + game.getScore());
 
 		VBox layout = new VBox(10);
 		layout.getChildren().addAll(label, scores);
@@ -224,5 +235,57 @@ public class TetrisScreen implements Screen {
 		window.setScene(scene);
 		window.showAndWait();
 		exit();
+	}
+
+	public static URI getLink() {
+		return link;
+	}
+
+	public boolean isReady() {
+		return ready;
+	}
+
+	public boolean isPlayerOneFinished() {
+		return playerOneFinished;
+	}
+
+	public int getPlayerOneScore() {
+		return playerOneScore;
+	}
+
+	public Color[] getPalette() {
+		return palette;
+	}
+
+	public double getScreenWidth() {
+		return screenWidth;
+	}
+
+	public double getScreenHeight() {
+		return screenHeight;
+	}
+
+	public VBox[][] getGameBox() {
+		return gameBox;
+	}
+
+	public VBox getLeftVBox() {
+		return leftVBox;
+	}
+
+	public VBox getRightVBox() {
+		return rightVBox;
+	}
+
+	public GridPane getGameGrid() {
+		return gameGrid;
+	}
+
+	public Menu getFileMenu() {
+		return fileMenu;
+	}
+
+	public Menu getHelpMenu() {
+		return helpMenu;
 	}
 }

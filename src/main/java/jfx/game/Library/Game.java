@@ -1,9 +1,11 @@
 package jfx.game.Library;
 
+import tmge.engine.gameComponents.Board;
 import tmge.engine.gameComponents.Screen;
 
 public class Game {
 	Screen currentScreen;
+	Board currentBoard;
 	int rows;
 	int columns;
 	
@@ -13,10 +15,9 @@ public class Game {
 		this.currentScreen = null;
 	}
 
-	public void setCurrentScene(Screen screen){
-		currentScreen = screen;
-	}
-	
+	public Game(){}
+
+
 	public String toString() {
 		return "";
 	}

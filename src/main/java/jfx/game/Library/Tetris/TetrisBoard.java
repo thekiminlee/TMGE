@@ -23,6 +23,8 @@ public class TetrisBoard extends Board {
 	BlockLogic logic;
 	int score = 0;
 	public enum Moves { TRANSLATE_VERTICAL, TRANSLATE_HORIZONTAL, ROTATE_CLOCKWISE };
+
+	TetrisGame tetrisGame;
 	
 	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
@@ -32,37 +34,21 @@ public class TetrisBoard extends Board {
 		this.screen = screen;
 		generator = screen.getGenerator();
 		generator.setGridDimensions(ROWS, COLUMNS);
-		
 		clearBoard();
 	}
-	
-	@Override
-	public void run() {
-		update();
-	}
 
-	@Override
-	public void update() {
-		while (playing) {
-			System.out.println("update");
-			this.screen.setReady(false);
-			Platform.runLater(() -> {
-				if (activeBlock == null)
-					createMovableBlock();
-				else {
-					attemptAction(Moves.TRANSLATE_VERTICAL, 1);
-				}
-				this.screen.draw();
-			});
-			while(!this.screen.ready()) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			if (!playing) break;
-		}
+	TetrisBoard(TetrisGame game){
+		super(ROWS,COLUMNS);
+		tetrisGame = game;
+		logic = new BlockLogic();
+		seed = new Random(LocalTime.now().toNanoOfDay());
+		generator = game.getGenerator();
+		generator.setGridDimensions(ROWS,COLUMNS);
+
+		for (int row = 0; row < ROWS; row++)
+			for (int col = 0; col < COLUMNS; col++)
+				board[row][col] = generator.emptyTile();
+		System.out.println(board);
 	}
 	
 	void clearBoard() {
@@ -155,7 +141,7 @@ public class TetrisBoard extends Board {
 		} else { 
 			activeBlock = block;
 			// add tile to board, register movement		
-			screen.translateMovableBlock((m, n) -> {
+			tetrisGame.getScreen().translateMovableBlock((m, n) -> {
 				attemptAction(m, n);
 				return true;
 			});
@@ -235,7 +221,7 @@ public class TetrisBoard extends Board {
 	
 	void gameover() {
 		playing = false;
-		screen.onEnd();
+		tetrisGame.getScreen().onEnd();
 		System.out.println("Game has ended");
 	}
 
@@ -247,5 +233,54 @@ public class TetrisBoard extends Board {
 	public void setPlaying(boolean playing) {
 		this.playing = playing;
 	}
-	
+
+
+	public static int getROWS() {
+		return ROWS;
+	}
+
+	public static int getCOLUMNS() {
+		return COLUMNS;
+	}
+
+	@Override
+	public long getDelay() {
+		return delay;
+	}
+
+	public int getMinimumDelay() {
+		return minimumDelay;
+	}
+
+	public Random getSeed() {
+		return seed;
+	}
+
+	public boolean isPlaying() {
+		return playing;
+	}
+
+	public TetrisScreen getScreen() {
+		return screen;
+	}
+
+	public TileGenerator getGenerator() {
+		return generator;
+	}
+
+	public TileGame getGame() {
+		return game;
+	}
+
+	public BlockLogic getLogic() {
+		return logic;
+	}
+
+	public TetrisGame getTetrisGame() {
+		return tetrisGame;
+	}
+
+	public Tile[][] getBoard(){
+		return board;
+	}
 }
