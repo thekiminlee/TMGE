@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.stream.*;
 import java.lang.Math;
 
 import javafx.application.Platform;
@@ -23,13 +20,11 @@ public class BejeweledBoard extends Board {
 	private int[][][] configurations = { { { 0, 0 } }, { { 0, 0 } }, { { 0, 0 } }, { { 0, 0 } } };
 	private int[] values = { 1, 2, 3, 4 };
 	private static final int ROWS = 8, COLUMNS = 8;
-	private ArrayList<Coordinate> listOfCoords;
 	private TileGenerator generator;
 	private boolean playing;
 	private Random seed;
-	private Tile t1, t2 = null;
-	static final int startTime = 60;
-	int timeSeconds = startTime;
+	private final int startTime = 60;
+	private int timeSeconds = startTime;
 	private boolean firstGame = true;
 	private int[] shapeScore = new int[] { 20, 30, 40, 50 };
 	private Set<Tile> matchSet = new HashSet<Tile>();
@@ -56,7 +51,7 @@ public class BejeweledBoard extends Board {
 	}
 
 	// Vertical Matching After Swap:
-	public void verticalMatch(Tile originTile1, Tile originTile2, Set matchSet) {
+	public void verticalMatch(Tile originTile1, Tile originTile2, Set<Tile> matchSet) {
 		// Checklist for Origin Tiles:
 		List<Tile> checkList = new ArrayList<Tile>();
 		checkList.add(originTile1);
@@ -95,7 +90,7 @@ public class BejeweledBoard extends Board {
 	}
 
 	// Horizontal Matching After Swap:
-	public void horizontalMatch(Tile originTile1, Tile originTile2, Set matchSet) {
+	public void horizontalMatch(Tile originTile1, Tile originTile2, Set<Tile> matchSet) {
 		List<Tile> checkList = new ArrayList<Tile>();
 		checkList.add(originTile1);
 		checkList.add(originTile2);
@@ -134,7 +129,7 @@ public class BejeweledBoard extends Board {
 	}
 
 	// Clear Tiles and Apply Gravity
-	public void clearAndGravity(Set matchSet) {
+	public void clearAndGravity(Set<Tile> matchSet) {
 
 		for (Object matchTile : matchSet) {
 			Tile match = Tile.class.cast(matchTile);

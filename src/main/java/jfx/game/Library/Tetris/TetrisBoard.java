@@ -44,7 +44,6 @@ public class TetrisBoard extends Board {
 	@Override
 	public void update() {
 		while (playing) {
-			System.out.println("update");
 			this.screen.setReady(false);
 			Platform.runLater(() -> {
 				if (activeBlock == null)
@@ -207,7 +206,6 @@ public class TetrisBoard extends Board {
 	
 	boolean blockCanMove(Block block, int row, int column) {
 		if (block == null) return false;
-		System.out.println("<" + Integer.toString(row) + ", " + Integer.toString(column) + ">:" + block);
 		for (Tile t: block.getTiles()) {
 			Coordinate c = t.getCoords();
 			Coordinate cPrime = new Coordinate(c.getX() + row, c.getY() + column);
@@ -236,7 +234,6 @@ public class TetrisBoard extends Board {
 	void gameover() {
 		playing = false;
 		screen.onEnd();
-		System.out.println("Game has ended");
 	}
 
 	@Override

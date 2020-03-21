@@ -4,6 +4,10 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.function.BiFunction;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -27,6 +31,7 @@ public class TetrisScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
 	boolean ready = false;
 	boolean playerOneFinished = false;
+	int currentScore = 0;
 	int playerOneScore = 0;
 	TileGenerator generator;
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
@@ -69,9 +74,19 @@ public class TetrisScreen implements Screen {
 				setVBox(row, column, generator.emptyTile());
 			}
 		}
+
+		Label label = new Label("0");
+		IntegerProperty scoreProperty = new SimpleIntegerProperty(currentScore);
+		scoreProperty.addListener(new ChangeListener<Number>() {
+			
+			@Override
+		    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+		        label.setText(Integer.toString(board.getScore()));
+		    }
+			
+		});
 		
-		leftVBox.getChildren().add(new Label("LEFT"));
-		rightVBox.getChildren().add(new Label("RIGHT"));
+		leftVBox.getChildren().add(label);
 		ready = true;
 	}
 	
@@ -107,6 +122,7 @@ public class TetrisScreen implements Screen {
 
 	@Override
 	public void draw() {
+		currentScore = board.getScore();
 		Tile[][] gameState = board.getBoard();
 		for (int row = 0; row < board.getRows(); row++) {
 			for (int column = 0; column < board.getColumns(); column++) {

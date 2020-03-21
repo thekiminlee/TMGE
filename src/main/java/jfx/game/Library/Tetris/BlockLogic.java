@@ -90,13 +90,17 @@ public class BlockLogic {
 		
 		// shift each tile back up to the top left of the 4x4
 		int[] newBounds = block.getBounds();
-		int rowFix = newBounds[0] - bounds[0];
-		int colFix = newBounds[1] - bounds[1];
+		// ensure the value is still in bounds for each tile
+		int rangeX = ((newBounds[2] >= maxRows) ? newBounds[2] - maxRows : 0);
+		int rangeY = ((newBounds[3] >= maxCols) ? newBounds[3] - maxCols : 0);
+
+		int rowFix = newBounds[0] - bounds[0] + rangeX;
+		int colFix = newBounds[1] - bounds[1] + rangeY;
+
 		for (Tile t: block.getTiles()) {
 			temp = t.getCoords();
 			t.setCoords(temp.getX() - rowFix, temp.getY() - colFix);
 		}
-		
 		return block;
 	}
 }
