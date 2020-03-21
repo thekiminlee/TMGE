@@ -218,55 +218,17 @@ public class BejeweledBoard extends Board {
 	@Override
 	public void update() {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		while (playing) {
-			// System.out.println("UPDATE IN BJ board");
-			this.screen.setReady(false);
-			this.timeSeconds -= 1;
-			this.screen.updateTimer(this.timeSeconds);
-			this.screen.updateScore(this.score);
-
-			Platform.runLater(() -> {
-				fillAll();
-				this.screen.draw();
-				if (this.timeSeconds == 0) {
-					if (firstGame) {
-						scoreFirst = score;
-						this.firstGame = false;
-						screen.displayAlertBox();
-						resetGame();
-					} else {
-						scoreSecond = score;
-						setPlaying(false);
-						screen.gameEnd(scoreFirst, scoreSecond);
-					}
-				}
-
-			});
-
-			while (!this.screen.ready() && playing)
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-		}
-	}
-
-	public void resetGame() {
-		this.score = 0;
-		this.timeSeconds = this.startTime;
-
-		setPlaying(true);
-=======
-
->>>>>>> parent of 414b207... MVC for Tetris Done
 =======
 
 >>>>>>> parent of 414b207... MVC for Tetris Done
 	}
 
+=======
+
+
+	}
+
+>>>>>>> parent of 414b207... MVC for Tetris Done
 	@Override
 	public void run() {
 		System.out.println("I am in run");
