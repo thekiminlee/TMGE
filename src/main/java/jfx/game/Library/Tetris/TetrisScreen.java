@@ -4,6 +4,10 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.function.BiFunction;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -27,10 +31,11 @@ public class TetrisScreen implements Screen {
 	public final static URI link = Paths.get("src/main/java/jfx/game/resources/fxml/tetris-singleplayer.fxml").toUri();
 	boolean ready = false;
 	boolean playerOneFinished = false;
+	int currentScore = 0;
 	int playerOneScore = 0;
 	TileGenerator generator;
 	final Color[] palette = {Color.AQUA, Color.BLUEVIOLET, Color.CHARTREUSE,
-				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL}; 
+				Color.DARKORANGE, Color.CRIMSON, Color.POWDERBLUE, Color.LIGHTCORAL};
 	TetrisBoard board;
 	double screenWidth, screenHeight;
 	VBox[][] gameBox;
@@ -39,7 +44,7 @@ public class TetrisScreen implements Screen {
 
 
 	public TetrisScreen() { createScreen(720.0 * 0.6, 640.0 - 48); }
-	
+
 	void createScreen(double screenWidth, double screenHeight) {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
@@ -56,17 +61,17 @@ public class TetrisScreen implements Screen {
 		new Thread(board).start();*/
 		gameBox = new VBox[game.getRows()][game.getColumns()];
 	}
-	
+
 	TileGenerator getGenerator() {
 		return generator;
 	}
-	
+
 	@FXML VBox leftVBox;
 	@FXML VBox rightVBox;
 	@FXML GridPane gameGrid;
 	@FXML Menu fileMenu;
 	@FXML Menu helpMenu;
-	
+
 	@Override
 	@FXML
 	public void initialize() {
@@ -79,25 +84,35 @@ public class TetrisScreen implements Screen {
 				setVBox(row, column, game.getGenerator().emptyTile());
 			}
 		}
-		
-		leftVBox.getChildren().add(new Label("LEFT"));
-		rightVBox.getChildren().add(new Label("RIGHT"));
+
+		Label label = new Label("0");
+		IntegerProperty scoreProperty = new SimpleIntegerProperty(currentScore);
+		scoreProperty.addListener(new ChangeListener<Number>() {
+
+			@Override
+		    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+		        label.setText(Integer.toString(board.getScore()));
+		    }
+
+		});
+
+		leftVBox.getChildren().add(label);
 		ready = true;
 		new Thread(game).start();
 	}
-	
-	@FXML 
+
+	@FXML
 	private void minimize() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
 		stage.setIconified(true);
 	}
-	
-	@FXML 
+
+	@FXML
 	private void maximize() {
 		Stage stage = (Stage) leftVBox.getScene().getWindow();
 		stage.setMaximized(true);
 	}
-	
+
 	@Override
 	@FXML
 	public void exit() {
@@ -133,17 +148,17 @@ public class TetrisScreen implements Screen {
 			}
 		this.ready = true;
 	}
-	
+
 	@Override
 	public Board getBoard() {
 		return this.board;
 	}
-	
+
 	public void setVBox(int row, int column, Tile t) {
 		gameBox[row][column].getChildren().clear();
 		gameBox[row][column].getChildren().add(t.getNode());
 	}
-	
+
 	void displayAlertBox() {
 		Stage window = new Stage();
 
@@ -154,7 +169,7 @@ public class TetrisScreen implements Screen {
 
 		Label label = new Label("GAME OVER");
 		label.setStyle("-fx-font-size: 2em;");
-		
+
 		Label score = new Label("You scored: " + game.getScore());
 		label.setStyle("-fx-font-size: 2em;");
 
@@ -170,11 +185,11 @@ public class TetrisScreen implements Screen {
 		window.setScene(scene);
 		window.showAndWait();
 	}
-	
+
 	void makeNewGame(Stage window) {
 		window.close();
 	}
-	
+
 	public void translateMovableBlock(BiFunction<TetrisBoard.Moves, Integer, Boolean> function) {
 		(leftVBox.getScene()).setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -201,7 +216,7 @@ public class TetrisScreen implements Screen {
             }
         });
 	}
-	
+
 	public void onEnd() {
 		if (!playerOneFinished) {
 			playerOneFinished = true;
@@ -214,7 +229,7 @@ public class TetrisScreen implements Screen {
 			gameEnd();
 		}
 	}
-	
+
 	public void gameEnd() {
 		Stage window = new Stage();
 

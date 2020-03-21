@@ -25,7 +25,7 @@ public class TetrisBoard extends Board {
 	public enum Moves { TRANSLATE_VERTICAL, TRANSLATE_HORIZONTAL, ROTATE_CLOCKWISE };
 
 	TetrisGame tetrisGame;
-	
+
 	TetrisBoard(TetrisScreen screen) {
 		super(new TileGame(ROWS, COLUMNS));
 		logic = new BlockLogic();
@@ -50,13 +50,13 @@ public class TetrisBoard extends Board {
 				board[row][col] = generator.emptyTile();
 		System.out.println(board);
 	}
-	
+
 	void clearBoard() {
 		for (int row = 0; row < ROWS; row++)
 			for (int col = 0; col < COLUMNS; col++)
 				board[row][col] = generator.emptyTile();
 	}
-	
+
 //	synchronized void attemptAction(Block block, Moves moveType, int n) {
 	synchronized void attemptAction(Moves moveType, int n) {
 		switch (moveType) {
@@ -73,11 +73,11 @@ public class TetrisBoard extends Board {
 			break;
 		}
 	}
-	
+
 	Block rotate() {
 		return (activeBlock != null) ? logic.rotateBlock(activeBlock, ROWS, COLUMNS) : null;
 	}
-	
+
 	synchronized Block attemptMoveDown(Block block, int row) {
 		if (block == null) return null;
 		if (blockCanMove(block, row, 0)) {
@@ -89,7 +89,7 @@ public class TetrisBoard extends Board {
 			return null;
 		}
 	}
-	
+
 	Block attemptMoveHorizontal(Block block, int column) {
 		if (block == null) return null;
 		if (blockCanMove(block, 0, column)) {
@@ -97,21 +97,21 @@ public class TetrisBoard extends Board {
 		}
 		return block;
 	}
-	
+
 	boolean rangeCheck(int row, int column) {
 		return row >= 0 && row < ROWS &&
 				column >= 0 && column < COLUMNS;
 	}
-	
+
 	boolean occupied(int row, int column) {
 		return board[row][column].getValue() > 0;
 	}
-	
+
 	// Can a tile be dropped at this location?
 	boolean canDropTile(int row, int column) {
 		return rangeCheck(row, column) && !occupied(row, column);
 	}
-	
+
 	synchronized Block findFirstAvailableColumn() {
 		Block tileConfig = logic.getRandomBlock(generator);
 		int column;
@@ -132,29 +132,29 @@ public class TetrisBoard extends Board {
 		}
 		return null;
 	}
-	
+
 	void createMovableBlock() {
 		Block block = findFirstAvailableColumn();
 		if (block == null) {
 			// no place to drop the tile
 			gameover();
-		} else { 
+		} else {
 			activeBlock = block;
-			// add tile to board, register movement		
+			// add tile to board, register movement
 			tetrisGame.getScreen().translateMovableBlock((m, n) -> {
 				attemptAction(m, n);
 				return true;
 			});
 		}
 	}
-	
+
 	void addTiles(Block block) {
 		for (Tile t: block.getTiles()) {
 			Coordinate coords = t.getCoords();
 			board[coords.getX()][coords.getY()] = t;
 		}
 	}
-	
+
 	void checkForMatches(Block block) {
 		int[] bounds = block.getBounds();
 		int matchScore = score;
@@ -172,7 +172,7 @@ public class TetrisBoard extends Board {
 				return false;
 		return true;
 	}
-	
+
 	void applyMatch(int row) {
 		int column = 0;
 		for (Tile t: board[row]) {
@@ -181,7 +181,7 @@ public class TetrisBoard extends Board {
 		}
 		score += 1;
 	}
-	
+
 	private void settleRowsAbove(int row) {
 		for (int currentRow = row; currentRow > 0; currentRow--) {
 			for (int column = 0; column < COLUMNS; column++) {
@@ -190,10 +190,9 @@ public class TetrisBoard extends Board {
 			}
 		}
 	}
-	
+
 	boolean blockCanMove(Block block, int row, int column) {
 		if (block == null) return false;
-		System.out.println("<" + Integer.toString(row) + ", " + Integer.toString(column) + ">:" + block);
 		for (Tile t: block.getTiles()) {
 			Coordinate c = t.getCoords();
 			Coordinate cPrime = new Coordinate(c.getX() + row, c.getY() + column);
@@ -203,22 +202,22 @@ public class TetrisBoard extends Board {
 		}
 		return true;
 	}
-	
+
 	void makeMove(Tile t, int toRow, int toColumn) {
 		Coordinate previousCoords = t.getCoords();
 		board[toRow][toColumn] = t;
 		board[previousCoords.getX()][previousCoords.getY()] = generator.emptyTile();
 		t.setCoords(toRow, toColumn);
 	}
-	
+
 	Block getActiveBlock() {
 		return activeBlock;
 	}
-	
+
 	int getScore() {
 		return score;
 	}
-	
+
 	void gameover() {
 		playing = false;
 		tetrisGame.getScreen().onEnd();
