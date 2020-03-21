@@ -121,10 +121,6 @@ public class BejeweledBoard extends Board {
 			if (matchList.size() >= 3) {
 				matchSet.addAll(matchList);
 			}
-
-			// Testing:
-			// System.out.println("Origin Tile: " + originTile);
-			// System.out.println("Match List Identified: " + matchList);
 		}
 	}
 
@@ -175,7 +171,7 @@ public class BejeweledBoard extends Board {
 		return false;
 	}
 
-	public void swap(Coordinate coords, Coordinate lastClicked) {
+	public String swap(Coordinate coords, Coordinate lastClicked) {
 		if (isValid(coords, lastClicked)) {
 			Tile temp1 = getTileAt(coords), temp2 = getTileAt(lastClicked);
 			temp1.setCoords(lastClicked);
@@ -191,8 +187,9 @@ public class BejeweledBoard extends Board {
 			} else {
 				resetTiles(temp1, temp2);
 			}
+			return "";
 		} else {
-			System.out.println("Invalid move");
+			return "Invalid move";
 		}
 	}
 
@@ -225,7 +222,7 @@ public class BejeweledBoard extends Board {
 	public void update() {
 
 		while (playing) {
-			// System.out.println("UPDATE IN BJ board");
+
 			this.screen.setReady(false);
 			this.timeSeconds -= 1;
 			this.screen.updateTimer(this.timeSeconds);
