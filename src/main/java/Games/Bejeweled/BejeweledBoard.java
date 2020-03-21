@@ -1,16 +1,10 @@
 package Games.Bejeweled;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Random;
-import java.lang.Math;
-
 import javafx.application.Platform;
-import tmge.engine.boardComponents.Board;
-import tmge.engine.boardComponents.Coordinate;
-import tmge.engine.boardComponents.Tile;
-import tmge.engine.boardComponents.TileGame;
-import tmge.engine.boardComponents.TileGenerator;
+import tmge.engine.boardComponents.*;
+
+import java.time.LocalTime;
+import java.util.*;
 
 public class BejeweledBoard extends Board {
 	private int score;
@@ -22,12 +16,20 @@ public class BejeweledBoard extends Board {
 	private boolean playing;
 	private Random seed;
 	private Tile t1, t2 = null;
-	private int clicked = 0;
+	static final int startTime = 60;
+	int timeSeconds = startTime;
+	private boolean firstGame = true;
+	private int[] shapeScore = new int[] { 20, 30, 40, 50 };
+	private Set<Tile> matchSet = new HashSet<Tile>();
+
+	private int scoreFirst;
+	private int scoreSecond;
 
 	BejeweledScreen screen;
 
 	public BejeweledBoard(BejeweledScreen screen) {
-		super(ROWS, COLUMNS);
+		//super(new TileGame(ROWS, COLUMNS));
+		super(ROWS,COLUMNS);
 		seed = new Random(LocalTime.now().toNanoOfDay());
 		this.screen = screen;
 		generator = screen.getGenerator();
@@ -42,34 +44,103 @@ public class BejeweledBoard extends Board {
 		System.out.println("Board created");
 	}
 
-	// Matching on board
-	public int applyMatch(ArrayList<Coordinate> list) {
-		int points = 0;
-		for (Coordinate coords : list) {
-			Tile tile = board[coords.getX()][coords.getY()];
-			points += tile.getValue();
-			System.out.println(list);
+	// Vertical Matching After Swap:
+	public void verticalMatch(Tile originTile1, Tile originTile2, Set matchSet) {
+		// Checklist for Origin Tiles:
+		List<Tile> checkList = new ArrayList<Tile>();
+		checkList.add(originTile1);
+		checkList.add(originTile2);
 
-			// Set empty Tile at the coordinate
-			removeTile(coords.getX(), coords.getY());
-		}
-
-		return points;
-	}
-
-	// GRAVITY OF THE GAME THAT HANDLES DROPPING
-	public void applyGravity() {
-		for (int row = this.getRows() - 1; row > 0; row++) {
-			for (int column = this.getColumns() - 1; column >= 0; column++) {
-				if (board[row][column] == null)
-					removeTile(row, column);
-				else if (board[row][column] == generator.emptyTile()) {
-					addTile(row, column, board[row - 1][column]);
-					removeTile(row - 1, column);
+		for (Tile originTile : checkList) {
+			Coordinate originTileCoord = originTile.getCoords();
+			// Check Upward:
+			List<Tile> matchList = new ArrayList<Tile>();
+			matchList.add(originTile);
+			int originValue = originTile.getValue();
+			for (int i = originTileCoord.getX() - 1; i > -1; i--) {
+				if (originValue == board[i][originTileCoord.getY()].getValue()) {
+					matchList.add(board[i][originTileCoord.getY()]);
+				} else {
+					break;
 				}
 			}
+
+			// Check Downward:
+			for (int i = originTileCoord.getX() + 1; i < this.getRows(); i++) {
+				if (originValue == board[i][originTileCoord.getY()].getValue()) {
+					matchList.add(board[i][originTileCoord.getY()]);
+				} else {
+					break;
+				}
+			}
+
+			// Add Tiles to MatchSet:
+			if (matchList.size() >= 3) {
+				matchSet.addAll(matchList);
+			}
 		}
-		fillRow(0);
+		//
+
+	}
+
+	// Horizontal Matching After Swap:
+	public void horizontalMatch(Tile originTile1, Tile originTile2, Set matchSet) {
+		List<Tile> checkList = new ArrayList<Tile>();
+		checkList.add(originTile1);
+		checkList.add(originTile2);
+
+		for (Tile originTile : checkList) {
+			Coordinate originTileCoord = originTile.getCoords();
+			// Check LEFT:
+			List<Tile> matchList = new ArrayList<Tile>();
+			matchList.add(originTile);
+			int originValue = originTile.getValue();
+			for (int i = originTileCoord.getY() - 1; i > -1; i--) {
+				if (originValue == board[originTileCoord.getX()][i].getValue()) {
+					matchList.add(board[originTileCoord.getX()][i]);
+				} else {
+					break;
+				}
+			}
+			// Check RIGHT:
+			for (int i = originTileCoord.getY() + 1; i < this.getColumns(); i++) {
+				if (originValue == board[originTileCoord.getX()][i].getValue()) {
+					matchList.add(board[originTileCoord.getX()][i]);
+				} else {
+					break;
+				}
+			}
+
+			// Add Tiles to MatchSet:
+			if (matchList.size() >= 3) {
+				matchSet.addAll(matchList);
+			}
+
+			// Testing:
+			// System.out.println("Origin Tile: " + originTile);
+			// System.out.println("Match List Identified: " + matchList);
+		}
+	}
+
+	// Clear Tiles and Apply Gravity
+	public void clearAndGravity(Set matchSet) {
+
+		for (Object matchTile : matchSet) {
+			Tile match = Tile.class.cast(matchTile);
+			score += shapeScore[match.getValue() - 1];
+			System.out.println(match.getCoords());
+			board[match.getCoords().getX()][match.getCoords().getY()] = null;
+
+			// applyGravity();
+		}
+	}
+
+	// Reset Tiles (No Matches)
+	public void resetTiles(Tile originTile1, Tile originTile2) {
+		System.out.println("No Matches, reverting to original.");
+		Tile temp = originTile1;
+		setTileAt(originTile1.getCoords(), originTile2);
+		setTileAt(originTile2.getCoords(), temp);
 	}
 
 	public void fillRow(int row) {
@@ -105,6 +176,15 @@ public class BejeweledBoard extends Board {
 			setTileAt(lastClicked, temp1);
 			temp2.setCoords(coords);
 			setTileAt(coords, temp2);
+			//
+			verticalMatch(temp1, temp2, matchSet);
+			horizontalMatch(temp1, temp2, matchSet);
+			if (matchSet.size() >= 3) {
+				clearAndGravity(matchSet);
+				matchSet.clear();
+			} else {
+				resetTiles(temp1, temp2);
+			}
 		} else {
 			System.out.println("Invalid move");
 		}
@@ -135,7 +215,55 @@ public class BejeweledBoard extends Board {
 		this.board[row][column] = generator.emptyTile();
 	}
 
+	@Override
+	public void update() {
 
+		while (playing) {
+			// System.out.println("UPDATE IN BJ board");
+			this.screen.setReady(false);
+			this.timeSeconds -= 1;
+			this.screen.updateTimer(this.timeSeconds);
+			this.screen.updateScore(this.score);
+
+			Platform.runLater(() -> {
+				fillAll();
+				this.screen.draw();
+				if (this.timeSeconds == 0) {
+					if (firstGame) {
+						scoreFirst = score;
+						this.firstGame = false;
+						screen.displayAlertBox();
+						resetGame();
+					} else {
+						scoreSecond = score;
+						setPlaying(false);
+						screen.gameEnd(scoreFirst, scoreSecond);
+					}
+				}
+
+			});
+
+			while (!this.screen.ready() && playing)
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+
+	public void resetGame() {
+		this.score = 0;
+		this.timeSeconds = this.startTime;
+
+		setPlaying(true);
+	}
+
+	@Override
+	public void run() {
+		System.out.println("I am in run");
+		update();
+	}
 
 	public void setPlaying(boolean playing) {
 		this.playing = playing;
