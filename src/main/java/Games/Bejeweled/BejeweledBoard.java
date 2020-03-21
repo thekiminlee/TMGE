@@ -260,10 +260,10 @@ public class BejeweledBoard extends Board {
 
 		setPlaying(true);
 =======
-		
+
 >>>>>>> parent of 414b207... MVC for Tetris Done
 =======
-		
+
 >>>>>>> parent of 414b207... MVC for Tetris Done
 	}
 
